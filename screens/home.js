@@ -1,26 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useContext } from 'react';
-import { Button, StyleSheet, Text, View, TextInput } from 'react-native';
-import { useState } from 'react/cjs/react.development';
-import { AuthContext } from '../context/AuthContext';
+import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 export default function HomePage() {
-  const [email, setEmail] = useState('');
-  const { signOutUser } = useContext(AuthContext);
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <Text>Open up homes!</Text>
-      <Button title="sign ut" onPress={() => signOutUser()} />
-      <StatusBar style="auto" />
-      <TextInput
-        style={styles.textinputs}
-        placeholder="Enter email:"
-        placeholderTextColor="black"
-        //value={email}
-        //onChangeText={setEmail}
-        onChangeText={(text) => setEmail(text)}
-      />
-      <Text>e{email}</Text>
+      <TouchableOpacity style={styles.touchableOpacity}>
+        <View style={styles.buttons}>
+          <Text style={styles.buttonsText}>Highscore</Text>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.touchableOpacity}
+        onPress={() => navigation.navigate('CreateGame')}
+      >
+        <View style={styles.buttons}>
+          <Text style={styles.buttonsText}>Create game</Text>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.touchableOpacity}
+        onPress={() => navigation.navigate('JoinGame')}
+      >
+        <View style={styles.buttons}>
+          <Text style={styles.buttonsText}>Join game</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -28,8 +34,25 @@ export default function HomePage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#146B66',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
+  },
+
+  buttonsText: {
+    fontSize: 35,
+    fontWeight: '800',
+  },
+  touchableOpacity: {
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#AFEFDF',
+    width: '80%',
+    height: '25%',
+    borderRadius: 20,
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 20,
   },
 });
