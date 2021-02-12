@@ -6,27 +6,36 @@ export default function HomePage() {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.touchableOpacity}>
-        <View style={styles.buttons}>
-          <Text style={styles.buttonsText}>Highscore</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.touchableOpacity}
-        onPress={() => navigation.navigate('CreateGame')}
+      <View
+        style={{
+          height: '55%',
+          width: '100%',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
       >
-        <View style={styles.buttons}>
-          <Text style={styles.buttonsText}>Create game</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.touchableOpacity}
-        onPress={() => navigation.navigate('JoinGame')}
-      >
-        <View style={styles.buttons}>
-          <Text style={styles.buttonsText}>Join game</Text>
-        </View>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.touchableOpacity}>
+          <View style={styles.buttons}>
+            <Text style={styles.buttonsText}>Highscore</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.touchableOpacity}
+          onPress={() => navigation.navigate('CreateGame')}
+        >
+          <View style={styles.buttons}>
+            <Text style={styles.buttonsText}>Create game</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.touchableOpacity}
+          onPress={() => navigation.navigate('JoinGame')}
+        >
+          <View style={styles.buttons}>
+            <Text style={styles.buttonsText}>Join game</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -35,7 +44,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#146B66',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
     alignItems: 'center',
   },
 

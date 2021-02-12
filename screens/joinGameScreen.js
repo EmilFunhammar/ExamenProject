@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 export default function JoinGame() {
+  const navigation = useNavigation();
   const [key, setKey] = useState('');
   return (
     <View style={styles.container}>
@@ -16,7 +18,9 @@ export default function JoinGame() {
         <View style={styles.underLineView} />
       </View>
       <View style={styles.button}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ParticipantScreen')}
+        >
           <Text style={styles.buttonText}>Join lobby</Text>
         </TouchableOpacity>
       </View>
@@ -38,6 +42,7 @@ const styles = StyleSheet.create({
     height: '10%',
     backgroundColor: '#AFEFDF',
     marginBottom: 100,
+    borderRadius: 20,
   },
   buttonText: {
     fontSize: 20,

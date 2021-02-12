@@ -13,7 +13,7 @@ const Stack = createStackNavigator();
 
 export default function AuthenticatedStack() {
   return (
-    <Stack.Navigator initialRouteName="ParticipantScreen">
+    <Stack.Navigator initialRouteName="home">
       <Stack.Screen
         name="home"
         component={HomePage}
@@ -53,12 +53,13 @@ export default function AuthenticatedStack() {
         options={{
           headerStyle: { backgroundColor: '#AFEFDF' },
           title: '',
+          headerShown: false,
         }}
       />
       <Stack.Screen
         name="GameScreen"
         component={GameBoard}
-        options={{ title: '' }}
+        options={{ title: '', headerShown: false }}
       />
     </Stack.Navigator>
   );
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   signOut: {
-    marginEnd: 10,
+    marginEnd: 20,
     fontSize: 16,
     fontWeight: 'bold',
   },
