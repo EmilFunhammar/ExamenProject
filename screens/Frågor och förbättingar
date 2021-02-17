@@ -2,4 +2,5 @@ få den angivna färgen att synas i participantView:n
 hittils får jag ner den from firebase
 // // //
 
-gameScreen skärmen låser sig eller uppdaterar segt
+
+hämtar frågor i vyn innan

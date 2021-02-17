@@ -1,5 +1,8 @@
 {
   "devToolsPort": 19002,
   "expoServerPort": 19000,
-  "packagerPort": 19000
+  "packagerPort": 19000,
+  "expoServerNgrokUrl": "https://75-u5r.emilfunhammar.examenproject.exp.direct",
+  "packagerNgrokUrl": "https://packager.75-u5r.emilfunhammar.examenproject.exp.direct",
+  "ngrokPid": 88077
 }

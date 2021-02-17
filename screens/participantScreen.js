@@ -2,17 +2,19 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { SnapShotUsers } from '../context/firebase_context';
+import { GetQuestionInfo, SnapShotUsers } from '../context/firebase_context';
 
 export default function JoinGame() {
   const navigation = useNavigation();
   const [userArray, setUserArray] = useState(['']);
+  const [questionArray, setQuestionArray] = useState(['']);
 
   const SnapShotObserver = () => {
     SnapShotUsers(setUserArray);
   };
   useEffect(() => {
     SnapShotObserver();
+    GetQuestionInfo(setQuestionArray);
   }, []);
 
   return (
@@ -29,7 +31,9 @@ export default function JoinGame() {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('GameScreen')}
+        onPress={() => {
+          navigation.navigate('GameScreen', { questionArray: questionArray });
+        }}
       >
         <Text style={styles.buttonText}>Start Game</Text>
       </TouchableOpacity>

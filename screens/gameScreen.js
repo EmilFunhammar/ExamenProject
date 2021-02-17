@@ -1,32 +1,52 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
-import { SnapShotUsers, GetQuestionInfo } from '../context/firebase_context';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Button,
+  Alert,
+} from 'react-native';
+import {
+  SnapShotUsers,
+  SnapShotActiveQuestion,
+  UpdateActiveQuestion,
+} from '../context/firebase_context';
 
-export default function GameBoard() {
+export default function GameBoard({ route }) {
   const [usersArray, setUsersArray] = useState(['']);
-  const [questionArray, setQuestionArray] = useState(['']);
+  const [activeQuestion, SetActiveQuestion] = useState(0);
+  const [backgroundColor, setBackgroundColor] = useState('#146B66');
+  //const [questionArray, setQuestionArray] = useState(['']);
+  const { questionArray } = route.params;
 
-  const SnapShotObserver = () => {
+  const SnapShotObservers = () => {
     SnapShotUsers(setUsersArray);
+    SnapShotActiveQuestion(SetActiveQuestion);
   };
 
+  const GetQuestionInfoFunc = () => {};
+
   useEffect(() => {
-    SnapShotObserver();
-    GetQuestionInfo(setQuestionArray);
+    SnapShotObservers();
+
+    //GetQuestionInfo(setQuestionArray);
   }, []);
-  let question = 'När slutade andra värdskriget';
 
   return (
-    <View style={styles.container}>
+    <View style={{ ...styles.container, backgroundColor: backgroundColor }}>
       <View style={styles.questionView}>
         <Text style={styles.questionText}>
-          {question} {'?'}
+          {questionArray[activeQuestion].question} {'?'}
           <Button
-            title="get Q"
-            onPress={() => console.log('QuestionArray', questionArray[0])}
+            title="get AQ"
+            onPress={() => {
+              //setActiveQuestion((prev) => prev + 1);
+              console.log('AQ', SetActiveQuestion(activeQuestion));
+            }}
           />
         </Text>
-        <Text>Question: {questionArray[0].answer1}</Text>
+        <Text>{activeQuestion}</Text>
       </View>
 
       {usersArray.map((element, index) => (
@@ -36,7 +56,16 @@ export default function GameBoard() {
           userScore={element.userScore}
         />
       ))}
-      <AnswerFeilds questionArray={questionArray} />
+
+      <AnswerFeilds
+        questionArray={questionArray}
+        activeQuestion={activeQuestion}
+        setActiveQuestion={SetActiveQuestion}
+        setBackgroundColor={setBackgroundColor}
+        usersArray={usersArray}
+
+        //questionArrayAnswers={questionArray[0].Answers}
+      />
     </View>
   );
 }
@@ -51,70 +80,95 @@ const ScoreFeild = ({ userName, userScore }) => {
   );
 };
 
-/* const ScoreFeild = () => {
-  const [UsersArray, setUsersArray] = useState(['']);
-  useEffect(() => {
-    SnapShotUsers(setUsersArray);
-  }, [UsersArray]);
-  return (
-    <View style={{ flexDirection: 'row', marginBottom: 15 }}>
-      <View style={{ width: '50%' }}>
-        <View style={styles.userNameAndScoreView}>
-          <Text style={styles.userNameScoreText}>{UsersArray[0].userName}</Text>
-          <Text style={styles.userScoreText}>{UsersArray[0].userScore}</Text>
-        </View>
-        <View style={{ ...styles.underLineView, marginLeft: 20 }} />
-        <View style={styles.userNameAndScoreView}>
-          <Text style={styles.userNameScoreText}>esdsmil:</Text>
-          <Text style={styles.userScoreText}>6</Text>
-        </View>
-        <View style={{ ...styles.underLineView, marginLeft: 20 }} />
-      </View>
-      <View style={{ width: '50%' }}>
-        <View style={styles.userNameAndScoreView}>
-          <Text style={{ ...styles.userNameScoreText, marginLeft: 0 }}>
-            esdsmil:
-          </Text>
-          <Text style={styles.userScoreText}>6</Text>
-        </View>
-        <View style={styles.underLineView} />
+const AnswerFeilds = ({
+  questionArray,
+  activeQuestion,
+  setActiveQuestion,
+  setBackgroundColor,
+  usersArray,
+}) => {
+  //console.log('ARRAY', questionArray);
 
-        <View style={styles.userNameAndScoreView}>
-          <Text style={{ ...styles.userNameScoreText, marginLeft: 0 }}>
-            emil:
-          </Text>
-          <Text style={{ ...styles.userScoreText }}>6</Text>
-        </View>
-        <View style={styles.underLineView} />
-      </View>
-    </View>
-  );
-}; */
+  const CheckAnswers = (value) => {
+    let usersAnswer = questionArray[activeQuestion].Answers[value];
+    let questionsRightAnswer = questionArray[activeQuestion].rightAnswer;
 
-const AnswerFeilds = ({ questionArray }) => {
+    if (usersAnswer === questionsRightAnswer) {
+      let hasUsersAnswerd = false;
+      for (let index = 0; index < usersArray.length; index++) {
+        if (usersArray[index].hasAnswerd !== true) {
+          return (hasUsersAnswerd = false);
+        } else {
+          hasUsersAnswerd = true;
+        }
+      }
+      if (hasUsersAnswerd == true) {
+        setBackgroundColor('green');
+        setTimeout(function () {
+          //setActiveQuestion((prev) => prev + 1);
+          setBackgroundColor('#146B66');
+        }, 2000);
+      }
+    } else {
+      setBackgroundColor('red');
+      setTimeout(function () {
+        //setActiveQuestion((prev) => prev + 1);
+        setBackgroundColor('#146B66');
+      }, 2000);
+    }
+  };
+
   return (
     <View style={styles.answersView}>
       <View style={styles.leftSide}>
-        <TouchableOpacity style={styles.answers}>
+        <TouchableOpacity
+          style={styles.answers}
+          onPress={() => {
+            CheckAnswers(0);
+          }}
+        >
           <View>
-            <Text style={styles.answersText}>{questionArray[0].answer1}</Text>
+            <Text style={styles.answersText}>
+              {questionArray[activeQuestion].Answers[0]}
+            </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.answers}>
+        <TouchableOpacity
+          style={styles.answers}
+          onPress={() => {
+            CheckAnswers(1);
+          }}
+        >
           <View>
-            <Text style={styles.answersText}>{questionArray[0].answer2}</Text>
+            <Text style={styles.answersText}>
+              {questionArray[activeQuestion].Answers[1]}
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
       <View style={styles.rightSide}>
-        <TouchableOpacity style={styles.answers}>
+        <TouchableOpacity
+          style={styles.answers}
+          onPress={() => {
+            CheckAnswers(2);
+          }}
+        >
           <View>
-            <Text style={styles.answersText}>{questionArray[0].answer3}</Text>
+            <Text style={styles.answersText}>
+              {questionArray[activeQuestion].Answers[2]}
+            </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.answers}>
+        <TouchableOpacity
+          style={styles.answers}
+          onPress={() => {
+            CheckAnswers(3);
+          }}
+        >
           <View>
-            <Text style={styles.answersText}>{questionArray[0].answer}</Text>
+            <Text style={styles.answersText}>
+              {questionArray[activeQuestion].Answers[3]}
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -199,3 +253,43 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+/* const ScoreFeild = () => {
+  const [UsersArray, setUsersArray] = useState(['']);
+  useEffect(() => {
+    SnapShotUsers(setUsersArray);
+  }, [UsersArray]);
+  return (
+    <View style={{ flexDirection: 'row', marginBottom: 15 }}>
+      <View style={{ width: '50%' }}>
+        <View style={styles.userNameAndScoreView}>
+          <Text style={styles.userNameScoreText}>{UsersArray[0].userName}</Text>
+          <Text style={styles.userScoreText}>{UsersArray[0].userScore}</Text>
+        </View>
+        <View style={{ ...styles.underLineView, marginLeft: 20 }} />
+        <View style={styles.userNameAndScoreView}>
+          <Text style={styles.userNameScoreText}>esdsmil:</Text>
+          <Text style={styles.userScoreText}>6</Text>
+        </View>
+        <View style={{ ...styles.underLineView, marginLeft: 20 }} />
+      </View>
+      <View style={{ width: '50%' }}>
+        <View style={styles.userNameAndScoreView}>
+          <Text style={{ ...styles.userNameScoreText, marginLeft: 0 }}>
+            esdsmil:
+          </Text>
+          <Text style={styles.userScoreText}>6</Text>
+        </View>
+        <View style={styles.underLineView} />
+
+        <View style={styles.userNameAndScoreView}>
+          <Text style={{ ...styles.userNameScoreText, marginLeft: 0 }}>
+            emil:
+          </Text>
+          <Text style={{ ...styles.userScoreText }}>6</Text>
+        </View>
+        <View style={styles.underLineView} />
+      </View>
+    </View>
+  );
+}; */

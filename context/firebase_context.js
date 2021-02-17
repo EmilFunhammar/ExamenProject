@@ -23,16 +23,47 @@ if (!firebase.apps.length) {
 
 export const auth = firebase.auth();
 
+//Set ActiveQuestion
+export function UpdateActiveQuestion(activeQuestion) {
+  firebase
+    .firestore()
+    .collection('GameSession')
+    .doc('pilot1')
+    .update({
+      ActiveQuestion: activeQuestion + 1,
+    })
+    .then(() => {
+      console.log('Document successfully updated!');
+    })
+    .catch((error) => console.log('error', error));
+}
+
+// SnapShot on ActiveQuestion
+export function SnapShotActiveQuestion(setActiveQuestion) {
+  firebase
+    .firestore()
+    .collection('GameSession')
+    .doc('pilot1')
+    .onSnapshot((doc) => {
+      setActiveQuestion(doc.data().ActiveQuestion);
+      //console.log('här', doc.data().ActiveQuestion);
+    });
+}
+
 // Get all the Questions and answers
 export function GetQuestionInfo(setQuestionArray) {
+  let ary = [];
   firebase
     .firestore()
     .collection('GameSession')
     .doc('pilot1')
     .get()
     .then((doc) => {
-      //console.log('doc', doc.data().Questions);
-      setQuestionArray(doc.data().Questions);
+      ary = [...doc.data().Questions];
+      for (let index = 0; index < ary.length; index++) {
+        ary[index].Answers.sort(() => Math.random() - 0.5);
+      }
+      setQuestionArray(ary);
     })
     .catch((error) => console.log('error', error));
 }
