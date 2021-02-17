@@ -1,9 +1,12 @@
 import React from 'react';
+import { useState, useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { GetUsers, SnapShotUsers } from '../context/firebase_context';
 
 export default function HomePage() {
   const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <View
@@ -14,7 +17,10 @@ export default function HomePage() {
           justifyContent: 'space-between',
         }}
       >
-        <TouchableOpacity style={styles.touchableOpacity}>
+        <TouchableOpacity
+          style={styles.touchableOpacity}
+          onPress={() => SnapShotUsers()}
+        >
           <View style={styles.buttons}>
             <Text style={styles.buttonsText}>Highscore</Text>
           </View>

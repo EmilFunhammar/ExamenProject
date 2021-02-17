@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
+
 import { useNavigation } from '@react-navigation/native';
 
 export default function JoinGame() {
@@ -17,14 +23,24 @@ export default function JoinGame() {
         />
         <View style={styles.underLineView} />
       </View>
-      <View style={styles.button}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('ParticipantScreen')}
-        >
-          <Text style={styles.buttonText}>Join lobby</Text>
-        </TouchableOpacity>
-      </View>
+
+      {/* <View
+        style={{
+          width: '100%',
+          height: '50%',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          backgroundColor: 'grey',
+        }}
+      > */}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('ParticipantScreen')}
+      >
+        <Text style={styles.buttonText}>Join game</Text>
+      </TouchableOpacity>
     </View>
+    //</View>
   );
 }
 
@@ -36,16 +52,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#146B66',
   },
   button: {
+    backgroundColor: '#AFEFDF',
+    width: '80%',
+    height: '15%',
+    marginBottom: 80,
     justifyContent: 'center',
     alignItems: 'center',
-    width: '80%',
-    height: '10%',
-    backgroundColor: '#AFEFDF',
-    marginBottom: 100,
     borderRadius: 20,
   },
+
   buttonText: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: 'bold',
   },
   text: {

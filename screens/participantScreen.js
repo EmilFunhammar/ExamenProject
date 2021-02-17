@@ -1,17 +1,16 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { SnapShotUsers } from '../context/firebase_context';
 
 export default function JoinGame() {
   const navigation = useNavigation();
-  const [userArray, setUserArray] = useState([
-    'emil',
-    'ida',
-    'victor',
-    'erika',
-  ]);
+  const [userArray, setUserArray] = useState(['']);
+
+  useEffect(() => {
+    SnapShotUsers(setUserArray);
+  }, [userArray]);
 
   return (
     <LinearGradient
@@ -22,15 +21,16 @@ export default function JoinGame() {
         <Text style={styles.participantTextHeader}>Participants</Text>
 
         {userArray.map((element, index) => (
-          <ParticipantView key={index} element={element} />
+          <ParticipantView key={index} element={element.userName} />
         ))}
       </View>
 
-      <View style={styles.button}>
-        <TouchableOpacity onPress={() => navigation.navigate('GameScreen')}>
-          <Text style={styles.buttonText}>Start Game</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('GameScreen')}
+      >
+        <Text style={styles.buttonText}>Start Game</Text>
+      </TouchableOpacity>
     </LinearGradient>
   );
 }
