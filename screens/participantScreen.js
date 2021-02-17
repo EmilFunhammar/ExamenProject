@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SnapShotUsers } from '../context/firebase_context';
 
@@ -8,9 +8,12 @@ export default function JoinGame() {
   const navigation = useNavigation();
   const [userArray, setUserArray] = useState(['']);
 
-  useEffect(() => {
+  const SnapShotObserver = () => {
     SnapShotUsers(setUserArray);
-  }, [userArray]);
+  };
+  useEffect(() => {
+    SnapShotObserver();
+  }, []);
 
   return (
     <LinearGradient
@@ -19,7 +22,6 @@ export default function JoinGame() {
     >
       <View style={styles.participantView}>
         <Text style={styles.participantTextHeader}>Participants</Text>
-
         {userArray.map((element, index) => (
           <ParticipantView key={index} element={element.userName} />
         ))}

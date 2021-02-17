@@ -23,6 +23,21 @@ if (!firebase.apps.length) {
 
 export const auth = firebase.auth();
 
+// Get all the Questions and answers
+export function GetQuestionInfo(setQuestionArray) {
+  firebase
+    .firestore()
+    .collection('GameSession')
+    .doc('pilot1')
+    .get()
+    .then((doc) => {
+      //console.log('doc', doc.data().Questions);
+      setQuestionArray(doc.data().Questions);
+    })
+    .catch((error) => console.log('error', error));
+}
+
+// SnapShot on the users and there information
 export function SnapShotUsers(setUserArray) {
   firebase
     .firestore()

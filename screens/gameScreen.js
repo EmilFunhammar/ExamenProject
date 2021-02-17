@@ -1,46 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
-import { useEffect, useState } from 'react/cjs/react.development';
-import { SnapShotUsers } from '../context/firebase_context';
+import { SnapShotUsers, GetQuestionInfo } from '../context/firebase_context';
 
 export default function GameBoard() {
-  const [UsersArray, setUsersArray] = useState(['']);
-  useEffect(() => {
+  const [usersArray, setUsersArray] = useState(['']);
+  const [questionArray, setQuestionArray] = useState(['']);
+
+  const SnapShotObserver = () => {
     SnapShotUsers(setUsersArray);
+  };
+
+  useEffect(() => {
+    SnapShotObserver();
+    GetQuestionInfo(setQuestionArray);
   }, []);
   let question = 'När slutade andra värdskriget';
-  let questionArray = [];
+
   return (
     <View style={styles.container}>
       <View style={styles.questionView}>
-        <Button
-          title="UserArray"
-          onPress={() => console.log('user array', UsersArray)}
-        />
         <Text style={styles.questionText}>
           {question} {'?'}
-          <Text>emil{UsersArray[0].userName}</Text>
+          <Button
+            title="get Q"
+            onPress={() => console.log('QuestionArray', questionArray[0])}
+          />
         </Text>
+        <Text>Question: {questionArray[0].answer1}</Text>
       </View>
 
-      {/* <View style={styles.underLineView} /> */}
-      {/* {UsersArray.map((element, index) => (
-        <Test
+      {usersArray.map((element, index) => (
+        <ScoreFeild
           key={index}
           userName={element.userName}
           userScore={element.userScore}
-          setUsersArray={setUsersArray}
-          UsersArray={UsersArray}
         />
-      ))} */}
-      <AnswerFeilds />
+      ))}
+      <AnswerFeilds questionArray={questionArray} />
     </View>
   );
 }
-const Test = ({ userName, userScore, UsersArray, setUsersArray }) => {
-  // useEffect(() => {
-  //   SnapShotUsers(setUsersArray);
-  // }, [UsersArray, setUsersArray]);
+const ScoreFeild = ({ userName, userScore }) => {
   return (
     <View style={{ flexDirection: 'row', marginBottom: 15 }}>
       <View style={styles.userNameAndScoreView}>
@@ -51,7 +51,7 @@ const Test = ({ userName, userScore, UsersArray, setUsersArray }) => {
   );
 };
 
-const ScoreFeild = () => {
+/* const ScoreFeild = () => {
   const [UsersArray, setUsersArray] = useState(['']);
   useEffect(() => {
     SnapShotUsers(setUsersArray);
@@ -89,32 +89,32 @@ const ScoreFeild = () => {
       </View>
     </View>
   );
-};
+}; */
 
-const AnswerFeilds = () => {
+const AnswerFeilds = ({ questionArray }) => {
   return (
     <View style={styles.answersView}>
       <View style={styles.leftSide}>
         <TouchableOpacity style={styles.answers}>
           <View>
-            <Text style={styles.answersText}>1999</Text>
+            <Text style={styles.answersText}>{questionArray[0].answer1}</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.answers}>
           <View>
-            <Text style={styles.answersText}>2008</Text>
+            <Text style={styles.answersText}>{questionArray[0].answer2}</Text>
           </View>
         </TouchableOpacity>
       </View>
       <View style={styles.rightSide}>
         <TouchableOpacity style={styles.answers}>
           <View>
-            <Text style={styles.answersText}>1679</Text>
+            <Text style={styles.answersText}>{questionArray[0].answer3}</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.answers}>
           <View>
-            <Text style={styles.answersText}>1995</Text>
+            <Text style={styles.answersText}>{questionArray[0].answer}</Text>
           </View>
         </TouchableOpacity>
       </View>
