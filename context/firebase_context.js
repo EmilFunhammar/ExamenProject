@@ -38,6 +38,23 @@ export function UpdateActiveQuestion(activeQuestion) {
     .catch((error) => console.log('error', error));
 }
 
+//SnapShop on HasANswerd
+export function SnapshotHasAnswers(setIfAnswerd) {
+  let ary = [];
+  firebase
+    .firestore()
+    .collection('GameSession')
+    .doc('pilot1')
+    .onSnapshot((doc) => {
+      for (let index = 0; index < doc.data().users.length; index++) {
+        console.log('här', doc.data().users[index].hasAnswerd);
+        ary.push(doc.data().users[index].hasAnswerd);
+      }
+      console.log('emil', ary);
+      //setIfAnswerd(ary);
+    });
+}
+
 // SnapShot on ActiveQuestion
 export function SnapShotActiveQuestion(setActiveQuestion) {
   firebase

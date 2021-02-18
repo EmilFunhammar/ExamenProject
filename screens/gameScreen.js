@@ -11,6 +11,7 @@ import {
   SnapShotUsers,
   SnapShotActiveQuestion,
   UpdateActiveQuestion,
+  SnapshotHasAnswers,
 } from '../context/firebase_context';
 
 export default function GameBoard({ route }) {
@@ -24,8 +25,6 @@ export default function GameBoard({ route }) {
     SnapShotUsers(setUsersArray);
     SnapShotActiveQuestion(SetActiveQuestion);
   };
-
-  const GetQuestionInfoFunc = () => {};
 
   useEffect(() => {
     SnapShotObservers();
@@ -87,28 +86,47 @@ const AnswerFeilds = ({
   setBackgroundColor,
   usersArray,
 }) => {
-  //console.log('ARRAY', questionArray);
+  const [ifAnswerd, setIfAnswerd] = useState([]);
+
+  const SnapShotObserver = () => {
+    SnapshotHasAnswers(setIfAnswerd);
+  };
+
+  useEffect(() => {
+    SnapShotObserver();
+  }, []);
+
+  /* useEffect(() => {
+    for (let index = 0; index < ifAnswerd.length; index++) {
+      if (ifAnswerd[index]) {
+        console.log('true');
+      }
+    }
+  }, [ifAnswerd]); */
+
+  const RigthAnswer = () => {};
+
+  const CheckIfAnswerd = () => {
+    SnapshotHasAnswers();
+  };
 
   const CheckAnswers = (value) => {
     let usersAnswer = questionArray[activeQuestion].Answers[value];
     let questionsRightAnswer = questionArray[activeQuestion].rightAnswer;
 
     if (usersAnswer === questionsRightAnswer) {
-      let hasUsersAnswerd = false;
-      for (let index = 0; index < usersArray.length; index++) {
-        if (usersArray[index].hasAnswerd !== true) {
+      setBackgroundColor('green');
+      setTimeout(function () {
+        //setActiveQuestion((prev) => prev + 1);
+        setBackgroundColor('#146B66');
+      }, 2000);
+      //for (let index = 0; index < usersArray.length; index++) {
+      /*  if (usersArray[index].hasAnswerd !== true) {
           return (hasUsersAnswerd = false);
-        } else {
-          hasUsersAnswerd = true;
-        }
-      }
-      if (hasUsersAnswerd == true) {
-        setBackgroundColor('green');
-        setTimeout(function () {
-          //setActiveQuestion((prev) => prev + 1);
-          setBackgroundColor('#146B66');
-        }, 2000);
-      }
+        } else { */
+      //hasUsersAnswerd = true;
+      //RigthAnswer();
+      //}
     } else {
       setBackgroundColor('red');
       setTimeout(function () {
@@ -118,13 +136,26 @@ const AnswerFeilds = ({
     }
   };
 
+  /*  if (hasUsersAnswerd === true) {
+        setBackgroundColor('green');
+        setTimeout(function () {
+          //setActiveQuestion((prev) => prev + 1);
+          setBackgroundColor('#146B66');
+        }, 2000);
+      } */
+
   return (
     <View style={styles.answersView}>
+      <Button
+        title="check"
+        onPress={() => console.log('ifAnswer', ifAnswerd[0])}
+      />
       <View style={styles.leftSide}>
         <TouchableOpacity
           style={styles.answers}
           onPress={() => {
-            CheckAnswers(0);
+            CheckIfAnswerd();
+            //CheckAnswers(0);
           }}
         >
           <View>
