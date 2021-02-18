@@ -87,6 +87,21 @@ const AnswerFeilds = ({
   usersArray,
 }) => {
   const [ifAnswerd, setIfAnswerd] = useState([]);
+  const [allDone, setAllDone] = useState([false]);
+  const [x, setX] = useState(0);
+
+  useEffect(() => {
+    //console.log('i effect', x);
+  }, [x]);
+
+  /*  useEffect(() => {
+    //console.log('iaf inne i effect');
+    if (ifAnswerd[0] && ifAnswerd[1] && ifAnswerd[2] !== false) {
+      console.log('inte false');
+    } else {
+      console.log('sant');
+    }
+  }, [ifAnswerd]); */
 
   const SnapShotObserver = () => {
     SnapshotHasAnswers(setIfAnswerd);
@@ -96,19 +111,9 @@ const AnswerFeilds = ({
     SnapShotObserver();
   }, []);
 
-  /* useEffect(() => {
-    for (let index = 0; index < ifAnswerd.length; index++) {
-      if (ifAnswerd[index]) {
-        console.log('true');
-      }
-    }
-  }, [ifAnswerd]); */
-
   const RigthAnswer = () => {};
 
-  const CheckIfAnswerd = () => {
-    SnapshotHasAnswers();
-  };
+  const CheckIfAnswerd = () => {};
 
   const CheckAnswers = (value) => {
     let usersAnswer = questionArray[activeQuestion].Answers[value];
@@ -117,50 +122,35 @@ const AnswerFeilds = ({
     if (usersAnswer === questionsRightAnswer) {
       setBackgroundColor('green');
       setTimeout(function () {
-        //setActiveQuestion((prev) => prev + 1);
         setBackgroundColor('#146B66');
       }, 2000);
-      //for (let index = 0; index < usersArray.length; index++) {
-      /*  if (usersArray[index].hasAnswerd !== true) {
-          return (hasUsersAnswerd = false);
-        } else { */
-      //hasUsersAnswerd = true;
-      //RigthAnswer();
-      //}
     } else {
       setBackgroundColor('red');
       setTimeout(function () {
-        //setActiveQuestion((prev) => prev + 1);
         setBackgroundColor('#146B66');
       }, 2000);
     }
   };
 
-  /*  if (hasUsersAnswerd === true) {
-        setBackgroundColor('green');
-        setTimeout(function () {
-          //setActiveQuestion((prev) => prev + 1);
-          setBackgroundColor('#146B66');
-        }, 2000);
-      } */
-
   return (
     <View style={styles.answersView}>
       <Button
         title="check"
-        onPress={() => console.log('ifAnswer', ifAnswerd[0])}
+        onPress={() => {
+          console.log('ifAns', ifAnswerd[0]);
+        }}
       />
       <View style={styles.leftSide}>
         <TouchableOpacity
           style={styles.answers}
           onPress={() => {
-            CheckIfAnswerd();
-            //CheckAnswers(0);
+            CheckAnswers(0);
           }}
         >
           <View>
             <Text style={styles.answersText}>
-              {questionArray[activeQuestion].Answers[0]}
+              {/* {`${ifAnswerd[0].hasAnswerd}`} */}
+              {/* {questionArray[activeQuestion].Answers[0]} */}
             </Text>
           </View>
         </TouchableOpacity>

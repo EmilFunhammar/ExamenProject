@@ -23,6 +23,8 @@ if (!firebase.apps.length) {
 
 export const auth = firebase.auth();
 
+//Set Users HasAnswers
+
 //Set ActiveQuestion
 export function UpdateActiveQuestion(activeQuestion) {
   firebase
@@ -46,11 +48,12 @@ export function SnapshotHasAnswers(setIfAnswerd) {
     .collection('GameSession')
     .doc('pilot1')
     .onSnapshot((doc) => {
-      for (let index = 0; index < doc.data().users.length; index++) {
-        console.log('här', doc.data().users[index].hasAnswerd);
+      setIfAnswerd(doc.data().users);
+      /*  for (let index = 0; index < doc.data().users.length; index++) {
+        //console.log('här', doc.data().users[index].hasAnswerd);
         ary.push(doc.data().users[index].hasAnswerd);
-      }
-      console.log('emil', ary);
+      } */
+      //console.log('emil', ary);
       //setIfAnswerd(ary);
     });
 }
