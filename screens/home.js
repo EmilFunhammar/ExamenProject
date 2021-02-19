@@ -3,12 +3,20 @@ import { useState, useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { GetUsers, SnapShotUsers } from '../context/firebase_context';
+import { ThemeContext } from '../context/ThemeContext';
 
 export default function HomePage() {
+  const { theme } = useContext(ThemeContext);
+
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        ...styles.container,
+        backgroundColor: theme.backgroundColor,
+      }}
+    >
       <View
         style={{
           height: '55%',

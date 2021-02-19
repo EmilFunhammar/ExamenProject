@@ -4,7 +4,7 @@ import schemes from '../resources/Schemes';
 export const ThemeContext = createContext();
 
 export default function ThemeContextProvider({ children }) {
-  const [theme, setTheme] = useState(schemes.MYLI3);
+  const [theme, setTheme] = useState(schemes.MYLI1);
 
   const toggleTheme = (value) => {
     setTheme(value);

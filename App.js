@@ -7,7 +7,9 @@ import ThemeContextProvider from './context/ThemeContext';
 export default function App() {
   return (
     <AuthContextProvider>
-      <AuthNavigation />
+      <ThemeContextProvider>
+        <AuthNavigation />
+      </ThemeContextProvider>
     </AuthContextProvider>
   );
 }

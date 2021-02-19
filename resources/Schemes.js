@@ -1,7 +1,9 @@
-/* export default schemes = {
+let schemes;
+export default schemes = {
   MYLI1: {
-    backgroundColor: 'white',
+    backgroundColor: '#146B66',
     color: 'black',
+    buttons: '#AFEFDF',
   },
 
   MYLI2: {
@@ -15,4 +17,3 @@
     contactColor: 'white',
   },
 };
- */
