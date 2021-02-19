@@ -11,14 +11,16 @@ import {
   SnapShotUsers,
   SnapShotActiveQuestion,
   UpdateActiveQuestion,
-  SnapshotHasAnswers,
+  ResetAnswerdNum,
+  SnapshotUserAnswerd,
+  UpdateAnswerdNum,
+  UpdateUserScore,
 } from '../context/firebase_context';
 
 export default function GameBoard({ route }) {
   const [usersArray, setUsersArray] = useState(['']);
   const [activeQuestion, SetActiveQuestion] = useState(0);
   const [backgroundColor, setBackgroundColor] = useState('#146B66');
-  //const [questionArray, setQuestionArray] = useState(['']);
   const { questionArray } = route.params;
 
   const SnapShotObservers = () => {
@@ -37,15 +39,16 @@ export default function GameBoard({ route }) {
       <View style={styles.questionView}>
         <Text style={styles.questionText}>
           {questionArray[activeQuestion].question} {'?'}
-          <Button
+          {/*   <Button
             title="get AQ"
             onPress={() => {
               //setActiveQuestion((prev) => prev + 1);
               console.log('AQ', SetActiveQuestion(activeQuestion));
             }}
-          />
+          /> */}
         </Text>
-        <Text>{activeQuestion}</Text>
+        {/*         <Text>ActiveQuestion: {activeQuestion}</Text>
+         */}
       </View>
 
       {usersArray.map((element, index) => (
@@ -86,34 +89,35 @@ const AnswerFeilds = ({
   setBackgroundColor,
   usersArray,
 }) => {
-  const [ifAnswerd, setIfAnswerd] = useState([]);
-  const [allDone, setAllDone] = useState([false]);
-  const [x, setX] = useState(0);
-
-  useEffect(() => {
-    //console.log('i effect', x);
-  }, [x]);
-
-  /*  useEffect(() => {
-    //console.log('iaf inne i effect');
-    if (ifAnswerd[0] && ifAnswerd[1] && ifAnswerd[2] !== false) {
-      console.log('inte false');
-    } else {
-      console.log('sant');
-    }
-  }, [ifAnswerd]); */
+  //const [ifAnswerd, setIfAnswerd] = useState([]);
+  const [AnswerdNum, setAnswerdNum] = useState(0);
 
   const SnapShotObserver = () => {
-    SnapshotHasAnswers(setIfAnswerd);
+    //console.log('OBSERVER');
+    SnapshotUserAnswerd(setAnswerdNum);
   };
-
   useEffect(() => {
+    // console.log('EFFECT');
     SnapShotObserver();
   }, []);
 
-  const RigthAnswer = () => {};
-
-  const CheckIfAnswerd = () => {};
+  useEffect(() => {
+    if (AnswerdNum === usersArray.length) {
+      ResetAnswerdNum();
+      setTimeout(function () {
+        setBackgroundColor('#146B66');
+        UpdateActiveQuestion(activeQuestion);
+      }, 2000);
+    } /* else {
+      console.log('answerdNum = ', AnswerdNum);
+    } */
+  }, [
+    AnswerdNum,
+    activeQuestion,
+    setActiveQuestion,
+    setBackgroundColor,
+    usersArray.length,
+  ]);
 
   const CheckAnswers = (value) => {
     let usersAnswer = questionArray[activeQuestion].Answers[value];
@@ -121,23 +125,34 @@ const AnswerFeilds = ({
 
     if (usersAnswer === questionsRightAnswer) {
       setBackgroundColor('green');
-      setTimeout(function () {
-        setBackgroundColor('#146B66');
-      }, 2000);
+      // setTimeout(function () {
+      /* for (let index = 0; index < usersArray.length; index++) {
+        if (usersArray[index].userName == 'idaa') {
+          UpdateUserScore();
+        }
+      } */
+      UpdateAnswerdNum(AnswerdNum);
+      // setBackgroundColor('#146B66');
+      // }, 2000);
     } else {
       setBackgroundColor('red');
-      setTimeout(function () {
-        setBackgroundColor('#146B66');
-      }, 2000);
+      //setTimeout(function () {
+      UpdateAnswerdNum(AnswerdNum);
+      //setBackgroundColor('#146B66');
+      // }, 2000);
     }
   };
 
   return (
     <View style={styles.answersView}>
       <Button
-        title="check"
+        title="set num"
         onPress={() => {
-          console.log('ifAns', ifAnswerd[0]);
+          for (let index = 0; index < usersArray.length; index++) {
+            if (usersArray[index].userName === 'idaa') {
+              //UpdateUserScore();
+            }
+          }
         }}
       />
       <View style={styles.leftSide}>
@@ -149,8 +164,9 @@ const AnswerFeilds = ({
         >
           <View>
             <Text style={styles.answersText}>
+              {/*  {AnswerdNum} */}
               {/* {`${ifAnswerd[0].hasAnswerd}`} */}
-              {/* {questionArray[activeQuestion].Answers[0]} */}
+              {questionArray[activeQuestion].Answers[0]}
             </Text>
           </View>
         </TouchableOpacity>
