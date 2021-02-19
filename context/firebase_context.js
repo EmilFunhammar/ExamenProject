@@ -146,13 +146,41 @@ export function UpdateUserScore() {
   firebase
     .firestore()
     .collection('GameSession')
-    .doc('Test')
-    .update({})
+    .where('users', '==', 'anna')
+    .get()
+    .then((doc) => {
+      console.log('doc', doc.data());
+    })
+    .catch((error) => console.log('error', error));
+}
+/* 
+var ref = _firestore.collection('member').document(uidMember[index]);
+ref.get() => then(function(snapshot) {
+    List<dynamic> list = List.from(snapshot.data['statistics']);
+    //if you need to update all positions of the array do a foreach instead of the next line
+    list[0].CH = false;
+    ref.updateData({
+        'statistics': list
+    }).catchError((e) {
+        print(e);
+    });
+}.catchError((e) {
+    print(e);
+}); */
+
+//.doc('Test')
+/*     .update({
+      users: firebase.firestore.FieldValue.delete(0), */
+//users: firebase.firestore.FieldValue.arrayRemove('2'),
+//users: firebase.firestore.FieldValue.arrayUnion('emil'),
+
+//users: firebase.firestore.FieldValue.arrayUnion('emil  användare'),
+/*   })
     .then(() => {
       console.log('Document successfully updated!');
     })
     .catch((error) => console.log('error', error));
-}
+} */
 
 /////////////////////////////////////////////////
 

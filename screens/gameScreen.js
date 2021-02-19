@@ -16,6 +16,8 @@ import {
   UpdateAnswerdNum,
   UpdateUserScore,
 } from '../context/firebase_context';
+import { AuthContext } from '../context/AuthContext';
+import { useContext } from 'react/cjs/react.development';
 
 export default function GameBoard({ route }) {
   const [usersArray, setUsersArray] = useState(['']);
@@ -89,6 +91,7 @@ const AnswerFeilds = ({
   setBackgroundColor,
   usersArray,
 }) => {
+  const { user } = useContext(AuthContext);
   //const [ifAnswerd, setIfAnswerd] = useState([]);
   const [AnswerdNum, setAnswerdNum] = useState(0);
 
@@ -148,11 +151,13 @@ const AnswerFeilds = ({
       <Button
         title="set num"
         onPress={() => {
-          for (let index = 0; index < usersArray.length; index++) {
+          UpdateUserScore();
+          //console.log('user', user.email);
+          /*  for (let index = 0; index < usersArray.length; index++) {
             if (usersArray[index].userName === 'idaa') {
               //UpdateUserScore();
             }
-          }
+          } */
         }}
       />
       <View style={styles.leftSide}>
