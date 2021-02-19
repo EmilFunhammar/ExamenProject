@@ -22,10 +22,52 @@ if (!firebase.apps.length) {
 }
 
 export const auth = firebase.auth();
+// Update ActiveQuestion
+/* export function UpdateActiveQuestion() {
+  firebase.firestore().collection('GameSession').doc('pilot1').update({})
+}
+ */
+export function SnapshotUserAnswerd(setAnswerdNum) {
+  firebase
+    .firestore()
+    .collection('GameSession')
+    .doc('pilot1')
+    .onSnapshot((doc) => {
+      setAnswerdNum(doc.data().UsersAnswerd);
+      //console.log('härsds', doc.data().UsersAnswerd);
+    });
+}
+//Reset AnswerdNum
+export function ResetAnswerdNum(AnswerdNum) {
+  firebase
+    .firestore()
+    .collection('GameSession')
+    .doc('pilot1')
+    .update({
+      UsersAnswerd: 0,
+    })
+    .then(() => {
+      console.log('Document successfully updated!');
+    })
+    .catch((error) => console.log('error', error));
+}
 
-//Set Users HasAnswers
+//Update AnswerdNum
+export function UpdateAnswerdNum(AnswerdNum) {
+  firebase
+    .firestore()
+    .collection('GameSession')
+    .doc('pilot1')
+    .update({
+      UsersAnswerd: AnswerdNum + 1,
+    })
+    .then(() => {
+      console.log('Document successfully updated!');
+    })
+    .catch((error) => console.log('error', error));
+}
 
-//Set ActiveQuestion
+//Update ActiveQuestion
 export function UpdateActiveQuestion(activeQuestion) {
   firebase
     .firestore()
@@ -83,6 +125,7 @@ export function GetQuestionInfo(setQuestionArray) {
       for (let index = 0; index < ary.length; index++) {
         ary[index].Answers.sort(() => Math.random() - 0.5);
       }
+
       setQuestionArray(ary);
     })
     .catch((error) => console.log('error', error));
@@ -97,6 +140,18 @@ export function SnapShotUsers(setUserArray) {
     .onSnapshot((doc) => {
       setUserArray(doc.data().users);
     });
+}
+// Update UserScore
+export function UpdateUserScore() {
+  firebase
+    .firestore()
+    .collection('GameSession')
+    .doc('Test')
+    .update({})
+    .then(() => {
+      console.log('Document successfully updated!');
+    })
+    .catch((error) => console.log('error', error));
 }
 
 /////////////////////////////////////////////////
