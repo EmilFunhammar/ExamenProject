@@ -141,17 +141,67 @@ export function SnapShotUsers(setUserArray) {
       setUserArray(doc.data().users);
     });
 }
+
+export function UpdateUserScore1() {
+  let userArrayRef = firebase.firestore().collection('GameSession').doc('Test');
+  if ('emil@gmail.com' == 'emil@gmail.com') {
+    userArrayRef.update({
+      users: [{ userName: 'emil', userScore: 2 }],
+    });
+  }
+
+  /*  userArrayRef.update({
+    users: [{ userName: 'emil', userScore: 2 }, { userName: 'ida' }],
+  }); */
+}
+
 // Update UserScore
 export function UpdateUserScore() {
-  firebase
-    .firestore()
-    .collection('GameSession')
-    .where('users', '==', 'anna')
-    .get()
-    .then((doc) => {
-      console.log('doc', doc.data());
-    })
-    .catch((error) => console.log('error', error));
+  let ary = [];
+
+  var userArrayRef = firebase.firestore().collection('GameSession').doc('Test');
+
+  userArrayRef.get().then((doc) => {
+    console.log('inne');
+    ary = [...doc.data().users];
+    for (let index = 0; index < ary.length; index++) {
+      if (ary[index].userName === 'emil') {
+        ary[index].userScore += 1;
+        console.log('här ', ary);
+        userArrayRef.update({
+          users: ary,
+        });
+
+        //console.log('updaterad score', ary[index].userScore);
+        //console.log('här ', ary[index].userScore);
+        //arrayRemove();
+        // arrayAdd();
+      }
+      /*   userArrayRef.update({
+        users: [
+          { userName: ary[index].userName, userScore: ary[index].userScore },
+        ],
+      }); */
+    }
+  });
+
+  const arrayRemove = () => {
+    userArrayRef
+      .update({
+        usersTest1: firebase.firestore.FieldValue.arrayRemove(),
+      })
+      .catch((error) => console.log('error', error));
+  };
+
+  const arrayAdd = () => {
+    for (let index = 0; index < ary1.length; index++) {
+      userArrayRef
+        .update({
+          usersTest1: firebase.firestore.FieldValue.arrayUnion(ary[index]),
+        })
+        .catch((error) => console.log('error', error));
+    }
+  };
 }
 /* 
 var ref = _firestore.collection('member').document(uidMember[index]);

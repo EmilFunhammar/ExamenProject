@@ -41,13 +41,12 @@ export default function GameBoard({ route }) {
       <View style={styles.questionView}>
         <Text style={styles.questionText}>
           {questionArray[activeQuestion].question} {'?'}
-          {/*   <Button
+          <Button
             title="get AQ"
             onPress={() => {
-              //setActiveQuestion((prev) => prev + 1);
-              console.log('AQ', SetActiveQuestion(activeQuestion));
+              UpdateUserScore();
             }}
-          /> */}
+          />
         </Text>
         {/*         <Text>ActiveQuestion: {activeQuestion}</Text>
          */}
@@ -106,6 +105,8 @@ const AnswerFeilds = ({
 
   useEffect(() => {
     if (AnswerdNum === usersArray.length) {
+      // knasar?
+      UpdateUserScore();
       ResetAnswerdNum();
       setTimeout(function () {
         setBackgroundColor('#146B66');
@@ -148,18 +149,6 @@ const AnswerFeilds = ({
 
   return (
     <View style={styles.answersView}>
-      <Button
-        title="set num"
-        onPress={() => {
-          UpdateUserScore();
-          //console.log('user', user.email);
-          /*  for (let index = 0; index < usersArray.length; index++) {
-            if (usersArray[index].userName === 'idaa') {
-              //UpdateUserScore();
-            }
-          } */
-        }}
-      />
       <View style={styles.leftSide}>
         <TouchableOpacity
           style={styles.answers}
