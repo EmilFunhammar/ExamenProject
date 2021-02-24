@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import { AddUserToGame } from '../context/firebase_context';
 import { AuthContext } from '../context/AuthContext';
-
 import { useNavigation } from '@react-navigation/native';
 
 export default function JoinGame() {
@@ -26,27 +25,16 @@ export default function JoinGame() {
         />
         <View style={styles.underLineView} />
       </View>
-
-      {/* <View
-        style={{
-          width: '100%',
-          height: '50%',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          backgroundColor: 'grey',
-        }}
-      > */}
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          AddUserToGame(user.displayName, user.email);
-          navigation.navigate('ParticipantScreen');
+          AddUserToGame(user.displayName, user.email, key);
+          navigation.navigate('ParticipantScreen', { gameKey: key });
         }}
       >
         <Text style={styles.buttonText}>Join game</Text>
       </TouchableOpacity>
     </View>
-    //</View>
   );
 }
 

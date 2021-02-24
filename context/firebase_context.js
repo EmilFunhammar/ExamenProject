@@ -7,6 +7,7 @@ import 'firebase/firestore';
 import 'firebase/functions';
 import 'firebase/storage';
 import { useEffect, useState } from 'react/cjs/react.development';
+import { useNavigation } from '@react-navigation/native';
 
 //import { AuthContext } from './AuthContext';
 
@@ -27,13 +28,53 @@ if (!firebase.apps.length) {
 
 export const auth = firebase.auth();
 
-export function AddUserToGame(userDisplayName, userEmail) {
+// Get questions from Firebase
+export function GetGameQuestions(setGameQuestions) {
+  let questionArray = [];
+  firebase
+    .firestore()
+    .collection('Questions')
+    .get()
+    .then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        questionArray.push(doc.data().question);
+      });
+    });
+  setGameQuestions(questionArray);
+}
+
+//UploadGameQuestion
+export function CreateGameSetup(questionsArray, sessionName, user) {
+  let userScore = 0;
+  let userEmail = user.email;
+  let userDisplayName = user.displayName;
+  let userAry = { userEmail, userDisplayName, userScore };
+
+  let ref = firebase.firestore().collection('GameSession').doc(sessionName);
+
+  ref
+    .set({
+      UsersAnswerd: 0,
+      ActiveQuestion: 0,
+      Questions: questionsArray,
+      users: firebase.firestore.FieldValue.arrayUnion(userAry),
+    })
+    .then(() => {
+      /*  ref.update({
+        users: firebase.firestore.FieldValue.arrayUnion(userAry),
+      }); */
+      //console.log('game Created');
+    })
+    .catch((error) => console.log('error', error));
+}
+
+export function AddUserToGame(userDisplayName, userEmail, gameKey) {
   let userScore = 0;
   let ary = { userScore, userEmail, userDisplayName };
   firebase
     .firestore()
     .collection('GameSession')
-    .doc('pilot1')
+    .doc(gameKey)
     .update({
       users: firebase.firestore.FieldValue.arrayUnion(ary),
     });
@@ -46,7 +87,7 @@ export function UpdateUserName(currentUserName) {
       displayName: currentUserName,
     })
     .then(function () {
-      console.log('document sucssesfuly');
+      //console.log('document sucssesfuly');
     })
     .catch(function (error) {
       console.log(error);
@@ -58,85 +99,87 @@ export function UpdateUserName(currentUserName) {
   firebase.firestore().collection('GameSession').doc('pilot1').update({})
 }
  */
-export function SnapshotUserAnswerd(setAnswerdNum) {
+export function SnapshotUserAnswerd(setAnswerdNum, gameKey) {
   firebase
     .firestore()
     .collection('GameSession')
-    .doc('pilot1')
+    .doc(gameKey)
     .onSnapshot((doc) => {
       setAnswerdNum(doc.data().UsersAnswerd);
       //console.log('härsds', doc.data().UsersAnswerd);
     });
 }
 //Reset AnswerdNum
-export function ResetAnswerdNum(AnswerdNum) {
+export function ResetAnswerdNum(gameKey) {
+  console.log('ResetAnswerdNum', gameKey);
+
   firebase
     .firestore()
     .collection('GameSession')
-    .doc('pilot1')
+    .doc(gameKey)
     .update({
       UsersAnswerd: 0,
     })
     .then(() => {
-      console.log('Document successfully updated!');
+      //console.log('Document successfully updated!');
     })
     .catch((error) => console.log('error', error));
 }
 
 //Update AnswerdNum
-export function UpdateAnswerdNum(AnswerdNum) {
+export function UpdateAnswerdNum(AnswerdNum, gameKey) {
+  // console.log('UpdateAnswerNum', gameKey);
+
   firebase
     .firestore()
     .collection('GameSession')
-    .doc('pilot1')
+    .doc(gameKey)
     .update({
       UsersAnswerd: AnswerdNum + 1,
     })
     .then(() => {
-      console.log('Document successfully updated!');
+      // console.log('Document successfully updated!');
     })
     .catch((error) => console.log('error', error));
 }
 
 //Update ActiveQuestion
-export function UpdateActiveQuestion(activeQuestion) {
+export function UpdateActiveQuestion(activeQuestion, gameKey) {
+  //console.log('updateActiveQuestion', gameKey);
   firebase
     .firestore()
     .collection('GameSession')
-    .doc('pilot1')
+    .doc(gameKey)
     .update({
       ActiveQuestion: activeQuestion + 1,
     })
     .then(() => {
-      console.log('Document successfully updated!');
+      //console.log('Document successfully updated!');
     })
     .catch((error) => console.log('error', error));
 }
 
 //SnapShop on HasANswerd
 export function SnapshotHasAnswers(setIfAnswerd) {
-  let ary = [];
+  // console.log('SnapShitHasAnswerd');
+
   firebase
     .firestore()
     .collection('GameSession')
     .doc('pilot1')
     .onSnapshot((doc) => {
       setIfAnswerd(doc.data().users);
-      /*  for (let index = 0; index < doc.data().users.length; index++) {
-        //console.log('här', doc.data().users[index].hasAnswerd);
-        ary.push(doc.data().users[index].hasAnswerd);
-      } */
-      //console.log('emil', ary);
-      //setIfAnswerd(ary);
     });
 }
 
 // SnapShot on ActiveQuestion
-export function SnapShotActiveQuestion(setActiveQuestion) {
+export function SnapShotActiveQuestion(setActiveQuestion, gameKey) {
+  //console.log('SnapShotActibeQurstion', gameKey);
+
   firebase
     .firestore()
     .collection('GameSession')
-    .doc('pilot1')
+    .doc(gameKey)
     .onSnapshot((doc) => {
       setActiveQuestion(doc.data().ActiveQuestion);
       //console.log('här', doc.data().ActiveQuestion);
@@ -144,117 +187,56 @@ export function SnapShotActiveQuestion(setActiveQuestion) {
 }
 
 // Get all the Questions and answers
-export function GetQuestionInfo(setQuestionArray) {
+export function GetQuestionInfo(setQuestionArray, gameKey) {
+  //console.log('GetQuestionInfo', gameKey);
+
   let ary = [];
   firebase
     .firestore()
     .collection('GameSession')
-    .doc('pilot1')
+    .doc(gameKey)
     .get()
     .then((doc) => {
       ary = [...doc.data().Questions];
       for (let index = 0; index < ary.length; index++) {
         ary[index].Answers.sort(() => Math.random() - 0.5);
       }
-
       setQuestionArray(ary);
     })
     .catch((error) => console.log('error', error));
 }
 
 // SnapShot on the users and there information
-export function SnapShotUsers(setUserArray) {
+export function SnapShotUsers(setUserArray, gameKey) {
+  //console.log('SnapShotUsers', gameKey);
+
   firebase
     .firestore()
     .collection('GameSession')
-    .doc('pilot1')
+    .doc(gameKey)
     .onSnapshot((doc) => {
-      console.log('users', doc.data());
       setUserArray(doc.data().users);
     });
 }
 
 // Update UserScore
-export function UpdateUserScore(userEmail) {
-  //const { user } = useContext(AuthContext);
+export function UpdateUserScore(userEmail, gameKey) {
+  //console.log('UpdateUserScore !!!!!', userEmail);
   let ary = [];
-
   var userArrayRef = firebase
     .firestore()
     .collection('GameSession')
-    .doc('pilot1');
+    .doc(gameKey);
 
   userArrayRef.get().then((doc) => {
-    //console.log('inne', userEmail);
     ary = [...doc.data().users];
     for (let index = 0; index < ary.length; index++) {
-      if (ary[index].userName === userEmail) {
-        console.log('user email');
+      if (ary[index].userEmail === userEmail) {
         ary[index].userScore += 1;
-        console.log('här ', ary);
-        // uppdatera endast när alla svarat
         userArrayRef.update({
           users: ary,
         });
-
-        //console.log('updaterad score', ary[index].userScore);
-        //console.log('här ', ary[index].userScore);
-        //arrayRemove();
-        // arrayAdd();
       }
-      /*   userArrayRef.update({
-        users: [
-          { userName: ary[index].userName, userScore: ary[index].userScore },
-        ],
-      }); */
     }
   });
-
-  const arrayRemove = () => {
-    userArrayRef
-      .update({
-        usersTest1: firebase.firestore.FieldValue.arrayRemove(),
-      })
-      .catch((error) => console.log('error', error));
-  };
-
-  const arrayAdd = () => {
-    for (let index = 0; index < ary.length; index++) {
-      userArrayRef
-        .update({
-          usersTest1: firebase.firestore.FieldValue.arrayUnion(ary[index]),
-        })
-        .catch((error) => console.log('error', error));
-    }
-  };
 }
-/* 
-var ref = _firestore.collection('member').document(uidMember[index]);
-ref.get() => then(function(snapshot) {
-    List<dynamic> list = List.from(snapshot.data['statistics']);
-    //if you need to update all positions of the array do a foreach instead of the next line
-    list[0].CH = false;
-    ref.updateData({
-        'statistics': list
-    }).catchError((e) {
-        print(e);
-    });
-}.catchError((e) {
-    print(e);
-}); */
-
-//.doc('Test')
-/*     .update({
-      users: firebase.firestore.FieldValue.delete(0), */
-//users: firebase.firestore.FieldValue.arrayRemove('2'),
-//users: firebase.firestore.FieldValue.arrayUnion('emil'),
-
-//users: firebase.firestore.FieldValue.arrayUnion('emil  användare'),
-/*   })
-    .then(() => {
-      console.log('Document successfully updated!');
-    })
-    .catch((error) => console.log('error', error));
-} */
-
-/////////////////////////////////////////////////

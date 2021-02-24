@@ -1,13 +1,38 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import React, { useContext, useState, useEffect } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
+import { GetGameQuestions, CreateGameSetup } from '../context/firebase_context';
+import { AuthContext } from '../context/AuthContext';
+import { useNavigation } from '@react-navigation/native';
 
 export default function CreateGameComponent() {
+  const navigation = useNavigation();
+  const { user } = useContext(AuthContext);
   const [key, setKey] = useState('');
+  const [gameQuestions, setGameQuestions] = useState();
+
+  useEffect(() => {
+    GetGameQuestions(setGameQuestions);
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.textView}>
-        <Text style={styles.text}>Enter game key</Text>
+        <Text
+          style={styles.text}
+          onPress={() => {
+            gameQuestions.sort(() => Math.random() - 0.5);
+
+            console.log('q', gameQuestions);
+          }}
+        >
+          Enter game key
+        </Text>
+
         <TextInput
           style={styles.textInput}
           placeholder="Enter key here:"
@@ -16,7 +41,12 @@ export default function CreateGameComponent() {
         <View style={styles.underLineView} />
       </View>
       <View style={styles.button}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            CreateGameSetup(gameQuestions, key, user);
+            navigation.navigate('ParticipantScreen', { gameKey: key });
+          }}
+        >
           <Text style={styles.buttonText}>Go to lobby</Text>
         </TouchableOpacity>
       </View>

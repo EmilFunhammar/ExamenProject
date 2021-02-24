@@ -4,17 +4,18 @@ import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { GetQuestionInfo, SnapShotUsers } from '../context/firebase_context';
 
-export default function JoinGame() {
+export default function JoinGame({ route }) {
   const navigation = useNavigation();
+  const { gameKey } = route.params;
   const [userArray, setUserArray] = useState(['']);
   const [questionArray, setQuestionArray] = useState(['']);
 
   const SnapShotObserver = () => {
-    SnapShotUsers(setUserArray);
+    SnapShotUsers(setUserArray, gameKey);
   };
   useEffect(() => {
     SnapShotObserver();
-    GetQuestionInfo(setQuestionArray);
+    GetQuestionInfo(setQuestionArray, gameKey);
   }, []);
 
   return (
@@ -23,16 +24,24 @@ export default function JoinGame() {
       style={styles.container}
     >
       <View style={styles.participantView}>
-        <Text style={styles.participantTextHeader}>Participants</Text>
+        <Text
+          style={styles.participantTextHeader}
+          onPress={() => console.log('nuckel', gameKey)}
+        >
+          Participants
+        </Text>
         {userArray.map((element, index) => (
-          <ParticipantView key={index} element={element.userName} />
+          <ParticipantView key={index} element={element.userDisplayName} />
         ))}
       </View>
 
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          navigation.navigate('GameScreen', { questionArray: questionArray });
+          navigation.navigate('GameScreen', {
+            questionArray: questionArray,
+            gameKey: gameKey,
+          });
         }}
       >
         <Text style={styles.buttonText}>Start Game</Text>

@@ -17,18 +17,19 @@ import {
   UpdateUserScore,
 } from '../context/firebase_context';
 import { AuthContext } from '../context/AuthContext';
+import { useNavigation } from '@react-navigation/native';
 
 export default function GameBoard({ route }) {
   const [usersArray, setUsersArray] = useState(['']);
   const [activeQuestion, SetActiveQuestion] = useState(0);
   const [backgroundColor, setBackgroundColor] = useState('#146B66');
   const { user } = useContext(AuthContext);
-
-  const { questionArray } = route.params;
+  const { questionArray, gameKey } = route.params;
+  const { navigation } = useNavigation();
 
   const SnapShotObservers = () => {
-    SnapShotUsers(setUsersArray);
-    SnapShotActiveQuestion(SetActiveQuestion);
+    SnapShotUsers(setUsersArray, gameKey);
+    SnapShotActiveQuestion(SetActiveQuestion, gameKey);
   };
 
   useEffect(() => {
@@ -37,26 +38,32 @@ export default function GameBoard({ route }) {
     //GetQuestionInfo(setQuestionArray);
   }, []);
 
+  useEffect(() => {
+    console.log('här', questionArray.length - 1);
+    if (questionArray.length - 1 === activeQuestion) {
+      navigation.navigate('WinnerScreen');
+      //console.log('sista frågan', questionArray.length, activeQuestion);
+    } else {
+      console.log('här i slutet');
+    }
+    //////////////////////////////
+  }, [activeQuestion, navigation, questionArray.length]);
+
   return (
     <View style={{ ...styles.container, backgroundColor: backgroundColor }}>
       <View style={styles.questionView}>
-        <Text style={styles.questionText}>
+        <Text
+          style={styles.questionText}
+          onPress={() => navigation.navigate('WinnerScreen')}
+        >
           {questionArray[activeQuestion].question} {'?'}
-          {/*  <Button
-            title="get AQ"
-            onPress={() => {
-              UpdateUserScore(user.email);
-            }}
-          /> */}
         </Text>
-        {/*         <Text>ActiveQuestion: {activeQuestion}</Text>
-         */}
       </View>
 
       {usersArray.map((element, index) => (
         <ScoreFeild
           key={index}
-          userName={element.userName}
+          userName={element.userDisplayName}
           userScore={element.userScore}
         />
       ))}
@@ -67,6 +74,7 @@ export default function GameBoard({ route }) {
         setActiveQuestion={SetActiveQuestion}
         setBackgroundColor={setBackgroundColor}
         usersArray={usersArray}
+        gameKey={gameKey}
 
         //questionArrayAnswers={questionArray[0].Answers}
       />
@@ -90,6 +98,7 @@ const AnswerFeilds = ({
   setActiveQuestion,
   setBackgroundColor,
   usersArray,
+  gameKey,
 }) => {
   const { user } = useContext(AuthContext);
   //const [ifAnswerd, setIfAnswerd] = useState([]);
@@ -97,7 +106,7 @@ const AnswerFeilds = ({
 
   const SnapShotObserver = () => {
     //console.log('OBSERVER');
-    SnapshotUserAnswerd(setAnswerdNum);
+    SnapshotUserAnswerd(setAnswerdNum, gameKey);
   };
   useEffect(() => {
     // console.log('EFFECT');
@@ -108,10 +117,11 @@ const AnswerFeilds = ({
     if (AnswerdNum === usersArray.length) {
       // knasar?
       //UpdateUserScore();
-      ResetAnswerdNum();
+      ResetAnswerdNum(gameKey);
       setTimeout(function () {
         setBackgroundColor('#146B66');
-        UpdateActiveQuestion(activeQuestion);
+
+        UpdateActiveQuestion(activeQuestion, gameKey);
       }, 2000);
     } /* else {
       console.log('answerdNum = ', AnswerdNum);
@@ -119,6 +129,7 @@ const AnswerFeilds = ({
   }, [
     AnswerdNum,
     activeQuestion,
+    gameKey,
     setActiveQuestion,
     setBackgroundColor,
     usersArray.length,
@@ -131,7 +142,7 @@ const AnswerFeilds = ({
     if (usersAnswer === questionsRightAnswer) {
       setBackgroundColor('green');
       //console.log('emil', user);
-      UpdateUserScore(user.email);
+      UpdateUserScore(user.email, gameKey);
 
       // setTimeout(function () {
       /* for (let index = 0; index < usersArray.length; index++) {
@@ -139,13 +150,13 @@ const AnswerFeilds = ({
           UpdateUserScore();
         }
       } */
-      UpdateAnswerdNum(AnswerdNum);
+      UpdateAnswerdNum(AnswerdNum, gameKey);
       // setBackgroundColor('#146B66');
       // }, 2000);
     } else {
       setBackgroundColor('red');
       //setTimeout(function () {
-      UpdateAnswerdNum(AnswerdNum);
+      UpdateAnswerdNum(AnswerdNum, gameKey);
       //setBackgroundColor('#146B66');
       // }, 2000);
     }
@@ -162,8 +173,6 @@ const AnswerFeilds = ({
         >
           <View>
             <Text style={styles.answersText}>
-              {/*  {AnswerdNum} */}
-              {/* {`${ifAnswerd[0].hasAnswerd}`} */}
               {questionArray[activeQuestion].Answers[0]}
             </Text>
           </View>
