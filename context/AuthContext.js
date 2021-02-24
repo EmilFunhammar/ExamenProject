@@ -1,5 +1,6 @@
 import React, { useState, createContext, useEffect } from 'react';
 import { auth } from './firebase_context';
+import { UpdateUserName } from '../context/firebase_context';
 
 export const AuthContext = createContext();
 
@@ -23,9 +24,10 @@ export default function AuthContextProvider({ children }) {
       console.log('error', errorMessage);
     }
   };
-  const createUser = async (email, password) => {
+  const createUser = async (email, password, userName) => {
     try {
       await auth.createUserWithEmailAndPassword(email, password);
+      UpdateUserName(userName);
       console.log('sucssesful sign up');
     } catch (error) {
       var errorMessage = error.message;

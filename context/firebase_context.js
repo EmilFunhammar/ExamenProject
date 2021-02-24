@@ -1,10 +1,14 @@
 import firebase, { firestore } from 'firebase';
+//import React, { useContext } from 'react';
+
 import 'firebase/auth';
 import 'firebase/database';
 import 'firebase/firestore';
 import 'firebase/functions';
 import 'firebase/storage';
-import { useState } from 'react/cjs/react.development';
+import { useEffect, useState } from 'react/cjs/react.development';
+
+//import { AuthContext } from './AuthContext';
 
 var firebaseConfig = {
   apiKey: 'AIzaSyDfjQkD4UeSNfs1yup3oprY9sQx0ZcH4Uk',
@@ -22,6 +26,33 @@ if (!firebase.apps.length) {
 }
 
 export const auth = firebase.auth();
+
+export function AddUserToGame(userDisplayName, userEmail) {
+  let userScore = 0;
+  let ary = { userScore, userEmail, userDisplayName };
+  firebase
+    .firestore()
+    .collection('GameSession')
+    .doc('pilot1')
+    .update({
+      users: firebase.firestore.FieldValue.arrayUnion(ary),
+    });
+}
+
+export function UpdateUserName(currentUserName) {
+  const currentUser = firebase.auth().currentUser;
+  currentUser
+    .updateProfile({
+      displayName: currentUserName,
+    })
+    .then(function () {
+      console.log('document sucssesfuly');
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
+
 // Update ActiveQuestion
 /* export function UpdateActiveQuestion() {
   firebase.firestore().collection('GameSession').doc('pilot1').update({})
@@ -138,36 +169,30 @@ export function SnapShotUsers(setUserArray) {
     .collection('GameSession')
     .doc('pilot1')
     .onSnapshot((doc) => {
+      console.log('users', doc.data());
       setUserArray(doc.data().users);
     });
 }
 
-export function UpdateUserScore1() {
-  let userArrayRef = firebase.firestore().collection('GameSession').doc('Test');
-  if ('emil@gmail.com' == 'emil@gmail.com') {
-    userArrayRef.update({
-      users: [{ userName: 'emil', userScore: 2 }],
-    });
-  }
-
-  /*  userArrayRef.update({
-    users: [{ userName: 'emil', userScore: 2 }, { userName: 'ida' }],
-  }); */
-}
-
 // Update UserScore
-export function UpdateUserScore() {
+export function UpdateUserScore(userEmail) {
+  //const { user } = useContext(AuthContext);
   let ary = [];
 
-  var userArrayRef = firebase.firestore().collection('GameSession').doc('Test');
+  var userArrayRef = firebase
+    .firestore()
+    .collection('GameSession')
+    .doc('pilot1');
 
   userArrayRef.get().then((doc) => {
-    console.log('inne');
+    //console.log('inne', userEmail);
     ary = [...doc.data().users];
     for (let index = 0; index < ary.length; index++) {
-      if (ary[index].userName === 'emil') {
+      if (ary[index].userName === userEmail) {
+        console.log('user email');
         ary[index].userScore += 1;
         console.log('här ', ary);
+        // uppdatera endast när alla svarat
         userArrayRef.update({
           users: ary,
         });
@@ -194,7 +219,7 @@ export function UpdateUserScore() {
   };
 
   const arrayAdd = () => {
-    for (let index = 0; index < ary1.length; index++) {
+    for (let index = 0; index < ary.length; index++) {
       userArrayRef
         .update({
           usersTest1: firebase.firestore.FieldValue.arrayUnion(ary[index]),
@@ -233,71 +258,3 @@ ref.get() => then(function(snapshot) {
 } */
 
 /////////////////////////////////////////////////
-
-export function GetUsers() {
-  firebase
-    .firestore()
-    .collection('GameSession')
-    .doc('pilot1')
-    .get()
-    .then((doc) => {
-      console.log('Document data:', doc.data());
-    })
-    .catch((error) => {
-      console.log('Error getting document:', error);
-    });
-}
-
-export function SnapShotUsersWithColor(setUserArray) {
-  let array = [];
-  firebase
-    .firestore()
-    .collection('GameSession')
-    .doc('pilot1')
-    .onSnapshot((doc) => {
-      for (var i = 0; i < doc.data().users.length; i++) {
-        var thing = {
-          userName: doc.data().users[i].userName,
-          userColor: doc.data().users[i].userColor,
-        };
-
-        array.push(thing);
-      }
-
-      setUserArray(array);
-    });
-}
-export function ListenToTheWorkout(garbage, workoutId, setArray) {
-  console.log(garbage);
-  firebase
-    .firestore()
-    .collection('WorkoutSession')
-    .doc(workoutId)
-    .onSnapshot((doc) => {
-      setArray(doc.data().users);
-    });
-}
-
-export function ListenToTheWorkout2(workoutId, setArray) {
-  firebase
-    .firestore()
-    .collection('WorkoutSession')
-    .doc(workoutId)
-    .collection('Exersices')
-    .onSnapshot(function (querySnapshot) {
-      var cities = [];
-      querySnapshot.forEach(function (doc) {
-        let docs = doc.data();
-        console.log('data', docs);
-        let document = {
-          exersice: docs.exercise,
-          data: docs.users,
-          reps: docs.reps,
-          sets: docs.sets,
-        };
-        console.log('document', document);
-        cities.push(document);
-      });
-      setArray(cities);
-    });
-}

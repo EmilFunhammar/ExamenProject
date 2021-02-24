@@ -14,12 +14,13 @@ export default function Login() {
   const { logInUser, createUser } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [userName, setUserName] = useState('');
 
   const logIn = () => {
     logInUser(email, password);
   };
   const registrerUser = () => {
-    createUser(email, password);
+    createUser(email, password, userName);
   };
 
   return (
@@ -31,6 +32,14 @@ export default function Login() {
         <Text style={styles.logIntoText}>Log into to youre account!</Text>
         <View style={styles.textFeildView}>
           {/* <Text style={{ fontWeight: 'bold' }}>Email</Text> */}
+          <TextInput
+            style={styles.textinputs}
+            placeholder="Enter Username:"
+            placeholderTextColor="black"
+            value={userName}
+            onChangeText={setUserName}
+          />
+          <View style={styles.underLineView} />
           <TextInput
             style={styles.textinputs}
             placeholder="Enter email:"

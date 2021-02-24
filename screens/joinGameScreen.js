@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,12 +6,15 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import { AddUserToGame } from '../context/firebase_context';
+import { AuthContext } from '../context/AuthContext';
 
 import { useNavigation } from '@react-navigation/native';
 
 export default function JoinGame() {
   const navigation = useNavigation();
   const [key, setKey] = useState('');
+  const { user } = useContext(AuthContext);
   return (
     <View style={styles.container}>
       <View style={styles.textView}>
@@ -35,7 +38,10 @@ export default function JoinGame() {
       > */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('ParticipantScreen')}
+        onPress={() => {
+          AddUserToGame(user.displayName, user.email);
+          navigation.navigate('ParticipantScreen');
+        }}
       >
         <Text style={styles.buttonText}>Join game</Text>
       </TouchableOpacity>

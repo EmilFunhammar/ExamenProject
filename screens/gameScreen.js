@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -17,12 +17,13 @@ import {
   UpdateUserScore,
 } from '../context/firebase_context';
 import { AuthContext } from '../context/AuthContext';
-import { useContext } from 'react/cjs/react.development';
 
 export default function GameBoard({ route }) {
   const [usersArray, setUsersArray] = useState(['']);
   const [activeQuestion, SetActiveQuestion] = useState(0);
   const [backgroundColor, setBackgroundColor] = useState('#146B66');
+  const { user } = useContext(AuthContext);
+
   const { questionArray } = route.params;
 
   const SnapShotObservers = () => {
@@ -41,12 +42,12 @@ export default function GameBoard({ route }) {
       <View style={styles.questionView}>
         <Text style={styles.questionText}>
           {questionArray[activeQuestion].question} {'?'}
-          <Button
+          {/*  <Button
             title="get AQ"
             onPress={() => {
-              UpdateUserScore();
+              UpdateUserScore(user.email);
             }}
-          />
+          /> */}
         </Text>
         {/*         <Text>ActiveQuestion: {activeQuestion}</Text>
          */}
@@ -106,7 +107,7 @@ const AnswerFeilds = ({
   useEffect(() => {
     if (AnswerdNum === usersArray.length) {
       // knasar?
-      UpdateUserScore();
+      //UpdateUserScore();
       ResetAnswerdNum();
       setTimeout(function () {
         setBackgroundColor('#146B66');
@@ -129,6 +130,9 @@ const AnswerFeilds = ({
 
     if (usersAnswer === questionsRightAnswer) {
       setBackgroundColor('green');
+      //console.log('emil', user);
+      UpdateUserScore(user.email);
+
       // setTimeout(function () {
       /* for (let index = 0; index < usersArray.length; index++) {
         if (usersArray[index].userName == 'idaa') {
