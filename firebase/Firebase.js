@@ -28,6 +28,23 @@ if (!firebase.apps.length) {
 
 export const auth = firebase.auth();
 
+//Get users Score and name
+export function GetUsers(setUserArray, gameKey) {
+  //console.log('SnapShotUsers', gameKey);
+
+  firebase
+    .firestore()
+    .collection('GameSession')
+    .doc(gameKey)
+    .get()
+    .then((doc) => {
+      setUserArray(doc.data().users);
+    })
+    .catch((error) => {
+      console.log('error', error);
+    });
+}
+
 // Get questions from Firebase
 export function GetGameQuestions(setGameQuestions) {
   let questionArray = [];
