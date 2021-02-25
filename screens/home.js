@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { GetUsers, SnapShotUsers } from '../context/firebase_context';
+import { GetUsers, SnapShotUsers } from '../firebase/Firebase';
 import { ThemeContext } from '../context/ThemeContext';
 
 export default function HomePage() {

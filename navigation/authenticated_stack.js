@@ -6,14 +6,14 @@ import { AuthContext } from '../context/AuthContext';
 import CreatGameComponent from '../screens/createGameScreen';
 import JoinGame from '../screens/joinGameScreen';
 import Participants from '../screens/participantScreen';
-import GameWinner from '../screens/gameVinnerScreen';
+import GameWinner from '../screens/gameWinnerScreen';
 import GameBoard from '../screens/gameScreen';
 
 const Stack = createStackNavigator();
 
 export default function AuthenticatedStack() {
   return (
-    <Stack.Navigator initialRouteName="home">
+    <Stack.Navigator initialRouteName="WinnerScreen">
       <Stack.Screen
         name="home"
         component={HomePage}
@@ -45,6 +45,7 @@ export default function AuthenticatedStack() {
         options={{
           headerStyle: { backgroundColor: '#AFEFDF' },
           title: '',
+          headerShown: false,
         }}
       />
       <Stack.Screen

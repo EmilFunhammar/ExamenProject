@@ -6,7 +6,10 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import { GetGameQuestions, CreateGameSetup } from '../context/firebase_context';
+import {
+  GetGameQuestions,
+  CreateGameSetup,
+} from '../firebase/Firebase';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 

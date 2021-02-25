@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { AuthContext } from '../context/AuthContext';
 
 export default function GameWinner() {
+  const { user } = useContext(AuthContext);
   return (
     <View style={styles.container}>
-      <Text>THis is Winner Screen</Text>
+      <Text onPress={() => console.log(user)}>THis is Winner Screen</Text>
     </View>
   );
 }

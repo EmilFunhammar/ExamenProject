@@ -1,8 +1,8 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { GetQuestionInfo, SnapShotUsers } from '../context/firebase_context';
+import { GetQuestionInfo, SnapShotUsers } from '../firebase/Firebase';
 
 export default function JoinGame({ route }) {
   const navigation = useNavigation();

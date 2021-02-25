@@ -15,7 +15,7 @@ import {
   SnapshotUserAnswerd,
   UpdateAnswerdNum,
   UpdateUserScore,
-} from '../context/firebase_context';
+} from '../firebase/Firebase';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 
@@ -23,9 +23,9 @@ export default function GameBoard({ route }) {
   const [usersArray, setUsersArray] = useState(['']);
   const [activeQuestion, SetActiveQuestion] = useState(0);
   const [backgroundColor, setBackgroundColor] = useState('#146B66');
-  const { user } = useContext(AuthContext);
+  //const { user } = useContext(AuthContext);
   const { questionArray, gameKey } = route.params;
-  const { navigation } = useNavigation();
+  const navigation = useNavigation();
 
   const SnapShotObservers = () => {
     SnapShotUsers(setUsersArray, gameKey);
@@ -42,6 +42,7 @@ export default function GameBoard({ route }) {
     console.log('här', questionArray.length - 1);
     if (questionArray.length - 1 === activeQuestion) {
       navigation.navigate('WinnerScreen');
+
       //console.log('sista frågan', questionArray.length, activeQuestion);
     } else {
       console.log('här i slutet');
