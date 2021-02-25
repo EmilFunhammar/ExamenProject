@@ -5,11 +5,11 @@ import { useEffect, useState } from 'react/cjs/react.development';
 import { AuthContext } from '../context/AuthContext';
 import { GetUsers } from '../firebase/Firebase';
 
-export default function GameWinner() {
+export default function GameWinner({ route }) {
+  const { gameKey } = route.params;
   const { user } = useContext(AuthContext);
   const [userAry, setUserAry] = useState(['']);
   const [winner, setWinner] = useState('');
-  const gameKey = 'Emil';
 
   const SortOutWinner = () => {
     let highScore = 0;

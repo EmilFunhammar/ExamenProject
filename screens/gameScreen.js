@@ -41,7 +41,7 @@ export default function GameBoard({ route }) {
   useEffect(() => {
     console.log('här', questionArray.length - 1);
     if (questionArray.length - 1 === activeQuestion) {
-      navigation.navigate('WinnerScreen');
+      navigation.navigate('WinnerScreen', { gameKey: gameKey });
 
       //console.log('sista frågan', questionArray.length, activeQuestion);
     } else {
@@ -53,10 +53,7 @@ export default function GameBoard({ route }) {
   return (
     <View style={{ ...styles.container, backgroundColor: backgroundColor }}>
       <View style={styles.questionView}>
-        <Text
-          style={styles.questionText}
-          onPress={() => navigation.navigate('WinnerScreen')}
-        >
+        <Text style={styles.questionText}>
           {questionArray[activeQuestion].question} {'?'}
         </Text>
       </View>

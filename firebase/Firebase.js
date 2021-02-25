@@ -92,8 +92,20 @@ export function AddUserToGame(userDisplayName, userEmail, gameKey) {
     .firestore()
     .collection('GameSession')
     .doc(gameKey)
-    .update({
-      users: firebase.firestore.FieldValue.arrayUnion(ary),
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        firebase
+          .firestore()
+          .collection('GameSession')
+          .doc(gameKey)
+          .update({
+            users: firebase.firestore.FieldValue.arrayUnion(ary),
+          });
+        return true;
+      } else {
+        return false;
+      }
     });
 }
 

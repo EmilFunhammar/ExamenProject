@@ -13,7 +13,7 @@ const Stack = createStackNavigator();
 
 export default function AuthenticatedStack() {
   return (
-    <Stack.Navigator initialRouteName="WinnerScreen">
+    <Stack.Navigator initialRouteName="home">
       <Stack.Screen
         name="home"
         component={HomePage}

@@ -5,6 +5,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { AddUserToGame } from '../firebase/Firebase';
 import { AuthContext } from '../context/AuthContext';
@@ -14,6 +15,7 @@ export default function JoinGame() {
   const navigation = useNavigation();
   const [key, setKey] = useState('');
   const { user } = useContext(AuthContext);
+
   return (
     <View style={styles.container}>
       <View style={styles.textView}>
@@ -28,8 +30,14 @@ export default function JoinGame() {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          AddUserToGame(user.displayName, user.email, key);
-          navigation.navigate('ParticipantScreen', { gameKey: key });
+          if (AddUserToGame(user.displayName, user.email, key)) {
+            navigation.navigate('ParticipantScreen', { gameKey: key });
+          } else {
+            Alert.alert('wrong key');
+            /* Alert.alert('Wrong key', [
+              { text: 'ok', onPress: () => setKey('') },
+            ]); */
+          }
         }}
       >
         <Text style={styles.buttonText}>Join game</Text>
