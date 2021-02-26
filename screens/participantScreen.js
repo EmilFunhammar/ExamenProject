@@ -26,7 +26,15 @@ export default function JoinGame({ route }) {
       <View style={styles.participantView}>
         <Text
           style={styles.participantTextHeader}
-          onPress={() => console.log('nuckel', gameKey)}
+          onPress={() => {
+            /*   for (let index = 0; index < questionAnswersArray.length; index++) {
+              questionAnswersArray[index].Answers.sort(
+                () => Math.random() - 0.5
+              );
+            } */
+            //GetQuestionInfo(setQuestionArray, gameKey);
+            console.log('häääääär', questionArray[0]);
+          }}
         >
           Participants
         </Text>

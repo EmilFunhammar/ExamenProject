@@ -218,7 +218,6 @@ export function SnapShotActiveQuestion(setActiveQuestion, gameKey) {
 // Get all the Questions and answers
 export function GetQuestionInfo(setQuestionArray, gameKey) {
   //console.log('GetQuestionInfo', gameKey);
-
   let ary = [];
   firebase
     .firestore()
@@ -230,6 +229,7 @@ export function GetQuestionInfo(setQuestionArray, gameKey) {
       for (let index = 0; index < ary.length; index++) {
         ary[index].Answers.sort(() => Math.random() - 0.5);
       }
+      ary.sort(() => Math.random() - 0.5);
       setQuestionArray(ary);
     })
     .catch((error) => console.log('error', error));

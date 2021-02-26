@@ -48,7 +48,7 @@ export default function GameBoard({ route }) {
       console.log('här i slutet');
     }
     //////////////////////////////
-  }, [activeQuestion, navigation, questionArray.length]);
+  }, [activeQuestion, gameKey, navigation, questionArray.length]);
 
   return (
     <View style={{ ...styles.container, backgroundColor: backgroundColor }}>
