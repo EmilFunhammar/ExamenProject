@@ -33,7 +33,7 @@ export default function JoinGame({ route }) {
               );
             } */
             //GetQuestionInfo(setQuestionArray, gameKey);
-            console.log('häääääär', questionArray[0]);
+            console.log('häääääär', questionArray.length);
           }}
         >
           Participants

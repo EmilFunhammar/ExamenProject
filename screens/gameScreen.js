@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   questionText: {
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: '600',
     width: '80%',
   },

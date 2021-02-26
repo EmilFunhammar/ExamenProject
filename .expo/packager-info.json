@@ -4,5 +4,6 @@
   "packagerPort": 19000,
   "expoServerNgrokUrl": "https://75-u5r.emilfunhammar.examenproject.exp.direct",
   "packagerNgrokUrl": "https://packager.75-u5r.emilfunhammar.examenproject.exp.direct",
-  "ngrokPid": 69079
+  "ngrokPid": 76583,
+  "webpackServerPort": 19006
 }

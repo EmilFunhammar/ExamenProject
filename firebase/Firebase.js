@@ -8,6 +8,7 @@ import 'firebase/functions';
 import 'firebase/storage';
 import { useEffect, useState } from 'react/cjs/react.development';
 import { useNavigation } from '@react-navigation/native';
+import { Alert } from 'react-native';
 
 //import { AuthContext } from './AuthContext';
 
@@ -85,7 +86,25 @@ export function CreateGameSetup(questionsArray, sessionName, user) {
     .catch((error) => console.log('error', error));
 }
 
-export function AddUserToGame(userDisplayName, userEmail, gameKey) {
+export function doesDocExist(gameKey, setIfDocExsists) {
+  firebase
+    .firestore()
+    .collection('GameSession')
+    .doc(gameKey)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        setIfDocExsists(true);
+      }
+    });
+}
+
+export function AddUserToGame(
+  userDisplayName,
+  userEmail,
+  gameKey,
+  setIfDocExsists
+) {
   let userScore = 0;
   let ary = { userScore, userEmail, userDisplayName };
   firebase
@@ -102,9 +121,9 @@ export function AddUserToGame(userDisplayName, userEmail, gameKey) {
           .update({
             users: firebase.firestore.FieldValue.arrayUnion(ary),
           });
-        return true;
+        setIfDocExsists(true);
       } else {
-        return false;
+        setIfDocExsists(false);
       }
     });
 }
@@ -230,7 +249,9 @@ export function GetQuestionInfo(setQuestionArray, gameKey) {
         ary[index].Answers.sort(() => Math.random() - 0.5);
       }
       ary.sort(() => Math.random() - 0.5);
-      setQuestionArray(ary);
+      const size = 10;
+      const items = ary.slice(0, size);
+      setQuestionArray(items);
     })
     .catch((error) => console.log('error', error));
 }

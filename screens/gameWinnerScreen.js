@@ -4,8 +4,10 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { useEffect, useState } from 'react/cjs/react.development';
 import { AuthContext } from '../context/AuthContext';
 import { GetUsers } from '../firebase/Firebase';
+import { useNavigation } from '@react-navigation/native';
 
 export default function GameWinner({ route }) {
+  const navigation = useNavigation();
   const { gameKey } = route.params;
   const { user } = useContext(AuthContext);
   const [userAry, setUserAry] = useState(['']);
@@ -74,7 +76,10 @@ export default function GameWinner({ route }) {
             height: '30%',
           }}
         >
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('home')}
+          >
             <Text style={{ fontWeight: 'bold', fontSize: 32 }}>Quit Game</Text>
           </TouchableOpacity>
         </View>
