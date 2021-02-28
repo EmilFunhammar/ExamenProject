@@ -4,8 +4,10 @@ hittils får jag ner den from firebase
 
 
 hämtar frågor i vyn innan
-Ändra userns namn till något annat än mailen
 
 
-blanda innen spelat inte varsin användare
-vad svarade alla
+
+blanda innen spelat inte varsin användare // done
+vad svarade alla // map funkar inte// joinare lägger inte till i firebase
+timmer varnignen
+starta spel så ska allas startas
