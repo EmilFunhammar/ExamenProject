@@ -123,11 +123,11 @@ const AnswerFeilds = ({
   useEffect(() => {
     if (AnswerdNum === usersArray.length) {
       ResetAnswerdNum(gameKey);
-      setModalVisable(true);
+      //setModalVisable(true);
       setTimeout(function () {
         setBackgroundColor('#146B66');
         UpdateActiveQuestion(activeQuestion, gameKey);
-        setModalVisable(false);
+        //setModalVisable(false);
       }, 4000);
     }
   }, [
