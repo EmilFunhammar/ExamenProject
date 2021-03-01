@@ -6,10 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {
-  GetGameQuestions,
-  CreateGameSetup,
-} from '../firebase/Firebase';
+import { GetGameQuestions, CreateGameSetup } from '../firebase/Firebase';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 
@@ -27,11 +24,11 @@ export default function CreateGameComponent() {
       <View style={styles.textView}>
         <Text
           style={styles.text}
-          onPress={() => {
-            gameQuestions.sort(() => Math.random() - 0.5);
+          /*  onPress={() => {
+            //gameQuestions.sort(() => Math.random() - 0.5);
 
             console.log('q', gameQuestions);
-          }}
+          }} */
         >
           Enter game key
         </Text>

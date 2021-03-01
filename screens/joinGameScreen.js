@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { AddUserToGame, doesDocExist } from '../firebase/Firebase';
+import { AddUserToGame } from '../firebase/Firebase';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react/cjs/react.development';

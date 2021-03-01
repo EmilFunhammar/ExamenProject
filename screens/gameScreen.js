@@ -1,12 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Button,
-  Alert,
-} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Modal } from 'react-native';
 import {
   SnapShotUsers,
   SnapShotActiveQuestion,
@@ -15,6 +8,7 @@ import {
   SnapshotUserAnswerd,
   UpdateAnswerdNum,
   UpdateUserScore,
+  SaveUserAnswers,
 } from '../firebase/Firebase';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
@@ -23,6 +17,8 @@ export default function GameBoard({ route }) {
   const [usersArray, setUsersArray] = useState(['']);
   const [activeQuestion, SetActiveQuestion] = useState(0);
   const [backgroundColor, setBackgroundColor] = useState('#146B66');
+  const [modalVisiable, setModalVisable] = useState(false);
+
   //const { user } = useContext(AuthContext);
   const { questionArray, gameKey } = route.params;
   const navigation = useNavigation();
@@ -65,6 +61,23 @@ export default function GameBoard({ route }) {
           userScore={element.userScore}
         />
       ))}
+      <View>
+        <Modal animationType="slide" transparent={true} visible={modalVisiable}>
+          <View style={styles.modal}>
+            {usersArray.map((element, index) => (
+              /*  <View style={{ flexDirection: 'row' }}>
+                <Text>g{element.userDisplayName}</Text>
+                <Text>g{element.userScore}</Text>
+              </View> */
+              <ModalTextComponent
+                key={index}
+                userName={element.userDisplayName}
+                userAnswer={element.userAnswer}
+              />
+            ))}
+          </View>
+        </Modal>
+      </View>
 
       <AnswerFeilds
         questionArray={questionArray}
@@ -73,8 +86,7 @@ export default function GameBoard({ route }) {
         setBackgroundColor={setBackgroundColor}
         usersArray={usersArray}
         gameKey={gameKey}
-
-        //questionArrayAnswers={questionArray[0].Answers}
+        setModalVisable={setModalVisable}
       />
     </View>
   );
@@ -97,67 +109,54 @@ const AnswerFeilds = ({
   setBackgroundColor,
   usersArray,
   gameKey,
+  setModalVisable,
 }) => {
   const { user } = useContext(AuthContext);
-  //const [ifAnswerd, setIfAnswerd] = useState([]);
   const [AnswerdNum, setAnswerdNum] = useState(0);
-
   const SnapShotObserver = () => {
-    //console.log('OBSERVER');
     SnapshotUserAnswerd(setAnswerdNum, gameKey);
   };
   useEffect(() => {
-    // console.log('EFFECT');
     SnapShotObserver();
   }, []);
 
   useEffect(() => {
     if (AnswerdNum === usersArray.length) {
-      // knasar?
-      //UpdateUserScore();
       ResetAnswerdNum(gameKey);
+      setModalVisable(true);
       setTimeout(function () {
         setBackgroundColor('#146B66');
-
         UpdateActiveQuestion(activeQuestion, gameKey);
-      }, 2000);
-    } /* else {
-      console.log('answerdNum = ', AnswerdNum);
-    } */
+        setModalVisable(false);
+      }, 4000);
+    }
   }, [
     AnswerdNum,
     activeQuestion,
     gameKey,
     setActiveQuestion,
     setBackgroundColor,
+    setModalVisable,
     usersArray.length,
   ]);
 
   const CheckAnswers = (value) => {
     let usersAnswer = questionArray[activeQuestion].Answers[value];
     let questionsRightAnswer = questionArray[activeQuestion].rightAnswer;
+    saveUsersAnswers(usersAnswer);
 
     if (usersAnswer === questionsRightAnswer) {
       setBackgroundColor('green');
-      //console.log('emil', user);
       UpdateUserScore(user.email, gameKey);
-
-      // setTimeout(function () {
-      /* for (let index = 0; index < usersArray.length; index++) {
-        if (usersArray[index].userName == 'idaa') {
-          UpdateUserScore();
-        }
-      } */
       UpdateAnswerdNum(AnswerdNum, gameKey);
-      // setBackgroundColor('#146B66');
-      // }, 2000);
     } else {
       setBackgroundColor('red');
-      //setTimeout(function () {
       UpdateAnswerdNum(AnswerdNum, gameKey);
-      //setBackgroundColor('#146B66');
-      // }, 2000);
     }
+  };
+
+  const saveUsersAnswers = (userAnswer) => {
+    SaveUserAnswers(userAnswer, gameKey, user.email);
   };
 
   return (
@@ -214,6 +213,21 @@ const AnswerFeilds = ({
           </View>
         </TouchableOpacity>
       </View>
+    </View>
+  );
+};
+
+const ModalTextComponent = ({ userAnswer, userName }) => {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+      }}
+    >
+      <Text>{userName}</Text>
+      <Text>{userAnswer}</Text>
     </View>
   );
 };
@@ -291,6 +305,17 @@ const styles = StyleSheet.create({
   },
   userNameAndScoreView: {
     flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modal: {
+    position: 'absolute',
+    top: '55%',
+    bottom: 0,
+    right: 0,
+    left: 0,
+    backgroundColor: 'gray',
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
