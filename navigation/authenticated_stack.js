@@ -8,26 +8,34 @@ import JoinGame from '../screens/joinGameScreen';
 import Participants from '../screens/participantScreen';
 import GameWinner from '../screens/gameWinnerScreen';
 import GameBoard from '../screens/gameScreen';
+import { useState } from 'react/cjs/react.development';
+import { ThemeContext } from '../context/ThemeContext';
+import { schemes } from '../resources/colorSchemes';
 
 const Stack = createStackNavigator();
 
 export default function AuthenticatedStack() {
+  const { theme } = useContext(ThemeContext);
+
   return (
     <Stack.Navigator initialRouteName="home">
       <Stack.Screen
         name="home"
         component={HomePage}
         options={{
-          headerStyle: { backgroundColor: '#AFEFDF' },
+          headerStyle: { backgroundColor: theme.buttons },
+          headerTintColor: theme.buttonsText,
           headerTitle: () => <CustomHeader />,
           headerRight: () => <SignOutComponent />,
+          headerLeft: () => <ThemeComponent />,
         }}
       />
       <Stack.Screen
         name="CreateGame"
         component={CreatGameComponent}
         options={{
-          headerStyle: { backgroundColor: '#AFEFDF' },
+          headerStyle: { backgroundColor: theme.buttons },
+          headerTintColor: theme.buttonsText,
           title: '',
         }}
       />
@@ -85,6 +93,34 @@ const CustomHeader = () => {
   );
 };
 
+const ThemeComponent = () => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  const [value, setValue] = useState('Dark mode');
+
+  const changeTheme = () => {
+    if (value === 'Dark mode') {
+      toggleTheme(schemes.Dark);
+      setValue('Default mode');
+    } else if (value === 'Default mode') {
+      toggleTheme(schemes.Def);
+      setValue('Dark mode');
+    }
+  };
+
+  return (
+    <View>
+      <Text
+        style={styles.Theme}
+        onPress={() => {
+          changeTheme();
+        }}
+      >
+        {value}
+      </Text>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   header: {
     width: '100%',
@@ -102,5 +138,10 @@ const styles = StyleSheet.create({
     marginEnd: 20,
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  Theme: {
+    marginLeft: 10,
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });

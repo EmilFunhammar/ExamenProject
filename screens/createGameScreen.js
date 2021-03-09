@@ -9,10 +9,13 @@ import {
 import { GetGameQuestions, CreateGameSetup } from '../firebase/Firebase';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
+import { ThemeContext } from '../context/ThemeContext';
 
 export default function CreateGameComponent() {
   const navigation = useNavigation();
   const { user } = useContext(AuthContext);
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
   const [key, setKey] = useState('');
   const [gameQuestions, setGameQuestions] = useState();
 
@@ -20,27 +23,23 @@ export default function CreateGameComponent() {
     GetGameQuestions(setGameQuestions);
   }, []);
   return (
-    <View style={styles.container}>
+    <View
+      style={{ ...styles.container, backgroundColor: theme.backgroundColor }}
+    >
       <View style={styles.textView}>
-        <Text
-          style={styles.text}
-          /*  onPress={() => {
-            //gameQuestions.sort(() => Math.random() - 0.5);
-
-            console.log('q', gameQuestions);
-          }} */
-        >
+        <Text style={{ ...styles.text, color: theme.color }}>
           Enter game key
         </Text>
 
         <TextInput
           style={styles.textInput}
+          placeholderTextColor={theme.color}
           placeholder="Enter key here:"
           onChangeText={(text) => setKey(text)}
         />
         <View style={styles.underLineView} />
       </View>
-      <View style={styles.button}>
+      <View style={{ ...styles.button, backgroundColor: theme.buttons }}>
         <TouchableOpacity
           onPress={() => {
             CreateGameSetup(gameQuestions, key, user);
