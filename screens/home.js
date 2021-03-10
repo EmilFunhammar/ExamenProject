@@ -42,7 +42,7 @@ export default function HomePage() {
           style={{ ...styles.touchableOpacity, backgroundColor: theme.buttons }}
           onPress={() => navigation.navigate('CreateGame')}
         >
-          <View style={styles.buttons}>
+          <View>
             <Text style={styles.buttonsText}>Create game</Text>
           </View>
         </TouchableOpacity>

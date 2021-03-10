@@ -4,6 +4,7 @@ schemes = {
     backgroundColor: '#146B66',
     color: 'black',
     buttons: '#AFEFDF',
+    buttonsText: 'black',
   },
 
   Dark: {
