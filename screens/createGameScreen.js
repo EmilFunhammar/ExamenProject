@@ -26,18 +26,28 @@ export default function CreateGameComponent() {
     <View
       style={{ ...styles.container, backgroundColor: theme.backgroundColor }}
     >
-      <View style={styles.textView}>
-        <Text style={{ ...styles.text, color: theme.color }}>
+      <View
+        style={{
+          ...styles.textView,
+          backgroundColor: theme.viewBackgroundColor,
+        }}
+      >
+        {/* <Text style={{ ...styles.text, color: theme.buttonsText }}>
           Enter game key
-        </Text>
+        </Text> */}
 
         <TextInput
           style={styles.textInput}
-          placeholderTextColor={theme.color}
-          placeholder="Enter key here:"
+          placeholderTextColor={theme.placeholderTextColor}
+          placeholder="Enter game key here:"
           onChangeText={(text) => setKey(text)}
         />
-        <View style={styles.underLineView} />
+        <View
+          style={{
+            ...styles.underLineView,
+            backgroundColor: theme.placeholderTextColor,
+          }}
+        />
       </View>
       <View style={{ ...styles.button, backgroundColor: theme.buttons }}>
         <TouchableOpacity
@@ -46,7 +56,9 @@ export default function CreateGameComponent() {
             navigation.navigate('ParticipantScreen', { gameKey: key });
           }}
         >
-          <Text style={styles.buttonText}>Go to lobby</Text>
+          <Text style={{ ...styles.buttonText, color: theme.buttonsText }}>
+            Go to lobby
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -79,17 +91,20 @@ const styles = StyleSheet.create({
   textInput: {
     marginTop: 40,
     fontSize: 20,
+    fontWeight: '400',
   },
   textView: {
     marginTop: 100,
     width: '80%',
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 20,
   },
   underLineView: {
     height: 2,
     backgroundColor: 'black',
     marginTop: 3,
-    width: '100%',
+    marginBottom: 15,
+    width: '80%',
   },
 });

@@ -43,7 +43,9 @@ export default function HomePage() {
           onPress={() => navigation.navigate('CreateGame')}
         >
           <View>
-            <Text style={styles.buttonsText}>Create game</Text>
+            <Text style={{ ...styles.buttonsText, color: theme.buttonsText }}>
+              Create game
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
@@ -51,7 +53,9 @@ export default function HomePage() {
           onPress={() => navigation.navigate('JoinGame')}
         >
           <View style={styles.buttons}>
-            <Text style={styles.buttonsText}>Join game</Text>
+            <Text style={{ ...styles.buttonsText, color: theme.buttonsText }}>
+              Join game
+            </Text>
           </View>
         </TouchableOpacity>
       </View>

@@ -5,6 +5,8 @@ schemes = {
     color: 'black',
     buttons: '#AFEFDF',
     buttonsText: 'black',
+    viewBackgroundColor: '#146B66',
+    placeholderTextColor: 'black',
   },
 
   Dark: {
@@ -12,7 +14,16 @@ schemes = {
     color: '#BB86FC',
     buttons: '#BB86FC',
     buttonsText: 'black',
+    viewBackgroundColor: '#121212',
+    placeholderTextColor: '#BB86FC',
   },
 
-  crazy: {},
+  EasyReadColor: {
+    backgroundColor: 'white',
+    color: 'White',
+    buttons: '#515050',
+    buttonsText: 'white',
+    viewBackgroundColor: '#515050',
+    placeholderTextColor: 'white',
+  },
 };
