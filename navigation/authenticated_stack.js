@@ -1,19 +1,15 @@
 import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomePage from '../screens/home';
-import { StyleSheet, Text, View } from 'react-native';
-import { AuthContext } from '../context/AuthContext';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import CreatGameComponent from '../screens/createGameScreen';
 import JoinGame from '../screens/joinGameScreen';
 import Participants from '../screens/participantScreen';
 import GameWinner from '../screens/gameWinnerScreen';
 import GameBoard from '../screens/gameScreen';
 import Settings from '../screens/settings';
-import { useState } from 'react/cjs/react.development';
 import { ThemeContext } from '../context/ThemeContext';
-import { schemes } from '../resources/colorSchemes';
 import { EvilIcons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 
 const Stack = createStackNavigator();
@@ -97,10 +93,14 @@ export default function AuthenticatedStack() {
 }; */
 
 const CustomHeader = ({ name }) => {
+  const { theme } = useContext(ThemeContext);
+
   return (
     <View style={styles.header}>
       <View>
-        <Text style={styles.headerText}>{name}</Text>
+        <Text style={{ ...styles.headerText, color: theme.buttonsText }}>
+          {name}
+        </Text>
       </View>
     </View>
   );

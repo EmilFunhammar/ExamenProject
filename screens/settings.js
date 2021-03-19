@@ -19,6 +19,8 @@ export default function Settings() {
       toggleTheme(schemes.Dark);
     } else if (value === 'defualt mode') {
       toggleTheme(schemes.Def);
+    } else if (value === 'Easy read mode') {
+      toggleTheme(schemes.EasyReadColor);
     }
   };
 
@@ -48,7 +50,9 @@ export default function Settings() {
             }}
           >
             <View>
-              <Text style={styles.themeText}>Dark mode</Text>
+              <Text style={{ ...styles.themeText, color: theme.buttonsText }}>
+                Dark mode
+              </Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -59,7 +63,22 @@ export default function Settings() {
             style={{ ...styles.thmesbuttons, backgroundColor: theme.buttons }}
           >
             <View>
-              <Text style={styles.themeText}>Defualt moode</Text>
+              <Text style={{ ...styles.themeText, color: theme.buttonsText }}>
+                Defualt mode
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              changeTheme('Easy read mode');
+              navigation.navigate('home');
+            }}
+            style={{ ...styles.thmesbuttons, backgroundColor: theme.buttons }}
+          >
+            <View>
+              <Text style={{ ...styles.themeText, color: theme.buttonsText }}>
+                Easy read mode
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -76,7 +95,9 @@ export default function Settings() {
             style={{ ...styles.signOut, backgroundColor: theme.buttons }}
           >
             <View>
-              <Text style={styles.themeText}>Sign out</Text>
+              <Text style={{ ...styles.themeText, color: theme.buttonsText }}>
+                Sign out
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
