@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Modal } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Modal,
+  LogBox,
+} from 'react-native';
 import {
   SnapShotUsers,
   SnapShotActiveQuestion,
@@ -12,6 +19,7 @@ import {
 } from '../firebase/Firebase';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
+LogBox.ignoreLogs(['Setting a timer']);
 
 export default function GameBoard({ route }) {
   const [usersArray, setUsersArray] = useState(['']);
@@ -35,13 +43,13 @@ export default function GameBoard({ route }) {
   }, []);
 
   useEffect(() => {
-    console.log('här', questionArray.length - 1);
+    //console.log('här', questionArray.length - 1);
     if (questionArray.length - 1 === activeQuestion) {
       navigation.navigate('WinnerScreen', { gameKey: gameKey });
 
       //console.log('sista frågan', questionArray.length, activeQuestion);
     } else {
-      console.log('här i slutet');
+      //console.log('här i slutet');
     }
     //////////////////////////////
   }, [activeQuestion, gameKey, navigation, questionArray.length]);
