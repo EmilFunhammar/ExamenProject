@@ -85,7 +85,8 @@ export function CreateGameSetup(questionsArray, sessionName, user) {
   let userEmail = user.email;
   let userDisplayName = user.displayName;
   let userAnswer = '';
-  let userAry = { userEmail, userDisplayName, userScore, userAnswer };
+  let host = true;
+  let userAry = { userEmail, userDisplayName, userScore, userAnswer, host };
 
   let ref = firebase.firestore().collection('GameSession').doc(sessionName);
 

@@ -1,14 +1,17 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { GetQuestionInfo, SnapShotUsers } from '../firebase/Firebase';
+import { AuthContext } from '../context/AuthContext';
 
 export default function JoinGame({ route }) {
+  const { user } = useContext(AuthContext);
   const navigation = useNavigation();
   const { gameKey } = route.params;
   const [userArray, setUserArray] = useState(['']);
   const [questionArray, setQuestionArray] = useState(['']);
+  const [shouldShow, setShouldShow] = useState(true);
 
   const SnapShotObserver = () => {
     SnapShotUsers(setUserArray, gameKey);
@@ -16,7 +19,27 @@ export default function JoinGame({ route }) {
   useEffect(() => {
     SnapShotObserver();
     GetQuestionInfo(setQuestionArray, gameKey);
+    isHost();
   }, []);
+
+  const isHost = () => {
+    userArray.forEach((element) => {
+      if (user.email === element.userEmail) {
+        if (element.host) {
+          return setShouldShow(true);
+        } else {
+          return setShouldShow(false);
+        }
+      } /* else {
+        //return setShouldShow(false);
+      } */
+    });
+    /*  if (userArray[1].host) {
+      return setShouldShow(true);
+    } else {
+      return setShouldShow(false);
+    } */
+  };
 
   return (
     <LinearGradient
@@ -33,7 +56,7 @@ export default function JoinGame({ route }) {
               );
             } */
             //GetQuestionInfo(setQuestionArray, gameKey);
-            console.log('häääääär', questionArray.length);
+            isHost();
           }}
         >
           Participants
@@ -42,8 +65,21 @@ export default function JoinGame({ route }) {
           <ParticipantView key={index} element={element.userDisplayName} />
         ))}
       </View>
+      {shouldShow ? (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            navigation.navigate('GameScreen', {
+              questionArray: questionArray,
+              gameKey: gameKey,
+            });
+          }}
+        >
+          <Text style={styles.buttonText}>Start Game</Text>
+        </TouchableOpacity>
+      ) : null}
 
-      <TouchableOpacity
+      {/*  <TouchableOpacity
         style={styles.button}
         onPress={() => {
           navigation.navigate('GameScreen', {
@@ -53,7 +89,7 @@ export default function JoinGame({ route }) {
         }}
       >
         <Text style={styles.buttonText}>Start Game</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </LinearGradient>
   );
 }
