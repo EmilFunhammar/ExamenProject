@@ -2,7 +2,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { GetQuestionInfo, SnapShotUsers } from '../firebase/Firebase';
+import {
+  GetQuestionInfo,
+  SnapShotUsers,
+  SnapShotStartGame,
+  StartGame,
+} from '../firebase/Firebase';
 import { AuthContext } from '../context/AuthContext';
 
 export default function JoinGame({ route }) {
@@ -11,24 +16,39 @@ export default function JoinGame({ route }) {
   const { gameKey } = route.params;
   const [userArray, setUserArray] = useState(['']);
   const [questionArray, setQuestionArray] = useState(['']);
-  const [shouldShow, setShouldShow] = useState(true);
+  const [shouldShow, setShouldShow] = useState(false);
+  const [startGame, setStartGame] = useState(false);
 
-  const SnapShotObserver = () => {
+  const SnapShots = () => {
     SnapShotUsers(setUserArray, gameKey);
+    SnapShotStartGame(setStartGame, gameKey);
   };
   useEffect(() => {
-    SnapShotObserver();
+    SnapShots();
     GetQuestionInfo(setQuestionArray, gameKey);
     isHost();
   }, []);
+
+  useEffect(() => {
+    if (startGame) {
+      navigation.navigate('GameScreen', {
+        questionArray: questionArray,
+        gameKey: gameKey,
+      });
+    } else {
+      console.log(startGame);
+    }
+  }, [startGame]);
 
   const isHost = () => {
     userArray.forEach((element) => {
       if (user.email === element.userEmail) {
         if (element.host) {
+          console.log('true i isHost');
           return setShouldShow(true);
         } else {
-          return setShouldShow(false);
+          console.log('false i isHost');
+          //return setShouldShow(false);
         }
       } /* else {
         //return setShouldShow(false);
@@ -69,10 +89,11 @@ export default function JoinGame({ route }) {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            navigation.navigate('GameScreen', {
+            StartGame(gameKey);
+            /* navigation.navigate('GameScreen', {
               questionArray: questionArray,
               gameKey: gameKey,
-            });
+            }); */
           }}
         >
           <Text style={styles.buttonText}>Start Game</Text>

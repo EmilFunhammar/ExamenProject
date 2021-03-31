@@ -80,6 +80,7 @@ export function GetGameQuestions(setGameQuestions) {
 }
 
 //UploadGameQuestion
+
 export function CreateGameSetup(questionsArray, sessionName, user) {
   let userScore = 0;
   let userEmail = user.email;
@@ -92,6 +93,7 @@ export function CreateGameSetup(questionsArray, sessionName, user) {
 
   ref
     .set({
+      StartGame: false,
       UsersAnswerd: 0,
       ActiveQuestion: 0,
       Questions: questionsArray,
@@ -275,6 +277,26 @@ export function GetQuestionInfo(setQuestionArray, gameKey) {
       setQuestionArray(items);
     })
     .catch((error) => console.log('error', error));
+}
+//StartGame
+export function StartGame(gameKey) {
+  firebase
+    .firestore()
+    .collection('GameSession')
+    .doc(gameKey)
+    .update({ StartGame: true })
+    .catch((error) => console.log('error', error));
+}
+
+//SnapShot on StartGame
+export function SnapShotStartGame(setStartGame, gameKey) {
+  firebase
+    .firestore()
+    .collection('GameSession')
+    .doc(gameKey)
+    .onSnapshot((doc) => {
+      setStartGame(doc.data().StartGame);
+    });
 }
 
 // SnapShot on the users and there information
