@@ -6,8 +6,6 @@ import 'firebase/database';
 import 'firebase/firestore';
 import 'firebase/functions';
 import 'firebase/storage';
-import { useEffect, useState } from 'react/cjs/react.development';
-import { useNavigation } from '@react-navigation/native';
 
 //import { AuthContext } from './AuthContext';
 
@@ -27,6 +25,25 @@ if (!firebase.apps.length) {
 }
 
 export const auth = firebase.auth();
+export function SaveUserAnswers(userAnswer, gameKey, userEmail) {
+  let ary = [];
+  var userArrayRef = firebase
+    .firestore()
+    .collection('GameSession')
+    .doc(gameKey);
+
+  userArrayRef.get().then((doc) => {
+    ary = [...doc.data().users];
+    for (let index = 0; index < ary.length; index++) {
+      if (ary[index].userEmail === userEmail) {
+        ary[index].userAnswer = userAnswer;
+        userArrayRef.update({
+          users: ary,
+        });
+      }
+    }
+  });
+}
 
 //Get users Score and name
 export function GetUsers(setUserArray, gameKey) {
@@ -56,21 +73,27 @@ export function GetGameQuestions(setGameQuestions) {
       querySnapshot.forEach(function (doc) {
         questionArray.push(doc.data().question);
       });
+      questionArray.sort(() => Math.random() - 0.5);
+      //console.log('här ', questionArray);
     });
   setGameQuestions(questionArray);
 }
 
 //UploadGameQuestion
+
 export function CreateGameSetup(questionsArray, sessionName, user) {
   let userScore = 0;
   let userEmail = user.email;
   let userDisplayName = user.displayName;
-  let userAry = { userEmail, userDisplayName, userScore };
+  let userAnswer = '';
+  let host = true;
+  let userAry = { userEmail, userDisplayName, userScore, userAnswer, host };
 
   let ref = firebase.firestore().collection('GameSession').doc(sessionName);
 
   ref
     .set({
+      StartGame: false,
       UsersAnswerd: 0,
       ActiveQuestion: 0,
       Questions: questionsArray,
@@ -85,9 +108,28 @@ export function CreateGameSetup(questionsArray, sessionName, user) {
     .catch((error) => console.log('error', error));
 }
 
-export function AddUserToGame(userDisplayName, userEmail, gameKey) {
+export function doesDocExist(gameKey, setIfDocExsists) {
+  firebase
+    .firestore()
+    .collection('GameSession')
+    .doc(gameKey)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        setIfDocExsists(true);
+      }
+    });
+}
+
+export function AddUserToGame(
+  userDisplayName,
+  userEmail,
+  gameKey,
+  setIfDocExsists
+) {
   let userScore = 0;
-  let ary = { userScore, userEmail, userDisplayName };
+  let userAnswer = '';
+  let ary = { userScore, userEmail, userDisplayName, userAnswer };
   firebase
     .firestore()
     .collection('GameSession')
@@ -102,9 +144,9 @@ export function AddUserToGame(userDisplayName, userEmail, gameKey) {
           .update({
             users: firebase.firestore.FieldValue.arrayUnion(ary),
           });
-        return true;
+        setIfDocExsists(true);
       } else {
-        return false;
+        setIfDocExsists(false);
       }
     });
 }
@@ -218,7 +260,6 @@ export function SnapShotActiveQuestion(setActiveQuestion, gameKey) {
 // Get all the Questions and answers
 export function GetQuestionInfo(setQuestionArray, gameKey) {
   //console.log('GetQuestionInfo', gameKey);
-
   let ary = [];
   firebase
     .firestore()
@@ -230,9 +271,32 @@ export function GetQuestionInfo(setQuestionArray, gameKey) {
       for (let index = 0; index < ary.length; index++) {
         ary[index].Answers.sort(() => Math.random() - 0.5);
       }
-      setQuestionArray(ary);
+      //ary.sort(() => Math.random() - 0.5);
+      const size = 10;
+      const items = ary.slice(0, size);
+      setQuestionArray(items);
     })
     .catch((error) => console.log('error', error));
+}
+//StartGame
+export function StartGame(gameKey) {
+  firebase
+    .firestore()
+    .collection('GameSession')
+    .doc(gameKey)
+    .update({ StartGame: true })
+    .catch((error) => console.log('error', error));
+}
+
+//SnapShot on StartGame
+export function SnapShotStartGame(setStartGame, gameKey) {
+  firebase
+    .firestore()
+    .collection('GameSession')
+    .doc(gameKey)
+    .onSnapshot((doc) => {
+      setStartGame(doc.data().StartGame);
+    });
 }
 
 // SnapShot on the users and there information

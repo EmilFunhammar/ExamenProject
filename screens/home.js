@@ -4,9 +4,10 @@ import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { GetUsers, SnapShotUsers } from '../firebase/Firebase';
 import { ThemeContext } from '../context/ThemeContext';
+import { schemes } from '../resources/colorSchemes';
 
 export default function HomePage() {
-  const { theme } = useContext(ThemeContext);
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   const navigation = useNavigation();
 
@@ -18,6 +19,7 @@ export default function HomePage() {
       }}
     >
       <View
+        // eslint-disable-next-line react-native/no-inline-styles
         style={{
           height: '55%',
           width: '100%',
@@ -26,27 +28,34 @@ export default function HomePage() {
         }}
       >
         <TouchableOpacity
-          style={styles.touchableOpacity}
-          onPress={() => SnapShotUsers()}
+          style={{ ...styles.touchableOpacity, backgroundColor: theme.buttons }}
+          onPress={() => toggleTheme(schemes.Dark)}
+          onLongPress={() => toggleTheme(schemes.Def)}
         >
           <View style={styles.buttons}>
-            <Text style={styles.buttonsText}>Highscore</Text>
+            <Text style={{ ...styles.buttonsText, color: theme.buttonsText }}>
+              Highscore
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.touchableOpacity}
+          style={{ ...styles.touchableOpacity, backgroundColor: theme.buttons }}
           onPress={() => navigation.navigate('CreateGame')}
         >
-          <View style={styles.buttons}>
-            <Text style={styles.buttonsText}>Create game</Text>
+          <View>
+            <Text style={{ ...styles.buttonsText, color: theme.buttonsText }}>
+              Create game
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.touchableOpacity}
+          style={{ ...styles.touchableOpacity, backgroundColor: theme.buttons }}
           onPress={() => navigation.navigate('JoinGame')}
         >
           <View style={styles.buttons}>
-            <Text style={styles.buttonsText}>Join game</Text>
+            <Text style={{ ...styles.buttonsText, color: theme.buttonsText }}>
+              Join game
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
