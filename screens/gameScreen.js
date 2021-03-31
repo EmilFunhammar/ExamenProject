@@ -25,19 +25,20 @@ export default function GameBoard({ route }) {
   const [usersArray, setUsersArray] = useState(['']);
   const [activeQuestion, SetActiveQuestion] = useState(0);
   const [backgroundColor, setBackgroundColor] = useState('#146B66');
-  const [modalVisiable, setModalVisable] = useState(false);
+  const [modalVisiable, setModalVisable] = useState(true);
 
   //const { user } = useContext(AuthContext);
   const { questionArray, gameKey } = route.params;
   const navigation = useNavigation();
 
-  const SnapShotObservers = () => {
+  /*  const SnapShotObservers = () => {
     SnapShotUsers(setUsersArray, gameKey);
     SnapShotActiveQuestion(SetActiveQuestion, gameKey);
-  };
+  }; */
 
   useEffect(() => {
-    SnapShotObservers();
+    SnapShotUsers(setUsersArray, gameKey);
+    SnapShotActiveQuestion(SetActiveQuestion, gameKey);
 
     //GetQuestionInfo(setQuestionArray);
   }, []);
@@ -72,17 +73,47 @@ export default function GameBoard({ route }) {
       <View>
         <Modal animationType="slide" transparent={true} visible={modalVisiable}>
           <View style={styles.modal}>
-            {usersArray.map((element, index) => (
-              /*  <View style={{ flexDirection: 'row' }}>
-                <Text>g{element.userDisplayName}</Text>
-                <Text>g{element.userScore}</Text>
-              </View> */
-              <ModalTextComponent
-                key={index}
-                userName={element.userDisplayName}
-                userAnswer={element.userAnswer}
-              />
-            ))}
+            <View
+              style={{
+                backgroundColor: 'yellow',
+                width: '100%',
+                position: 'absolute',
+                top: '8%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text>
+                Right anser: {questionArray[activeQuestion].rightAnswer}
+              </Text>
+            </View>
+            <View
+              style={{
+                backgroundColor: 'yellow',
+                width: '100%',
+                position: 'absolute',
+                bottom: '10%',
+              }}
+            >
+              {usersArray.map((element, index) => (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginBottom: 10,
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Text style={{ position: 'absolute', left: '5%' }}>
+                    {element.userDisplayName}
+                  </Text>
+                  <Text
+                    style={{}} /* style={{ position: 'absolute', left: '50%' }} */
+                  >
+                    {element.userAnswer}
+                  </Text>
+                </View>
+              ))}
+            </View>
           </View>
         </Modal>
       </View>
@@ -121,37 +152,41 @@ const AnswerFeilds = ({
 }) => {
   const { user } = useContext(AuthContext);
   const [AnswerdNum, setAnswerdNum] = useState(0);
-  const SnapShotObserver = () => {
+  let usersAnswer = questionArray[activeQuestion];
+
+  /*   const SnapShotObserver = () => {
     SnapshotUserAnswerd(setAnswerdNum, gameKey);
-  };
+  }; */
   useEffect(() => {
-    SnapShotObserver();
+    SnapshotUserAnswerd(setAnswerdNum, gameKey);
   }, []);
 
   useEffect(() => {
     if (AnswerdNum === usersArray.length) {
       ResetAnswerdNum(gameKey);
-      //setModalVisable(true);
+      setModalVisable(true);
       setTimeout(function () {
         setBackgroundColor('#146B66');
         UpdateActiveQuestion(activeQuestion, gameKey);
-        //setModalVisable(false);
-      }, 4000);
+        setModalVisable(false);
+      }, 3000);
     }
   }, [
     AnswerdNum,
-    activeQuestion,
+    /*  activeQuestion,
     gameKey,
     setActiveQuestion,
     setBackgroundColor,
     setModalVisable,
-    usersArray.length,
+    usersArray.length, */
   ]);
 
   const CheckAnswers = (value) => {
     let usersAnswer = questionArray[activeQuestion].Answers[value];
     let questionsRightAnswer = questionArray[activeQuestion].rightAnswer;
-    saveUsersAnswers(usersAnswer);
+    //SaveUserAnswers(usersAnswer, gameKey, user.email);
+
+    //saveUsersAnswers(usersAnswer);
 
     if (usersAnswer === questionsRightAnswer) {
       setBackgroundColor('green');
@@ -163,9 +198,9 @@ const AnswerFeilds = ({
     }
   };
 
-  const saveUsersAnswers = (userAnswer) => {
+  /*   const saveUsersAnswers = (userAnswer) => {
     SaveUserAnswers(userAnswer, gameKey, user.email);
-  };
+  }; */
 
   return (
     <View style={styles.answersView}>
@@ -173,6 +208,7 @@ const AnswerFeilds = ({
         <TouchableOpacity
           style={styles.answers}
           onPress={() => {
+            SaveUserAnswers(usersAnswer.Answers[0], gameKey, user.email);
             CheckAnswers(0);
           }}
         >
@@ -185,6 +221,7 @@ const AnswerFeilds = ({
         <TouchableOpacity
           style={styles.answers}
           onPress={() => {
+            SaveUserAnswers(usersAnswer.Answers[1], gameKey, user.email);
             CheckAnswers(1);
           }}
         >
@@ -199,6 +236,7 @@ const AnswerFeilds = ({
         <TouchableOpacity
           style={styles.answers}
           onPress={() => {
+            SaveUserAnswers(usersAnswer.Answers[2], gameKey, user.email);
             CheckAnswers(2);
           }}
         >
@@ -211,6 +249,7 @@ const AnswerFeilds = ({
         <TouchableOpacity
           style={styles.answers}
           onPress={() => {
+            SaveUserAnswers(usersAnswer.Answers[3], gameKey, user.email);
             CheckAnswers(3);
           }}
         >
@@ -225,17 +264,14 @@ const AnswerFeilds = ({
   );
 };
 
-const ModalTextComponent = ({ userAnswer, userName }) => {
+const ModalTextComponent = ({ userAnswer, userName, rightAnswer }) => {
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-      }}
-    >
-      <Text>{userName}</Text>
-      <Text>{userAnswer}</Text>
+    <View style={{ height: '100%', width: '100%' }}>
+      <Text>Right anser: {rightAnswer}</Text>
+
+      <Text>
+        {userName} {userAnswer}
+      </Text>
     </View>
   );
 };
@@ -327,14 +363,14 @@ const styles = StyleSheet.create({
   },
   modal: {
     position: 'absolute',
-    top: '55%',
-    bottom: 0,
-    right: 0,
-    left: 0,
+    top: '40%',
+    width: '90%',
+    height: '30%',
     backgroundColor: 'gray',
-    borderRadius: 20,
-    justifyContent: 'center',
+    alignSelf: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 20,
   },
 });
 

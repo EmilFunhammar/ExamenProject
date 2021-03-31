@@ -25,6 +25,7 @@ if (!firebase.apps.length) {
 }
 
 export const auth = firebase.auth();
+
 export function SaveUserAnswers(userAnswer, gameKey, userEmail) {
   let ary = [];
   var userArrayRef = firebase
@@ -182,7 +183,7 @@ export function SnapshotUserAnswerd(setAnswerdNum, gameKey) {
 }
 //Reset AnswerdNum
 export function ResetAnswerdNum(gameKey) {
-  console.log('ResetAnswerdNum', gameKey);
+  //console.log('ResetAnswerdNum', gameKey);
 
   firebase
     .firestore()
@@ -302,7 +303,6 @@ export function SnapShotStartGame(setStartGame, gameKey) {
 // SnapShot on the users and there information
 export function SnapShotUsers(setUserArray, gameKey) {
   //console.log('SnapShotUsers', gameKey);
-
   firebase
     .firestore()
     .collection('GameSession')

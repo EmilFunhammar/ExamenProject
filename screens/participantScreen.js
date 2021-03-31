@@ -18,19 +18,39 @@ export default function JoinGame({ route }) {
   const [questionArray, setQuestionArray] = useState(['']);
   const [shouldShow, setShouldShow] = useState(false);
   const [startGame, setStartGame] = useState(false);
+  const [useEffectSub, setUseEffectSub] = useState(true);
 
-  const SnapShots = () => {
+  /*   const SnapShots = () => {
     SnapShotUsers(setUserArray, gameKey);
     SnapShotStartGame(setStartGame, gameKey);
-  };
+  }; */
   useEffect(() => {
-    SnapShots();
+    SnapShotUsers(setUserArray, gameKey);
+    SnapShotStartGame(setStartGame, gameKey);
     GetQuestionInfo(setQuestionArray, gameKey);
-    isHost();
+    //isHost();
   }, []);
 
   useEffect(() => {
+    //let juseEffectSub = true;
+    if (useEffectSub) {
+      userArray.forEach((element) => {
+        if (user.email === element.userEmail) {
+          if (element.host) {
+            console.log('true i isHost');
+            return setShouldShow(true);
+          } else {
+            console.log('false i isHost');
+            return setShouldShow(false);
+          }
+        }
+      });
+    }
+  }, [userArray]);
+
+  useEffect(() => {
     if (startGame) {
+      setUseEffectSub(false);
       navigation.navigate('GameScreen', {
         questionArray: questionArray,
         gameKey: gameKey,
@@ -39,27 +59,6 @@ export default function JoinGame({ route }) {
       console.log(startGame);
     }
   }, [startGame]);
-
-  const isHost = () => {
-    userArray.forEach((element) => {
-      if (user.email === element.userEmail) {
-        if (element.host) {
-          console.log('true i isHost');
-          return setShouldShow(true);
-        } else {
-          console.log('false i isHost');
-          //return setShouldShow(false);
-        }
-      } /* else {
-        //return setShouldShow(false);
-      } */
-    });
-    /*  if (userArray[1].host) {
-      return setShouldShow(true);
-    } else {
-      return setShouldShow(false);
-    } */
-  };
 
   return (
     <LinearGradient
@@ -76,11 +75,14 @@ export default function JoinGame({ route }) {
               );
             } */
             //GetQuestionInfo(setQuestionArray, gameKey);
-            isHost();
+            //isHost();
           }}
         >
           Participants
         </Text>
+        <Text>Game key:</Text>
+        <Text style={styles.gameKey}>{gameKey}</Text>
+
         {userArray.map((element, index) => (
           <ParticipantView key={index} element={element.userDisplayName} />
         ))}
@@ -181,5 +183,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 20,
+  },
+  gameKey: {
+    fontSize: 18,
+    marginBottom: 10,
+    fontWeight: '600',
   },
 });
