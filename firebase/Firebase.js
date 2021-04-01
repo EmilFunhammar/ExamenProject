@@ -25,6 +25,7 @@ if (!firebase.apps.length) {
 }
 
 export const auth = firebase.auth();
+let ref = firebase.firestore().collection('GameSession');
 
 export function SaveUserAnswers(userAnswer, gameKey, userEmail) {
   let ary = [];
