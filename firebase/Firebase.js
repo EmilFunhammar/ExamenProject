@@ -28,6 +28,62 @@ export const auth = firebase.auth();
 let gameSessionRef = firebase.firestore().collection('GameSession');
 let questionRef = firebase.firestore().collection('Questions');
 
+//
+//
+//
+//
+// SNAPSHOTS
+
+//SnapShot on StartGame
+export function SnapShotStartGame(setStartGame, gameKey) {
+  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
+    setStartGame(doc.data().StartGame);
+  });
+}
+
+// SnapShot on ActiveQuestion
+export function SnapShotActiveQuestion(setActiveQuestion, gameKey) {
+  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
+    setActiveQuestion(doc.data().ActiveQuestion);
+  });
+}
+
+export function SnapshotUserAnswerd(setAnswerdNum, gameKey) {
+  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
+    setAnswerdNum(doc.data().UsersAnswerd);
+  });
+}
+
+// SnapShot on the users and there information
+export function SnapShotUsers(setUserArray, gameKey) {
+  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
+    setUserArray(doc.data().users);
+  });
+}
+//
+//
+//
+//
+// GETS
+
+// Get all the Questions and answers
+export function GetQuestionInfo(setQuestionArray, gameKey) {
+  let ary = [];
+  gameSessionRef
+    .doc(gameKey)
+    .get()
+    .then((doc) => {
+      ary = [...doc.data().Questions];
+      for (let index = 0; index < ary.length; index++) {
+        ary[index].Answers.sort(() => Math.random() - 0.5);
+      }
+      const size = 10;
+      const items = ary.slice(0, size);
+      setQuestionArray(items);
+    })
+    .catch((error) => console.log('error', error));
+}
+
 export function SaveUserAnswers(userAnswer, gameKey, userEmail) {
   let ary = [];
   let ref = gameSessionRef.doc(gameKey);
@@ -69,6 +125,11 @@ export function GetGameQuestions(setGameQuestions) {
   });
   setGameQuestions(questionArray);
 }
+//
+//
+//
+//
+// SETS
 
 //UploadGameQuestion
 export function CreateGameSetup(questionsArray, sessionName, user) {
@@ -90,16 +151,65 @@ export function CreateGameSetup(questionsArray, sessionName, user) {
     })
     .catch((error) => console.log('error', error));
 }
+//
+//
+//
+//
+// UPDATES
 
-export function doesDocExist(gameKey, setIfDocExsists) {
+//Update ActiveQuestion
+export function UpdateActiveQuestion(activeQuestion, gameKey) {
   gameSessionRef
     .doc(gameKey)
-    .get()
-    .then((doc) => {
-      if (doc.exists) {
-        setIfDocExsists(true);
+    .update({
+      ActiveQuestion: activeQuestion + 1,
+    })
+    .catch((error) => console.log('error', error));
+}
+
+//Reset AnswerdNum
+export function ResetAnswerdNum(gameKey) {
+  gameSessionRef
+    .doc(gameKey)
+    .update({
+      UsersAnswerd: 0,
+    })
+    .catch((error) => console.log('error', error));
+}
+
+//Update AnswerdNum
+export function UpdateAnswerdNum(AnswerdNum, gameKey) {
+  gameSessionRef
+    .doc(gameKey)
+    .update({
+      UsersAnswerd: AnswerdNum + 1,
+    })
+    .catch((error) => console.log('error', error));
+}
+
+// Update UserScore
+export function UpdateUserScore(userEmail, gameKey) {
+  let ary = [];
+  let ref = gameSessionRef.doc(gameKey);
+  ref.get().then((doc) => {
+    ary = [...doc.data().users];
+    for (let index = 0; index < ary.length; index++) {
+      if (ary[index].userEmail === userEmail) {
+        ary[index].userScore += 1;
+        ref.update({
+          users: ary,
+        });
       }
-    });
+    }
+  });
+}
+
+//StartGame
+export function StartGame(gameKey) {
+  gameSessionRef
+    .doc(gameKey)
+    .update({ StartGame: true })
+    .catch((error) => console.log('error', error));
 }
 
 export function AddUserToGame(
@@ -135,100 +245,13 @@ export function UpdateUserName(currentUserName) {
     });
 }
 
-export function SnapshotUserAnswerd(setAnswerdNum, gameKey) {
-  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
-    setAnswerdNum(doc.data().UsersAnswerd);
-  });
-}
-//Reset AnswerdNum
-export function ResetAnswerdNum(gameKey) {
-  gameSessionRef
-    .doc(gameKey)
-    .update({
-      UsersAnswerd: 0,
-    })
-    .catch((error) => console.log('error', error));
-}
-
-//Update AnswerdNum
-export function UpdateAnswerdNum(AnswerdNum, gameKey) {
-  gameSessionRef
-    .doc(gameKey)
-    .update({
-      UsersAnswerd: AnswerdNum + 1,
-    })
-    .catch((error) => console.log('error', error));
-}
-
-//Update ActiveQuestion
-export function UpdateActiveQuestion(activeQuestion, gameKey) {
-  gameSessionRef
-    .doc(gameKey)
-    .update({
-      ActiveQuestion: activeQuestion + 1,
-    })
-    .catch((error) => console.log('error', error));
-}
-
-// SnapShot on ActiveQuestion
-export function SnapShotActiveQuestion(setActiveQuestion, gameKey) {
-  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
-    setActiveQuestion(doc.data().ActiveQuestion);
-  });
-}
-
-// Get all the Questions and answers
-export function GetQuestionInfo(setQuestionArray, gameKey) {
-  let ary = [];
+/* export function doesDocExist(gameKey, setIfDocExsists) {
   gameSessionRef
     .doc(gameKey)
     .get()
     .then((doc) => {
-      ary = [...doc.data().Questions];
-      for (let index = 0; index < ary.length; index++) {
-        ary[index].Answers.sort(() => Math.random() - 0.5);
+      if (doc.exists) {
+        setIfDocExsists(true);
       }
-      const size = 10;
-      const items = ary.slice(0, size);
-      setQuestionArray(items);
-    })
-    .catch((error) => console.log('error', error));
-}
-//StartGame
-export function StartGame(gameKey) {
-  gameSessionRef
-    .doc(gameKey)
-    .update({ StartGame: true })
-    .catch((error) => console.log('error', error));
-}
-
-//SnapShot on StartGame
-export function SnapShotStartGame(setStartGame, gameKey) {
-  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
-    setStartGame(doc.data().StartGame);
-  });
-}
-
-// SnapShot on the users and there information
-export function SnapShotUsers(setUserArray, gameKey) {
-  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
-    setUserArray(doc.data().users);
-  });
-}
-
-// Update UserScore
-export function UpdateUserScore(userEmail, gameKey) {
-  let ary = [];
-  let ref = gameSessionRef.doc(gameKey);
-  ref.get().then((doc) => {
-    ary = [...doc.data().users];
-    for (let index = 0; index < ary.length; index++) {
-      if (ary[index].userEmail === userEmail) {
-        ary[index].userScore += 1;
-        ref.update({
-          users: ary,
-        });
-      }
-    }
-  });
-}
+    });
+} */
