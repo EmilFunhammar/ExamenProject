@@ -169,12 +169,9 @@ const AnswerFeilds = ({
   const [AnswerdNum, setAnswerdNum] = useState(0);
   let usersAnswer = questionArray[activeQuestion];
 
-  /*   const SnapShotObserver = () => {
-    SnapshotUserAnswerd(setAnswerdNum, gameKey);
-  }; */
   useEffect(() => {
     SnapshotUserAnswerd(setAnswerdNum, gameKey);
-  }, []);
+  }, [gameKey]);
 
   useEffect(() => {
     if (AnswerdNum === usersArray.length) {
@@ -184,16 +181,16 @@ const AnswerFeilds = ({
         setBackgroundColor('#146B66');
         UpdateActiveQuestion(activeQuestion, gameKey);
         setModalVisable(false);
-      }, 5000);
+      }, 10000);
     }
   }, [
     AnswerdNum,
-    /*  activeQuestion,
+    activeQuestion,
     gameKey,
     setActiveQuestion,
     setBackgroundColor,
     setModalVisable,
-    usersArray.length, */
+    usersArray.length,
   ]);
 
   const CheckAnswers = (value) => {
