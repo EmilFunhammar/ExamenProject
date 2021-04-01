@@ -6,16 +6,16 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {
-  GetGameQuestions,
-  CreateGameSetup,
-} from '../firebase/Firebase';
+import { GetGameQuestions, CreateGameSetup } from '../firebase/Firebase';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
+import { ThemeContext } from '../context/ThemeContext';
 
 export default function CreateGameComponent() {
   const navigation = useNavigation();
   const { user } = useContext(AuthContext);
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
   const [key, setKey] = useState('');
   const [gameQuestions, setGameQuestions] = useState();
 
@@ -23,34 +23,42 @@ export default function CreateGameComponent() {
     GetGameQuestions(setGameQuestions);
   }, []);
   return (
-    <View style={styles.container}>
-      <View style={styles.textView}>
-        <Text
-          style={styles.text}
-          onPress={() => {
-            gameQuestions.sort(() => Math.random() - 0.5);
-
-            console.log('q', gameQuestions);
-          }}
-        >
+    <View
+      style={{ ...styles.container, backgroundColor: theme.backgroundColor }}
+    >
+      <View
+        style={{
+          ...styles.textView,
+          backgroundColor: theme.viewBackgroundColor,
+        }}
+      >
+        {/* <Text style={{ ...styles.text, color: theme.buttonsText }}>
           Enter game key
-        </Text>
+        </Text> */}
 
         <TextInput
           style={styles.textInput}
-          placeholder="Enter key here:"
+          placeholderTextColor={theme.placeholderTextColor}
+          placeholder="Enter game key here:"
           onChangeText={(text) => setKey(text)}
         />
-        <View style={styles.underLineView} />
+        <View
+          style={{
+            ...styles.underLineView,
+            backgroundColor: theme.placeholderTextColor,
+          }}
+        />
       </View>
-      <View style={styles.button}>
+      <View style={{ ...styles.button, backgroundColor: theme.buttons }}>
         <TouchableOpacity
           onPress={() => {
             CreateGameSetup(gameQuestions, key, user);
             navigation.navigate('ParticipantScreen', { gameKey: key });
           }}
         >
-          <Text style={styles.buttonText}>Go to lobby</Text>
+          <Text style={{ ...styles.buttonText, color: theme.buttonsText }}>
+            Go to lobby
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -83,17 +91,20 @@ const styles = StyleSheet.create({
   textInput: {
     marginTop: 40,
     fontSize: 20,
+    fontWeight: '400',
   },
   textView: {
     marginTop: 100,
     width: '80%',
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 20,
   },
   underLineView: {
     height: 2,
     backgroundColor: 'black',
     marginTop: 3,
-    width: '100%',
+    marginBottom: 15,
+    width: '80%',
   },
 });

@@ -1,33 +1,41 @@
 import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomePage from '../screens/home';
-import { StyleSheet, Text, View } from 'react-native';
-import { AuthContext } from '../context/AuthContext';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import CreatGameComponent from '../screens/createGameScreen';
 import JoinGame from '../screens/joinGameScreen';
 import Participants from '../screens/participantScreen';
 import GameWinner from '../screens/gameWinnerScreen';
 import GameBoard from '../screens/gameScreen';
+import Settings from '../screens/settings';
+import { ThemeContext } from '../context/ThemeContext';
+import { EvilIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const Stack = createStackNavigator();
 
 export default function AuthenticatedStack() {
+  const { theme } = useContext(ThemeContext);
+
   return (
-    <Stack.Navigator initialRouteName="WinnerScreen">
+    <Stack.Navigator initialRouteName="home">
       <Stack.Screen
         name="home"
         component={HomePage}
         options={{
-          headerStyle: { backgroundColor: '#AFEFDF' },
-          headerTitle: () => <CustomHeader />,
-          headerRight: () => <SignOutComponent />,
+          headerStyle: { backgroundColor: theme.buttons },
+          headerTintColor: theme.buttonsText,
+          headerTitle: () => <CustomHeader name={'Vem kan minst?'} />,
+          //headerRight: () => <SignOutComponent />,
+          headerLeft: () => <ThemeComponent />,
         }}
       />
       <Stack.Screen
         name="CreateGame"
         component={CreatGameComponent}
         options={{
-          headerStyle: { backgroundColor: '#AFEFDF' },
+          headerStyle: { backgroundColor: theme.buttons },
+          headerTintColor: theme.buttonsText,
           title: '',
         }}
       />
@@ -62,26 +70,53 @@ export default function AuthenticatedStack() {
         component={GameBoard}
         options={{ title: '', headerShown: false }}
       />
+      <Stack.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          headerTitle: () => <CustomHeader name={'Settings'} />,
+          headerStyle: { backgroundColor: theme.buttons },
+          headerTintColor: theme.buttonsText,
+        }}
+      />
     </Stack.Navigator>
   );
 }
 
-const SignOutComponent = () => {
+/* const SignOutComponent = () => {
   const { signOutUser } = useContext(AuthContext);
   return (
     <Text style={styles.signOut} onPress={() => signOutUser()}>
       Sign out
     </Text>
   );
-};
+}; */
 
-const CustomHeader = () => {
+const CustomHeader = ({ name }) => {
+  const { theme } = useContext(ThemeContext);
+
   return (
     <View style={styles.header}>
       <View>
-        <Text style={styles.headerText}>Närmast vinner</Text>
+        <Text style={{ ...styles.headerText, color: theme.buttonsText }}>
+          {name}
+        </Text>
       </View>
     </View>
+  );
+};
+
+const ThemeComponent = () => {
+  const navigation = useNavigation();
+  const { theme } = useContext(ThemeContext);
+  let color = `${theme.buttonsText}`;
+
+  return (
+    <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+      <View style={styles.Theme}>
+        <EvilIcons name="gear" size={32} color={color} />
+      </View>
+    </TouchableOpacity>
   );
 };
 
@@ -98,9 +133,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     letterSpacing: 1,
   },
-  signOut: {
-    marginEnd: 20,
-    fontSize: 16,
-    fontWeight: 'bold',
+  Theme: {
+    marginLeft: 10,
   },
 });

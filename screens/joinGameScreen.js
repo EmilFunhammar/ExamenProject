@@ -5,19 +5,46 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { AddUserToGame } from '../firebase/Firebase';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
+import { useEffect } from 'react/cjs/react.development';
+import { useRef } from 'react';
 
 export default function JoinGame() {
   const navigation = useNavigation();
   const [key, setKey] = useState('');
   const { user } = useContext(AuthContext);
+  const [ifDocExsists, setIfDocExsists] = useState();
+  let num = useRef(0);
+
+  const navigate = () => {
+    navigation.navigate('ParticipantScreen', { gameKey: key });
+  };
+
+  useEffect(() => {
+    console.log('överst ', num);
+    if (num.current != 0) {
+      if (ifDocExsists === true) {
+        navigate();
+      } else {
+        Alert.alert('wrong key');
+      }
+    }
+    num.current += 1;
+  }, [ifDocExsists]);
+
   return (
     <View style={styles.container}>
       <View style={styles.textView}>
-        <Text style={styles.text}>Enter game key</Text>
+        <Text
+          style={styles.text}
+          onPress={() => console.log('emil', ifDocExsists)}
+        >
+          Enter game key
+        </Text>
         <TextInput
           style={styles.textInput}
           placeholder="Enter key here:"
@@ -28,8 +55,13 @@ export default function JoinGame() {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          AddUserToGame(user.displayName, user.email, key);
-          navigation.navigate('ParticipantScreen', { gameKey: key });
+          AddUserToGame(user.displayName, user.email, key, setIfDocExsists);
+          //doesDocExist(key, setIfDocExsists);
+          /*   if (AddUserToGame(user.displayName, user.email, key) === true) {
+            navigation.navigate('ParticipantScreen', { gameKey: key });
+          } else {
+            Alert.alert('wrong key');
+          } */
         }}
       >
         <Text style={styles.buttonText}>Join game</Text>
