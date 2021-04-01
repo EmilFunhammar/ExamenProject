@@ -25,20 +25,19 @@ if (!firebase.apps.length) {
 }
 
 export const auth = firebase.auth();
+let gameSessionRef = firebase.firestore().collection('GameSession');
+let questionRef = firebase.firestore().collection('Questions');
 
 export function SaveUserAnswers(userAnswer, gameKey, userEmail) {
   let ary = [];
-  var userArrayRef = firebase
-    .firestore()
-    .collection('GameSession')
-    .doc(gameKey);
+  let ref = gameSessionRef.doc(gameKey);
 
-  userArrayRef.get().then((doc) => {
+  ref.get().then((doc) => {
     ary = [...doc.data().users];
     for (let index = 0; index < ary.length; index++) {
       if (ary[index].userEmail === userEmail) {
         ary[index].userAnswer = userAnswer;
-        userArrayRef.update({
+        ref.update({
           users: ary,
         });
       }
@@ -48,11 +47,7 @@ export function SaveUserAnswers(userAnswer, gameKey, userEmail) {
 
 //Get users Score and name
 export function GetUsers(setUserArray, gameKey) {
-  //console.log('SnapShotUsers', gameKey);
-
-  firebase
-    .firestore()
-    .collection('GameSession')
+  gameSessionRef
     .doc(gameKey)
     .get()
     .then((doc) => {
@@ -66,22 +61,16 @@ export function GetUsers(setUserArray, gameKey) {
 // Get questions from Firebase
 export function GetGameQuestions(setGameQuestions) {
   let questionArray = [];
-  firebase
-    .firestore()
-    .collection('Questions')
-    .get()
-    .then(function (querySnapshot) {
-      querySnapshot.forEach(function (doc) {
-        questionArray.push(doc.data().question);
-      });
-      questionArray.sort(() => Math.random() - 0.5);
-      //console.log('här ', questionArray);
+  questionRef.get().then(function (querySnapshot) {
+    querySnapshot.forEach(function (doc) {
+      questionArray.push(doc.data().question);
     });
+    questionArray.sort(() => Math.random() - 0.5);
+  });
   setGameQuestions(questionArray);
 }
 
 //UploadGameQuestion
-
 export function CreateGameSetup(questionsArray, sessionName, user) {
   let userScore = 0;
   let userEmail = user.email;
@@ -90,8 +79,7 @@ export function CreateGameSetup(questionsArray, sessionName, user) {
   let host = true;
   let userAry = { userEmail, userDisplayName, userScore, userAnswer, host };
 
-  let ref = firebase.firestore().collection('GameSession').doc(sessionName);
-
+  let ref = gameSessionRef.doc(sessionName);
   ref
     .set({
       StartGame: false,
@@ -100,19 +88,11 @@ export function CreateGameSetup(questionsArray, sessionName, user) {
       Questions: questionsArray,
       users: firebase.firestore.FieldValue.arrayUnion(userAry),
     })
-    .then(() => {
-      /*  ref.update({
-        users: firebase.firestore.FieldValue.arrayUnion(userAry),
-      }); */
-      //console.log('game Created');
-    })
     .catch((error) => console.log('error', error));
 }
 
 export function doesDocExist(gameKey, setIfDocExsists) {
-  firebase
-    .firestore()
-    .collection('GameSession')
+  gameSessionRef
     .doc(gameKey)
     .get()
     .then((doc) => {
@@ -131,25 +111,17 @@ export function AddUserToGame(
   let userScore = 0;
   let userAnswer = '';
   let ary = { userScore, userEmail, userDisplayName, userAnswer };
-  firebase
-    .firestore()
-    .collection('GameSession')
-    .doc(gameKey)
-    .get()
-    .then((doc) => {
-      if (doc.exists) {
-        firebase
-          .firestore()
-          .collection('GameSession')
-          .doc(gameKey)
-          .update({
-            users: firebase.firestore.FieldValue.arrayUnion(ary),
-          });
-        setIfDocExsists(true);
-      } else {
-        setIfDocExsists(false);
-      }
-    });
+  let ref = gameSessionRef.doc(gameKey);
+  ref.get().then((doc) => {
+    if (doc.exists) {
+      ref.doc(gameKey).update({
+        users: firebase.firestore.FieldValue.arrayUnion(ary),
+      });
+      setIfDocExsists(true);
+    } else {
+      setIfDocExsists(false);
+    }
+  });
 }
 
 export function UpdateUserName(currentUserName) {
@@ -158,113 +130,57 @@ export function UpdateUserName(currentUserName) {
     .updateProfile({
       displayName: currentUserName,
     })
-    .then(function () {
-      //console.log('document sucssesfuly');
-    })
     .catch(function (error) {
       console.log(error);
     });
 }
 
-// Update ActiveQuestion
-/* export function UpdateActiveQuestion() {
-  firebase.firestore().collection('GameSession').doc('pilot1').update({})
-}
- */
 export function SnapshotUserAnswerd(setAnswerdNum, gameKey) {
-  firebase
-    .firestore()
-    .collection('GameSession')
-    .doc(gameKey)
-    .onSnapshot((doc) => {
-      setAnswerdNum(doc.data().UsersAnswerd);
-      //console.log('härsds', doc.data().UsersAnswerd);
-    });
+  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
+    setAnswerdNum(doc.data().UsersAnswerd);
+  });
 }
 //Reset AnswerdNum
 export function ResetAnswerdNum(gameKey) {
-  //console.log('ResetAnswerdNum', gameKey);
-
-  firebase
-    .firestore()
-    .collection('GameSession')
+  gameSessionRef
     .doc(gameKey)
     .update({
       UsersAnswerd: 0,
-    })
-    .then(() => {
-      //console.log('Document successfully updated!');
     })
     .catch((error) => console.log('error', error));
 }
 
 //Update AnswerdNum
 export function UpdateAnswerdNum(AnswerdNum, gameKey) {
-  // console.log('UpdateAnswerNum', gameKey);
-
-  firebase
-    .firestore()
-    .collection('GameSession')
+  gameSessionRef
     .doc(gameKey)
     .update({
       UsersAnswerd: AnswerdNum + 1,
-    })
-    .then(() => {
-      // console.log('Document successfully updated!');
     })
     .catch((error) => console.log('error', error));
 }
 
 //Update ActiveQuestion
 export function UpdateActiveQuestion(activeQuestion, gameKey) {
-  //console.log('updateActiveQuestion', gameKey);
-  firebase
-    .firestore()
-    .collection('GameSession')
+  gameSessionRef
     .doc(gameKey)
     .update({
       ActiveQuestion: activeQuestion + 1,
     })
-    .then(() => {
-      //console.log('Document successfully updated!');
-    })
     .catch((error) => console.log('error', error));
-}
-
-//SnapShop on HasANswerd
-export function SnapshotHasAnswers(setIfAnswerd) {
-  // console.log('SnapShitHasAnswerd');
-
-  firebase
-    .firestore()
-    .collection('GameSession')
-    .doc('pilot1')
-    .onSnapshot((doc) => {
-      setIfAnswerd(doc.data().users);
-    });
 }
 
 // SnapShot on ActiveQuestion
 export function SnapShotActiveQuestion(setActiveQuestion, gameKey) {
-  //console.log('SnapShotActibeQurstion', gameKey);
-
-  firebase
-    .firestore()
-    .collection('GameSession')
-    .doc(gameKey)
-    .onSnapshot((doc) => {
-      setActiveQuestion(doc.data().ActiveQuestion);
-      //console.log('här', doc.data().ActiveQuestion);
-    });
+  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
+    setActiveQuestion(doc.data().ActiveQuestion);
+  });
 }
 
 // Get all the Questions and answers
 export function GetQuestionInfo(setQuestionArray, gameKey) {
-  //console.log('GetQuestionInfo', gameKey);
   let ary = [];
-  firebase
-    .firestore()
-    .collection('GameSession')
+  gameSessionRef
     .doc(gameKey)
     .get()
     .then((doc) => {
@@ -272,7 +188,6 @@ export function GetQuestionInfo(setQuestionArray, gameKey) {
       for (let index = 0; index < ary.length; index++) {
         ary[index].Answers.sort(() => Math.random() - 0.5);
       }
-      //ary.sort(() => Math.random() - 0.5);
       const size = 10;
       const items = ary.slice(0, size);
       setQuestionArray(items);
@@ -281,9 +196,7 @@ export function GetQuestionInfo(setQuestionArray, gameKey) {
 }
 //StartGame
 export function StartGame(gameKey) {
-  firebase
-    .firestore()
-    .collection('GameSession')
+  gameSessionRef
     .doc(gameKey)
     .update({ StartGame: true })
     .catch((error) => console.log('error', error));
@@ -291,42 +204,28 @@ export function StartGame(gameKey) {
 
 //SnapShot on StartGame
 export function SnapShotStartGame(setStartGame, gameKey) {
-  firebase
-    .firestore()
-    .collection('GameSession')
-    .doc(gameKey)
-    .onSnapshot((doc) => {
-      setStartGame(doc.data().StartGame);
-    });
+  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
+    setStartGame(doc.data().StartGame);
+  });
 }
 
 // SnapShot on the users and there information
 export function SnapShotUsers(setUserArray, gameKey) {
-  //console.log('SnapShotUsers', gameKey);
-  firebase
-    .firestore()
-    .collection('GameSession')
-    .doc(gameKey)
-    .onSnapshot((doc) => {
-      setUserArray(doc.data().users);
-    });
+  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
+    setUserArray(doc.data().users);
+  });
 }
 
 // Update UserScore
 export function UpdateUserScore(userEmail, gameKey) {
-  //console.log('UpdateUserScore !!!!!', userEmail);
   let ary = [];
-  var userArrayRef = firebase
-    .firestore()
-    .collection('GameSession')
-    .doc(gameKey);
-
-  userArrayRef.get().then((doc) => {
+  let ref = gameSessionRef.doc(gameKey);
+  ref.get().then((doc) => {
     ary = [...doc.data().users];
     for (let index = 0; index < ary.length; index++) {
       if (ary[index].userEmail === userEmail) {
         ary[index].userScore += 1;
-        userArrayRef.update({
+        ref.update({
           users: ary,
         });
       }
