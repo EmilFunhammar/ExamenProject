@@ -25,7 +25,7 @@ export default function GameBoard({ route }) {
   const [usersArray, setUsersArray] = useState(['']);
   const [activeQuestion, SetActiveQuestion] = useState(0);
   const [backgroundColor, setBackgroundColor] = useState('#146B66');
-  const [modalVisiable, setModalVisable] = useState(true);
+  const [modalVisiable, setModalVisable] = useState(false);
 
   //const { user } = useContext(AuthContext);
   const { questionArray, gameKey } = route.params;
@@ -75,21 +75,24 @@ export default function GameBoard({ route }) {
           <View style={styles.modal}>
             <View
               style={{
-                backgroundColor: 'yellow',
                 width: '100%',
                 position: 'absolute',
                 top: '8%',
                 justifyContent: 'center',
                 alignItems: 'center',
+                backgroundColor: 'rgba(20, 107, 102, 0.8)',
               }}
             >
-              <Text>
-                Right anser: {questionArray[activeQuestion].rightAnswer}
+              <Text style={{ fontSize: 16, fontWeight: '600' }}>
+                Right answer:
+              </Text>
+              <Text style={{ fontSize: 22, fontWeight: '600' }}>
+                {questionArray[activeQuestion].rightAnswer}
               </Text>
             </View>
             <View
               style={{
-                backgroundColor: 'yellow',
+                backgroundColor: 'rgba(20, 107, 102, 0.8)',
                 width: '100%',
                 position: 'absolute',
                 bottom: '10%',
@@ -101,13 +104,25 @@ export default function GameBoard({ route }) {
                     flexDirection: 'row',
                     marginBottom: 10,
                     justifyContent: 'center',
+                    fontSize: 22,
                   }}
                 >
-                  <Text style={{ position: 'absolute', left: '5%' }}>
+                  <Text
+                    style={{
+                      position: 'absolute',
+                      left: '5%',
+                      fontSize: 22,
+                      fontWeight: '600',
+                    }}
+                  >
                     {element.userDisplayName}
                   </Text>
                   <Text
-                    style={{}} /* style={{ position: 'absolute', left: '50%' }} */
+                    style={{
+                      marginLeft: '20%',
+                      fontSize: 22,
+                      fontWeight: '600',
+                    }} /* style={{ position: 'absolute', left: '50%' }} */
                   >
                     {element.userAnswer}
                   </Text>
@@ -169,7 +184,7 @@ const AnswerFeilds = ({
         setBackgroundColor('#146B66');
         UpdateActiveQuestion(activeQuestion, gameKey);
         setModalVisable(false);
-      }, 3000);
+      }, 5000);
     }
   }, [
     AnswerdNum,
@@ -333,6 +348,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   questionText: {
+    justifyContent: 'center',
+    alignItems: 'center',
     fontSize: 30,
     fontWeight: '600',
     width: '80%',
@@ -366,7 +383,9 @@ const styles = StyleSheet.create({
     top: '40%',
     width: '90%',
     height: '30%',
-    backgroundColor: 'gray',
+    //backgroundColor: 'rgba(175, 239, 223, 0.8)',
+    backgroundColor: 'rgba(20, 107, 102, 0.9)',
+
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
