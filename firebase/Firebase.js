@@ -84,16 +84,24 @@ export function GetQuestionInfo(setQuestionArray, gameKey) {
     .catch((error) => console.log('error', error));
 }
 
-export function SaveUserAnswers(gameKey) {
-  console.log('här');
+export function SaveUserAnswers1(gameKey) {
   let ref = gameSessionRef.doc(gameKey);
-  ref.update({
-    users: firebase.firestore.FieldValue.arrayUnion('greater_virginia'),
-    //users: firebase.firestore.FieldValue.arrayRemove('users'),
+
+  ref.get().then((doc) => {
+    /* console.log(
+      doc.data().users[0].userAnswer
+    ),  */ doc
+      .data()
+      .users[0].userAnswer.update({
+        users: firebase.firestore.FieldValue.arrayUnion('greater_virginia'),
+      }); /* .update({
+      users: firebase.firestore.FieldValue.arrayUnion({ emil }),
+      //users: firebase.firestore.FieldValue.arrayRemove('users'),
+    }); */
   });
 }
-
-export function SaveUserAnswers1(userAnswerd, gameKey, userEmail) {
+// save user answer
+export function SaveUserAnswers(userAnswerd, gameKey, userEmail) {
   let ary = [];
   let ref = gameSessionRef.doc(gameKey);
 

@@ -37,7 +37,7 @@ export default function CreateGameComponent() {
         </Text> */}
 
         <TextInput
-          style={styles.textInput}
+          style={{ ...styles.textInput, color: theme.color }}
           placeholderTextColor={theme.placeholderTextColor}
           placeholder="Enter game key here:"
           onChangeText={(text) => setKey(text)}
