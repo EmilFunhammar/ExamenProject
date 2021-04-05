@@ -7,6 +7,10 @@ schemes = {
     buttonsText: 'black',
     viewBackgroundColor: '#146B66',
     placeholderTextColor: 'black',
+    linearBackgroundColor: ['#93F5EF', '#146B66', 'black'],
+    linearButton: '#AFEFDF',
+    linearButtonText: 'black',
+    borderColor: 'black',
   },
 
   Dark: {
@@ -16,6 +20,10 @@ schemes = {
     buttonsText: 'black',
     viewBackgroundColor: '#121212',
     placeholderTextColor: '#BB86FC',
+    linearBackgroundColor: ['#821EFC', '#BB86FC', 'black'],
+    linearButton: 'black',
+    linearButtonText: '#FEFEFE',
+    borderColor: 'white',
   },
 
   EasyReadColor: {
@@ -25,5 +33,9 @@ schemes = {
     buttonsText: 'white',
     viewBackgroundColor: '#515050',
     placeholderTextColor: 'white',
+    linearBackgroundColor: ['#93F5EF', '#146B66', 'black'],
+    linearButton: 'black',
+    linearButtonText: '#FEFEFE',
+    borderColor: 'black',
   },
 };
