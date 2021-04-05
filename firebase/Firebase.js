@@ -84,21 +84,37 @@ export function GetQuestionInfo(setQuestionArray, gameKey) {
     .catch((error) => console.log('error', error));
 }
 
-export function SaveUserAnswers(userAnswer, gameKey, userEmail) {
+export function SaveUserAnswers(gameKey) {
+  console.log('här');
+  let ref = gameSessionRef.doc(gameKey);
+  ref.update({
+    users: firebase.firestore.FieldValue.arrayUnion('greater_virginia'),
+    //users: firebase.firestore.FieldValue.arrayRemove('users'),
+  });
+}
+
+export function SaveUserAnswers1(userAnswerd, gameKey, userEmail) {
   let ary = [];
   let ref = gameSessionRef.doc(gameKey);
 
-  ref.get().then((doc) => {
-    ary = [...doc.data().users];
-    for (let index = 0; index < ary.length; index++) {
-      if (ary[index].userEmail === userEmail) {
-        ary[index].userAnswer = userAnswer;
-        ref.update({
-          users: ary,
-        });
+  ref
+    .get()
+    .then((doc) => {
+      ary = [...doc.data().users];
+      for (let index = 0; index < ary.length; index++) {
+        if (ary[index].userEmail === userEmail) {
+          ary[index].userAnswer = userAnswerd;
+          console.log('ary', ary[0].userAnswer);
+          ref.update({
+            users: firebase.firestore.FieldValue.arrayUnion(ary),
+          });
+        }
       }
-    }
-  });
+      console.log('sucssesful');
+    })
+    .catch((error) => {
+      console.log('error', error);
+    });
 }
 
 //Get users Score and name
@@ -224,7 +240,7 @@ export function AddUserToGame(
   let ref = gameSessionRef.doc(gameKey);
   ref.get().then((doc) => {
     if (doc.exists) {
-      ref.doc(gameKey).update({
+      ref.update({
         users: firebase.firestore.FieldValue.arrayUnion(ary),
       });
       setIfDocExsists(true);

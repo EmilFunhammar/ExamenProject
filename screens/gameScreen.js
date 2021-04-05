@@ -99,34 +99,7 @@ export default function GameBoard({ route }) {
               }}
             >
               {usersArray.map((element, index) => (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    marginBottom: 10,
-                    justifyContent: 'center',
-                    fontSize: 22,
-                  }}
-                >
-                  <Text
-                    style={{
-                      position: 'absolute',
-                      left: '5%',
-                      fontSize: 22,
-                      fontWeight: '600',
-                    }}
-                  >
-                    {element.userDisplayName}
-                  </Text>
-                  <Text
-                    style={{
-                      marginLeft: '20%',
-                      fontSize: 22,
-                      fontWeight: '600',
-                    }} /* style={{ position: 'absolute', left: '50%' }} */
-                  >
-                    {element.userAnswer}
-                  </Text>
-                </View>
+                <ModalTextComponent element={element} key={index} />
               ))}
             </View>
           </View>
@@ -145,6 +118,39 @@ export default function GameBoard({ route }) {
     </View>
   );
 }
+
+const ModalTextComponent = ({ element }) => {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        marginBottom: 10,
+        justifyContent: 'center',
+        fontSize: 22,
+      }}
+    >
+      <Text
+        style={{
+          position: 'absolute',
+          left: '5%',
+          fontSize: 22,
+          fontWeight: '600',
+        }}
+      >
+        {element.userDisplayName}
+      </Text>
+      <Text
+        style={{
+          marginLeft: '20%',
+          fontSize: 22,
+          fontWeight: '600',
+        }} /* style={{ position: 'absolute', left: '50%' }} */
+      >
+        {element.userAnswer}
+      </Text>
+    </View>
+  );
+};
 const ScoreFeild = ({ userName, userScore }) => {
   return (
     <View style={{ flexDirection: 'row', marginBottom: 15 }}>
@@ -194,13 +200,13 @@ const AnswerFeilds = ({
   ]);
 
   const CheckAnswers = (value) => {
-    let usersAnswer = questionArray[activeQuestion].Answers[value];
+    let usersAnswerd = questionArray[activeQuestion].Answers[value];
     let questionsRightAnswer = questionArray[activeQuestion].rightAnswer;
     //SaveUserAnswers(usersAnswer, gameKey, user.email);
 
     //saveUsersAnswers(usersAnswer);
 
-    if (usersAnswer === questionsRightAnswer) {
+    if (usersAnswerd === questionsRightAnswer) {
       setBackgroundColor('green');
       UpdateUserScore(user.email, gameKey);
       UpdateAnswerdNum(AnswerdNum, gameKey);
@@ -220,7 +226,8 @@ const AnswerFeilds = ({
         <TouchableOpacity
           style={styles.answers}
           onPress={() => {
-            SaveUserAnswers(usersAnswer.Answers[0], gameKey, user.email);
+            //SaveUserAnswers(usersAnswer.Answers[0], gameKey, user.email);
+            SaveUserAnswers(gameKey);
             CheckAnswers(0);
           }}
         >
@@ -272,18 +279,6 @@ const AnswerFeilds = ({
           </View>
         </TouchableOpacity>
       </View>
-    </View>
-  );
-};
-
-const ModalTextComponent = ({ userAnswer, userName, rightAnswer }) => {
-  return (
-    <View style={{ height: '100%', width: '100%' }}>
-      <Text>Right anser: {rightAnswer}</Text>
-
-      <Text>
-        {userName} {userAnswer}
-      </Text>
     </View>
   );
 };
