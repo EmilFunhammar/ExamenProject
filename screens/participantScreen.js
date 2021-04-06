@@ -8,10 +8,14 @@ import {
   SnapShotStartGame,
   StartGame,
 } from '../firebase/Firebase';
+
+// CONTEXTS
 import { AuthContext } from '../context/AuthContext';
+import { ThemeContext } from '../context/ThemeContext';
 
 export default function JoinGame({ route }) {
   const { user } = useContext(AuthContext);
+  const { theme } = useContext(ThemeContext);
   const navigation = useNavigation();
   const { gameKey } = route.params;
   const [userArray, setUserArray] = useState(['']);
@@ -62,8 +66,8 @@ export default function JoinGame({ route }) {
 
   return (
     <LinearGradient
-      colors={['#93F5EF', '#146B66', 'black']}
-      style={styles.container}
+      colors={theme.linearBackgroundColor}
+      style={{ ...styles.container, backgroundColor: theme.backgroundColor }}
     >
       <View style={styles.participantView}>
         <Text
@@ -89,7 +93,7 @@ export default function JoinGame({ route }) {
       </View>
       {shouldShow ? (
         <TouchableOpacity
-          style={styles.button}
+          style={{ ...styles.button, backgroundColor: theme.linearButton }}
           onPress={() => {
             StartGame(gameKey);
             /* navigation.navigate('GameScreen', {
@@ -98,7 +102,9 @@ export default function JoinGame({ route }) {
             }); */
           }}
         >
-          <Text style={styles.buttonText}>Start Game</Text>
+          <Text style={{ ...styles.buttonText, color: theme.linearButtonText }}>
+            Start Game
+          </Text>
         </TouchableOpacity>
       ) : null}
 

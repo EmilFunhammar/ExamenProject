@@ -28,21 +28,101 @@ export const auth = firebase.auth();
 let gameSessionRef = firebase.firestore().collection('GameSession');
 let questionRef = firebase.firestore().collection('Questions');
 
-export function SaveUserAnswers(userAnswer, gameKey, userEmail) {
+//
+//
+//
+//
+// SNAPSHOTS
+
+//SnapShot on StartGame
+export function SnapShotStartGame(setStartGame, gameKey) {
+  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
+    setStartGame(doc.data().StartGame);
+  });
+}
+
+// SnapShot on ActiveQuestion
+export function SnapShotActiveQuestion(setActiveQuestion, gameKey) {
+  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
+    setActiveQuestion(doc.data().ActiveQuestion);
+  });
+}
+
+export function SnapshotUserAnswerd(setAnswerdNum, gameKey) {
+  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
+    setAnswerdNum(doc.data().UsersAnswerd);
+  });
+}
+
+// SnapShot on the users and there information
+export function SnapShotUsers(setUserArray, gameKey) {
+  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
+    setUserArray(doc.data().users);
+  });
+}
+//
+//
+//
+//
+// GETS
+
+// Get all the Questions and answers
+export function GetQuestionInfo(setQuestionArray, gameKey) {
   let ary = [];
+  gameSessionRef
+    .doc(gameKey)
+    .get()
+    .then((doc) => {
+      ary = [...doc.data().Questions];
+      for (let index = 0; index < ary.length; index++) {
+        ary[index].Answers.sort(() => Math.random() - 0.5);
+      }
+      const size = 10;
+      const items = ary.slice(0, size);
+      setQuestionArray(items);
+    })
+    .catch((error) => console.log('error', error));
+}
+
+export function SaveUserAnswers1(gameKey) {
   let ref = gameSessionRef.doc(gameKey);
 
   ref.get().then((doc) => {
-    ary = [...doc.data().users];
-    for (let index = 0; index < ary.length; index++) {
-      if (ary[index].userEmail === userEmail) {
-        ary[index].userAnswer = userAnswer;
-        ref.update({
-          users: ary,
-        });
-      }
-    }
+    /* console.log(
+      doc.data().users[0].userAnswer
+    ),  */ doc
+      .data()
+      .users[0].userAnswer.update({
+        users: firebase.firestore.FieldValue.arrayUnion('greater_virginia'),
+      }); /* .update({
+      users: firebase.firestore.FieldValue.arrayUnion({ emil }),
+      //users: firebase.firestore.FieldValue.arrayRemove('users'),
+    }); */
   });
+}
+// save user answer
+export function SaveUserAnswers(userAnswerd, gameKey, userEmail) {
+  let ary = [];
+  let ref = gameSessionRef.doc(gameKey);
+
+  ref
+    .get()
+    .then((doc) => {
+      ary = [...doc.data().users];
+      for (let index = 0; index < ary.length; index++) {
+        if (ary[index].userEmail === userEmail) {
+          ary[index].userAnswer = userAnswerd;
+          console.log('ary', ary[0].userAnswer);
+          ref.update({
+            users: firebase.firestore.FieldValue.arrayUnion(ary),
+          });
+        }
+      }
+      console.log('sucssesful');
+    })
+    .catch((error) => {
+      console.log('error', error);
+    });
 }
 
 //Get users Score and name
@@ -69,6 +149,11 @@ export function GetGameQuestions(setGameQuestions) {
   });
   setGameQuestions(questionArray);
 }
+//
+//
+//
+//
+// SETS
 
 //UploadGameQuestion
 export function CreateGameSetup(questionsArray, sessionName, user) {
@@ -90,56 +175,22 @@ export function CreateGameSetup(questionsArray, sessionName, user) {
     })
     .catch((error) => console.log('error', error));
 }
+//
+//
+//
+//
+// UPDATES
 
-export function doesDocExist(gameKey, setIfDocExsists) {
+//Update ActiveQuestion
+export function UpdateActiveQuestion(activeQuestion, gameKey) {
   gameSessionRef
     .doc(gameKey)
-    .get()
-    .then((doc) => {
-      if (doc.exists) {
-        setIfDocExsists(true);
-      }
-    });
-}
-
-export function AddUserToGame(
-  userDisplayName,
-  userEmail,
-  gameKey,
-  setIfDocExsists
-) {
-  let userScore = 0;
-  let userAnswer = '';
-  let ary = { userScore, userEmail, userDisplayName, userAnswer };
-  let ref = gameSessionRef.doc(gameKey);
-  ref.get().then((doc) => {
-    if (doc.exists) {
-      ref.doc(gameKey).update({
-        users: firebase.firestore.FieldValue.arrayUnion(ary),
-      });
-      setIfDocExsists(true);
-    } else {
-      setIfDocExsists(false);
-    }
-  });
-}
-
-export function UpdateUserName(currentUserName) {
-  const currentUser = firebase.auth().currentUser;
-  currentUser
-    .updateProfile({
-      displayName: currentUserName,
+    .update({
+      ActiveQuestion: activeQuestion + 1,
     })
-    .catch(function (error) {
-      console.log(error);
-    });
+    .catch((error) => console.log('error', error));
 }
 
-export function SnapshotUserAnswerd(setAnswerdNum, gameKey) {
-  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
-    setAnswerdNum(doc.data().UsersAnswerd);
-  });
-}
 //Reset AnswerdNum
 export function ResetAnswerdNum(gameKey) {
   gameSessionRef
@@ -160,62 +211,6 @@ export function UpdateAnswerdNum(AnswerdNum, gameKey) {
     .catch((error) => console.log('error', error));
 }
 
-//Update ActiveQuestion
-export function UpdateActiveQuestion(activeQuestion, gameKey) {
-  gameSessionRef
-    .doc(gameKey)
-    .update({
-      ActiveQuestion: activeQuestion + 1,
-    })
-    .catch((error) => console.log('error', error));
-}
-
-// SnapShot on ActiveQuestion
-export function SnapShotActiveQuestion(setActiveQuestion, gameKey) {
-  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
-    setActiveQuestion(doc.data().ActiveQuestion);
-  });
-}
-
-// Get all the Questions and answers
-export function GetQuestionInfo(setQuestionArray, gameKey) {
-  let ary = [];
-  gameSessionRef
-    .doc(gameKey)
-    .get()
-    .then((doc) => {
-      ary = [...doc.data().Questions];
-      for (let index = 0; index < ary.length; index++) {
-        ary[index].Answers.sort(() => Math.random() - 0.5);
-      }
-      const size = 10;
-      const items = ary.slice(0, size);
-      setQuestionArray(items);
-    })
-    .catch((error) => console.log('error', error));
-}
-//StartGame
-export function StartGame(gameKey) {
-  gameSessionRef
-    .doc(gameKey)
-    .update({ StartGame: true })
-    .catch((error) => console.log('error', error));
-}
-
-//SnapShot on StartGame
-export function SnapShotStartGame(setStartGame, gameKey) {
-  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
-    setStartGame(doc.data().StartGame);
-  });
-}
-
-// SnapShot on the users and there information
-export function SnapShotUsers(setUserArray, gameKey) {
-  gameSessionRef.doc(gameKey).onSnapshot((doc) => {
-    setUserArray(doc.data().users);
-  });
-}
-
 // Update UserScore
 export function UpdateUserScore(userEmail, gameKey) {
   let ary = [];
@@ -232,3 +227,55 @@ export function UpdateUserScore(userEmail, gameKey) {
     }
   });
 }
+
+//StartGame
+export function StartGame(gameKey) {
+  gameSessionRef
+    .doc(gameKey)
+    .update({ StartGame: true })
+    .catch((error) => console.log('error', error));
+}
+
+export function AddUserToGame(
+  userDisplayName,
+  userEmail,
+  gameKey,
+  setIfDocExsists
+) {
+  let userScore = 0;
+  let userAnswer = '';
+  let ary = { userScore, userEmail, userDisplayName, userAnswer };
+  let ref = gameSessionRef.doc(gameKey);
+  ref.get().then((doc) => {
+    if (doc.exists) {
+      ref.update({
+        users: firebase.firestore.FieldValue.arrayUnion(ary),
+      });
+      setIfDocExsists(true);
+    } else {
+      setIfDocExsists(false);
+    }
+  });
+}
+
+export function UpdateUserName(currentUserName) {
+  const currentUser = firebase.auth().currentUser;
+  currentUser
+    .updateProfile({
+      displayName: currentUserName,
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
+
+/* export function doesDocExist(gameKey, setIfDocExsists) {
+  gameSessionRef
+    .doc(gameKey)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        setIfDocExsists(true);
+      }
+    });
+} */

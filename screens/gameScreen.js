@@ -17,7 +17,11 @@ import {
   UpdateUserScore,
   SaveUserAnswers,
 } from '../firebase/Firebase';
+
+// CONTEXTS
 import { AuthContext } from '../context/AuthContext';
+import { ThemeContext } from '../context/ThemeContext';
+
 import { useNavigation } from '@react-navigation/native';
 LogBox.ignoreLogs(['Setting a timer']);
 
@@ -28,6 +32,7 @@ export default function GameBoard({ route }) {
   const [modalVisiable, setModalVisable] = useState(false);
 
   //const { user } = useContext(AuthContext);
+  const { theme } = useContext(ThemeContext);
   const { questionArray, gameKey } = route.params;
   const navigation = useNavigation();
 
@@ -56,9 +61,11 @@ export default function GameBoard({ route }) {
   }, [activeQuestion, gameKey, navigation, questionArray.length]);
 
   return (
-    <View style={{ ...styles.container, backgroundColor: backgroundColor }}>
+    <View
+      style={{ ...styles.container, backgroundColor: theme.backgroundColor }}
+    >
       <View style={styles.questionView}>
-        <Text style={styles.questionText}>
+        <Text style={{ ...styles.questionText, color: theme.color }}>
           {questionArray[activeQuestion].question} {'?'}
         </Text>
       </View>
@@ -99,34 +106,7 @@ export default function GameBoard({ route }) {
               }}
             >
               {usersArray.map((element, index) => (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    marginBottom: 10,
-                    justifyContent: 'center',
-                    fontSize: 22,
-                  }}
-                >
-                  <Text
-                    style={{
-                      position: 'absolute',
-                      left: '5%',
-                      fontSize: 22,
-                      fontWeight: '600',
-                    }}
-                  >
-                    {element.userDisplayName}
-                  </Text>
-                  <Text
-                    style={{
-                      marginLeft: '20%',
-                      fontSize: 22,
-                      fontWeight: '600',
-                    }} /* style={{ position: 'absolute', left: '50%' }} */
-                  >
-                    {element.userAnswer}
-                  </Text>
-                </View>
+                <ModalTextComponent element={element} key={index} />
               ))}
             </View>
           </View>
@@ -145,6 +125,39 @@ export default function GameBoard({ route }) {
     </View>
   );
 }
+
+const ModalTextComponent = ({ element }) => {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        marginBottom: 10,
+        justifyContent: 'center',
+        fontSize: 22,
+      }}
+    >
+      <Text
+        style={{
+          position: 'absolute',
+          left: '5%',
+          fontSize: 22,
+          fontWeight: '600',
+        }}
+      >
+        {element.userDisplayName}
+      </Text>
+      <Text
+        style={{
+          marginLeft: '20%',
+          fontSize: 22,
+          fontWeight: '600',
+        }} /* style={{ position: 'absolute', left: '50%' }} */
+      >
+        {element.userAnswer}
+      </Text>
+    </View>
+  );
+};
 const ScoreFeild = ({ userName, userScore }) => {
   return (
     <View style={{ flexDirection: 'row', marginBottom: 15 }}>
@@ -165,16 +178,14 @@ const AnswerFeilds = ({
   gameKey,
   setModalVisable,
 }) => {
+  const { theme } = useContext(ThemeContext);
   const { user } = useContext(AuthContext);
   const [AnswerdNum, setAnswerdNum] = useState(0);
   let usersAnswer = questionArray[activeQuestion];
 
-  /*   const SnapShotObserver = () => {
-    SnapshotUserAnswerd(setAnswerdNum, gameKey);
-  }; */
   useEffect(() => {
     SnapshotUserAnswerd(setAnswerdNum, gameKey);
-  }, []);
+  }, [gameKey]);
 
   useEffect(() => {
     if (AnswerdNum === usersArray.length) {
@@ -184,26 +195,26 @@ const AnswerFeilds = ({
         setBackgroundColor('#146B66');
         UpdateActiveQuestion(activeQuestion, gameKey);
         setModalVisable(false);
-      }, 5000);
+      }, 4000);
     }
   }, [
     AnswerdNum,
-    /*  activeQuestion,
+    activeQuestion,
     gameKey,
     setActiveQuestion,
     setBackgroundColor,
     setModalVisable,
-    usersArray.length, */
+    usersArray.length,
   ]);
 
   const CheckAnswers = (value) => {
-    let usersAnswer = questionArray[activeQuestion].Answers[value];
+    let usersAnswerd = questionArray[activeQuestion].Answers[value];
     let questionsRightAnswer = questionArray[activeQuestion].rightAnswer;
     //SaveUserAnswers(usersAnswer, gameKey, user.email);
 
     //saveUsersAnswers(usersAnswer);
 
-    if (usersAnswer === questionsRightAnswer) {
+    if (usersAnswerd === questionsRightAnswer) {
       setBackgroundColor('green');
       UpdateUserScore(user.email, gameKey);
       UpdateAnswerdNum(AnswerdNum, gameKey);
@@ -221,9 +232,14 @@ const AnswerFeilds = ({
     <View style={styles.answersView}>
       <View style={styles.leftSide}>
         <TouchableOpacity
-          style={styles.answers}
+          style={{
+            ...styles.answers,
+            backgroundColor: theme.buttons,
+            borderColor: theme.borderColor,
+          }}
           onPress={() => {
             SaveUserAnswers(usersAnswer.Answers[0], gameKey, user.email);
+            //SaveUserAnswers(gameKey);
             CheckAnswers(0);
           }}
         >
@@ -234,7 +250,11 @@ const AnswerFeilds = ({
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.answers}
+          style={{
+            ...styles.answers,
+            backgroundColor: theme.buttons,
+            borderColor: theme.borderColor,
+          }}
           onPress={() => {
             SaveUserAnswers(usersAnswer.Answers[1], gameKey, user.email);
             CheckAnswers(1);
@@ -249,7 +269,11 @@ const AnswerFeilds = ({
       </View>
       <View style={styles.rightSide}>
         <TouchableOpacity
-          style={styles.answers}
+          style={{
+            ...styles.answers,
+            backgroundColor: theme.buttons,
+            borderColor: theme.borderColor,
+          }}
           onPress={() => {
             SaveUserAnswers(usersAnswer.Answers[2], gameKey, user.email);
             CheckAnswers(2);
@@ -262,7 +286,11 @@ const AnswerFeilds = ({
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.answers}
+          style={{
+            ...styles.answers,
+            backgroundColor: theme.buttons,
+            borderColor: theme.borderColor,
+          }}
           onPress={() => {
             SaveUserAnswers(usersAnswer.Answers[3], gameKey, user.email);
             CheckAnswers(3);
@@ -275,18 +303,6 @@ const AnswerFeilds = ({
           </View>
         </TouchableOpacity>
       </View>
-    </View>
-  );
-};
-
-const ModalTextComponent = ({ userAnswer, userName, rightAnswer }) => {
-  return (
-    <View style={{ height: '100%', width: '100%' }}>
-      <Text>Right anser: {rightAnswer}</Text>
-
-      <Text>
-        {userName} {userAnswer}
-      </Text>
     </View>
   );
 };

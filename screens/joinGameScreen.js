@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,14 +8,18 @@ import {
   Alert,
 } from 'react-native';
 import { AddUserToGame } from '../firebase/Firebase';
+import { LinearGradient } from 'expo-linear-gradient';
+import { ThemeContext } from '../context/ThemeContext';
+
 import { AuthContext } from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
-import { useEffect } from 'react/cjs/react.development';
+//import { useEffect } from 'react/cjs/react.development';
 import { useRef } from 'react';
 
 export default function JoinGame() {
   const navigation = useNavigation();
   const [key, setKey] = useState('');
+  const { theme } = useContext(ThemeContext);
   const { user } = useContext(AuthContext);
   const [ifDocExsists, setIfDocExsists] = useState();
   let num = useRef(0);
@@ -25,8 +29,7 @@ export default function JoinGame() {
   };
 
   useEffect(() => {
-    console.log('överst ', num);
-    if (num.current != 0) {
+    if (num.current !== 0) {
       if (ifDocExsists === true) {
         navigate();
       } else {
@@ -37,7 +40,10 @@ export default function JoinGame() {
   }, [ifDocExsists]);
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={theme.linearBackgroundColor}
+      style={styles.container}
+    >
       <View style={styles.textView}>
         <Text
           style={styles.text}
@@ -56,17 +62,11 @@ export default function JoinGame() {
         style={styles.button}
         onPress={() => {
           AddUserToGame(user.displayName, user.email, key, setIfDocExsists);
-          //doesDocExist(key, setIfDocExsists);
-          /*   if (AddUserToGame(user.displayName, user.email, key) === true) {
-            navigation.navigate('ParticipantScreen', { gameKey: key });
-          } else {
-            Alert.alert('wrong key');
-          } */
         }}
       >
         <Text style={styles.buttonText}>Join game</Text>
       </TouchableOpacity>
-    </View>
+    </LinearGradient>
   );
 }
 

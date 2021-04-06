@@ -5,11 +5,13 @@ import { useEffect, useState } from 'react/cjs/react.development';
 import { AuthContext } from '../context/AuthContext';
 import { GetUsers } from '../firebase/Firebase';
 import { useNavigation } from '@react-navigation/native';
+import { ThemeContext } from '../context/ThemeContext';
 
 export default function GameWinner({ route }) {
   const navigation = useNavigation();
   const { gameKey } = route.params;
   const { user } = useContext(AuthContext);
+  const { theme } = useContext(ThemeContext);
   const [userAry, setUserAry] = useState(['']);
   const [winner, setWinner] = useState('');
 
@@ -29,7 +31,9 @@ export default function GameWinner({ route }) {
     GetUsers(setUserAry, gameKey);
   }, []);
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={{ ...styles.container, backgroundColor: theme.backgroundColor }}
+    >
       <View
         style={{
           width: '100%',

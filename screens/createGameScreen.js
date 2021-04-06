@@ -37,7 +37,7 @@ export default function CreateGameComponent() {
         </Text> */}
 
         <TextInput
-          style={styles.textInput}
+          style={{ ...styles.textInput, color: theme.color }}
           placeholderTextColor={theme.placeholderTextColor}
           placeholder="Enter game key here:"
           onChangeText={(text) => setKey(text)}
@@ -49,18 +49,18 @@ export default function CreateGameComponent() {
           }}
         />
       </View>
-      <View style={{ ...styles.button, backgroundColor: theme.buttons }}>
-        <TouchableOpacity
-          onPress={() => {
-            CreateGameSetup(gameQuestions, key, user);
-            navigation.navigate('ParticipantScreen', { gameKey: key });
-          }}
-        >
-          <Text style={{ ...styles.buttonText, color: theme.buttonsText }}>
-            Go to lobby
-          </Text>
-        </TouchableOpacity>
-      </View>
+
+      <TouchableOpacity
+        style={{ ...styles.button, backgroundColor: theme.buttons }}
+        onPress={() => {
+          CreateGameSetup(gameQuestions, key, user);
+          navigation.navigate('ParticipantScreen', { gameKey: key });
+        }}
+      >
+        <Text style={{ ...styles.buttonText, color: theme.buttonsText }}>
+          Go to lobby
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
