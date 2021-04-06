@@ -1,20 +1,35 @@
 import React from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 export default function SplashPage() {
   return (
-    <View style={styles.container}>
-      <Text>this i splashPage!</Text>
+    <ImageBackground
+      style={styles.container}
+      source={require('../assets/splashScreen.png')}
+    >
+      <Text style={styles.text}>Välkomen till</Text>
+      <Text style={styles.text}>Vem kan minst!!!</Text>
       <ActivityIndicator animating={true} />
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#146B66',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  text: {
+    //transform: [{ rotate: '300deg' }],
+    fontSize: 60,
+    fontWeight: 'bold',
   },
 });

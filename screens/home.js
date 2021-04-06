@@ -1,4 +1,6 @@
 import React from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
+
 import { useState, useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
@@ -12,12 +14,16 @@ export default function HomePage() {
   const navigation = useNavigation();
 
   return (
-    <View
-      style={{
-        ...styles.container,
-        backgroundColor: theme.backgroundColor,
-      }}
+    <LinearGradient
+      colors={theme.linearBackgroundColor}
+      style={{ ...styles.container, backgroundColor: theme.backgroundColor }}
     >
+      {/*  <View
+        style={{
+          ...styles.container,
+          backgroundColor: theme.linearBackgroundColor,
+        }}
+      > */}
       <View
         // eslint-disable-next-line react-native/no-inline-styles
         style={{
@@ -28,7 +34,10 @@ export default function HomePage() {
         }}
       >
         <TouchableOpacity
-          style={{ ...styles.touchableOpacity, backgroundColor: theme.buttons }}
+          style={{
+            ...styles.touchableOpacity,
+            backgroundColor: theme.buttons,
+          }}
           onPress={() => toggleTheme(schemes.Dark)}
           onLongPress={() => toggleTheme(schemes.Def)}
         >
@@ -39,7 +48,10 @@ export default function HomePage() {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          style={{ ...styles.touchableOpacity, backgroundColor: theme.buttons }}
+          style={{
+            ...styles.touchableOpacity,
+            backgroundColor: theme.buttons,
+          }}
           onPress={() => navigation.navigate('CreateGame')}
         >
           <View>
@@ -49,7 +61,10 @@ export default function HomePage() {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          style={{ ...styles.touchableOpacity, backgroundColor: theme.buttons }}
+          style={{
+            ...styles.touchableOpacity,
+            backgroundColor: theme.buttons,
+          }}
           onPress={() => navigation.navigate('JoinGame')}
         >
           <View style={styles.buttons}>
@@ -59,7 +74,7 @@ export default function HomePage() {
           </View>
         </TouchableOpacity>
       </View>
-    </View>
+    </LinearGradient>
   );
 }
 

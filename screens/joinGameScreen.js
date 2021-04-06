@@ -8,6 +8,9 @@ import {
   Alert,
 } from 'react-native';
 import { AddUserToGame } from '../firebase/Firebase';
+import { LinearGradient } from 'expo-linear-gradient';
+import { ThemeContext } from '../context/ThemeContext';
+
 import { AuthContext } from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 //import { useEffect } from 'react/cjs/react.development';
@@ -16,6 +19,7 @@ import { useRef } from 'react';
 export default function JoinGame() {
   const navigation = useNavigation();
   const [key, setKey] = useState('');
+  const { theme } = useContext(ThemeContext);
   const { user } = useContext(AuthContext);
   const [ifDocExsists, setIfDocExsists] = useState();
   let num = useRef(0);
@@ -36,7 +40,10 @@ export default function JoinGame() {
   }, [ifDocExsists]);
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={theme.linearBackgroundColor}
+      style={styles.container}
+    >
       <View style={styles.textView}>
         <Text
           style={styles.text}
@@ -59,7 +66,7 @@ export default function JoinGame() {
       >
         <Text style={styles.buttonText}>Join game</Text>
       </TouchableOpacity>
-    </View>
+    </LinearGradient>
   );
 }
 
