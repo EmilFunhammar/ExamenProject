@@ -13,6 +13,10 @@ export default function HomePage() {
 
   const navigation = useNavigation();
 
+  const emil = (a, b) => {
+    return a + b;
+  };
+
   return (
     <LinearGradient
       colors={theme.linearBackgroundColor}
