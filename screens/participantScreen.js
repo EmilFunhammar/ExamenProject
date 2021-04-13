@@ -7,6 +7,7 @@ import {
   SnapShotUsers,
   SnapShotStartGame,
   StartGame,
+  addUserAnswer,
 } from '../firebase/Firebase';
 
 // CONTEXTS
@@ -96,6 +97,7 @@ export default function JoinGame({ route }) {
           style={{ ...styles.button, backgroundColor: theme.linearButton }}
           onPress={() => {
             StartGame(gameKey);
+            addUserAnswer(gameKey, userArray, user);
             /* navigation.navigate('GameScreen', {
               questionArray: questionArray,
               gameKey: gameKey,

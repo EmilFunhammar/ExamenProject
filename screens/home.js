@@ -38,8 +38,7 @@ export default function HomePage() {
             ...styles.touchableOpacity,
             backgroundColor: theme.buttons,
           }}
-          onPress={() => toggleTheme(schemes.Dark)}
-          onLongPress={() => toggleTheme(schemes.Def)}
+          onPress={() => console.log('emil')}
         >
           <View style={styles.buttons}>
             <Text style={{ ...styles.buttonsText, color: theme.buttonsText }}>

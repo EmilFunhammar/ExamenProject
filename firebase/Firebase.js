@@ -87,18 +87,11 @@ export function GetQuestionInfo(setQuestionArray, gameKey) {
 export function SaveUserAnswers1(gameKey) {
   let ref = gameSessionRef.doc(gameKey);
 
-  ref.get().then((doc) => {
-    /* console.log(
-      doc.data().users[0].userAnswer
-    ),  */ doc
-      .data()
-      .users[0].userAnswer.update({
-        users: firebase.firestore.FieldValue.arrayUnion('greater_virginia'),
-      }); /* .update({
-      users: firebase.firestore.FieldValue.arrayUnion({ emil }),
-      //users: firebase.firestore.FieldValue.arrayRemove('users'),
-    }); */
-  });
+  ref
+    .set({
+      test: 'emil',
+    })
+    .catch((error) => console.log('error', error));
 }
 // save user answer
 export function SaveUserAnswers(userAnswerd, gameKey, userEmail) {
@@ -165,6 +158,9 @@ export function CreateGameSetup(questionsArray, sessionName, user) {
   let userAry = { userEmail, userDisplayName, userScore, userAnswer, host };
 
   let ref = gameSessionRef.doc(sessionName);
+  /* ref.set({
+    google: 'emil',
+  }); */
   ref
     .set({
       StartGame: false,
@@ -175,6 +171,29 @@ export function CreateGameSetup(questionsArray, sessionName, user) {
     })
     .catch((error) => console.log('error', error));
 }
+
+// bugg
+export function addUserAnswer(gameKey, userArray, user) {
+  console.log('hello', user);
+
+  let ref = gameSessionRef.doc(gameKey).collection('user.email').doc('answers');
+
+  ref.set({
+    userAnswers: 'emil',
+  });
+  //ref.get().then((doc) => {
+  /*   userArray.forEach((element) => {
+      if (doc.exists) {
+        let userName = element.userDisplayName;
+        ref.update({
+          usersAnswer: 'Emil',
+          //: firebase.firestore.FieldValue.arrayUnion('ary'),
+        });
+      }
+    }); */
+  //});
+}
+
 //
 //
 //
@@ -230,7 +249,9 @@ export function UpdateUserScore(userEmail, gameKey) {
 
 //StartGame
 export function StartGame(gameKey) {
-  gameSessionRef
+  let ref = gameSessionRef;
+
+  ref
     .doc(gameKey)
     .update({ StartGame: true })
     .catch((error) => console.log('error', error));
