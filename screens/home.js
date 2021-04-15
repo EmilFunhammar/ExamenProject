@@ -1,5 +1,5 @@
 import React from 'react';
-import { LinearGradient } from 'expo-linear-gradient';
+//import { LinearGradient } from 'expo-linear-gradient';
 
 import { useState, useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -9,17 +9,13 @@ import { ThemeContext } from '../context/ThemeContext';
 import { schemes } from '../resources/colorSchemes';
 
 export default function HomePage() {
-  const { theme, toggleTheme } = useContext(ThemeContext);
-
-  const navigation = useNavigation();
-
-  const emil = (a, b) => {
-    return a + b;
-  };
+  //const { theme } = useContext(ThemeContext);
+  const theme = 'Def';
+  //const navigation = useNavigation();
 
   return (
-    <LinearGradient
-      colors={theme.linearBackgroundColor}
+    <View
+      //  colors={theme.linearBackgroundColor}
       style={{ ...styles.container, backgroundColor: theme.backgroundColor }}
     >
       {/*  <View
@@ -55,7 +51,7 @@ export default function HomePage() {
             ...styles.touchableOpacity,
             backgroundColor: theme.buttons,
           }}
-          onPress={() => navigation.navigate('CreateGame')}
+          //onPress={() => navigation.navigate('CreateGame')}
         >
           <View>
             <Text style={{ ...styles.buttonsText, color: theme.buttonsText }}>
@@ -68,7 +64,7 @@ export default function HomePage() {
             ...styles.touchableOpacity,
             backgroundColor: theme.buttons,
           }}
-          onPress={() => navigation.navigate('JoinGame')}
+          //onPress={() => navigation.navigate('JoinGame')}
         >
           <View style={styles.buttons}>
             <Text style={{ ...styles.buttonsText, color: theme.buttonsText }}>
@@ -77,7 +73,7 @@ export default function HomePage() {
           </View>
         </TouchableOpacity>
       </View>
-    </LinearGradient>
+    </View>
   );
 }
 
