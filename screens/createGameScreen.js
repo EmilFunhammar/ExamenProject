@@ -19,14 +19,14 @@ export default function CreateGameComponent() {
   const [key, setKey] = useState('');
   const [gameQuestions, setGameQuestions] = useState();
 
-  const [key1, setKey1] = useState('');
- const [key2, setKey2] = useState('');
+/*   const [key1, setKey1] = useState('');
+ const [key2, setKey2] = useState(''); */
  
  
  
- const test = ()=>{
+/*  const test = ()=>{
    setKey2(key1)
- }
+ } */
 
 
   useEffect(() => {
@@ -53,12 +53,12 @@ export default function CreateGameComponent() {
           onChangeText={(text) => setKey(text)}
         />
          
-<Button title="testbutton" onPress={()=> test()}></Button>
-       <Text>{key2}</Text>
+{/* <Button title="testbutton" onPress={()=> test()}></Button> */}
+   {/*     <Text>{key2}</Text>
        <TextInput
          placeholder="emil"
          onChangeText={(text) => setKey1(text)}
-       />
+       /> */}
         <View
           style={{
             ...styles.underLineView,
