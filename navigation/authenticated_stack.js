@@ -1,21 +1,22 @@
-import React, { useContext } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import HomePage from '../screens/home';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import CreatGameComponent from '../screens/createGameScreen';
-import JoinGame from '../screens/joinGameScreen';
-import Participants from '../screens/participantScreen';
-import GameWinner from '../screens/gameWinnerScreen';
-import GameBoard from '../screens/gameScreen';
-import Settings from '../screens/settings';
-import { ThemeContext } from '../context/ThemeContext';
-import { EvilIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import React, { useContext } from 'react'
+import { createStackNavigator } from '@react-navigation/stack'
+import HomePage from '../screens/home'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import CreatGameComponent from '../screens/createGameScreen'
+import JoinGame from '../screens/joinGameScreen'
+import Participants from '../screens/participantScreen'
+import GameWinner from '../screens/gameWinnerScreen'
+import GameBoard from '../screens/gameScreen'
+import Settings from '../screens/settings'
+import { ThemeContext } from '../context/ThemeContext'
+import { EvilIcons } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
+import HighScore from '../screens/highscoreScreen'
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator()
 
 export default function AuthenticatedStack() {
-  const { theme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext)
 
   return (
     <Stack.Navigator initialRouteName="home">
@@ -79,8 +80,18 @@ export default function AuthenticatedStack() {
           headerTintColor: theme.buttonsText,
         }}
       />
+      <Stack.Screen
+        name="HighScore"
+        component={HighScore}
+        options={{
+          title: '',
+          headerShown: true,
+          headerStyle: { backgroundColor: theme.buttons },
+          headerTintColor: theme.buttonsText,
+        }}
+      />
     </Stack.Navigator>
-  );
+  )
 }
 
 /* const SignOutComponent = () => {
@@ -93,7 +104,7 @@ export default function AuthenticatedStack() {
 }; */
 
 const CustomHeader = ({ name }) => {
-  const { theme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext)
 
   return (
     <View style={styles.header}>
@@ -103,13 +114,13 @@ const CustomHeader = ({ name }) => {
         </Text>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const ThemeComponent = () => {
-  const navigation = useNavigation();
-  const { theme } = useContext(ThemeContext);
-  let color = `${theme.buttonsText}`;
+  const navigation = useNavigation()
+  const { theme } = useContext(ThemeContext)
+  let color = `${theme.buttonsText}`
 
   return (
     <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
@@ -117,8 +128,8 @@ const ThemeComponent = () => {
         <EvilIcons name="gear" size={32} color={color} />
       </View>
     </TouchableOpacity>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   header: {
@@ -136,4 +147,4 @@ const styles = StyleSheet.create({
   Theme: {
     marginLeft: 10,
   },
-});
+})
