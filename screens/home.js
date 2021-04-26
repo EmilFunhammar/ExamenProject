@@ -1,17 +1,17 @@
-import React from 'react';
-import { LinearGradient } from 'expo-linear-gradient';
+import React from 'react'
+import { LinearGradient } from 'expo-linear-gradient'
 
-import { useState, useContext } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { GetUsers, SnapShotUsers } from '../firebase/Firebase';
-import { ThemeContext } from '../context/ThemeContext';
-import { schemes } from '../resources/colorSchemes';
+import { useState, useContext } from 'react'
+import { useNavigation } from '@react-navigation/native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { GetUsers, SnapShotUsers, saveGameWinner } from '../firebase/Firebase'
+import { ThemeContext } from '../context/ThemeContext'
+import { schemes } from '../resources/colorSchemes'
 
 export default function HomePage() {
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme, toggleTheme } = useContext(ThemeContext)
 
-  const navigation = useNavigation();
+  const navigation = useNavigation()
 
   return (
     <LinearGradient
@@ -38,7 +38,7 @@ export default function HomePage() {
             ...styles.touchableOpacity,
             backgroundColor: theme.buttons,
           }}
-          onPress={() => console.log('emil')}
+          onPress={() => navigation.navigate('HighScore')}
         >
           <View style={styles.buttons}>
             <Text style={{ ...styles.buttonsText, color: theme.buttonsText }}>
@@ -74,7 +74,7 @@ export default function HomePage() {
         </TouchableOpacity>
       </View>
     </LinearGradient>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -101,4 +101,4 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 20,
   },
-});
+})
