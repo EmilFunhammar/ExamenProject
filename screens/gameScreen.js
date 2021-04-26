@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { LinearGradient } from 'expo-linear-gradient';
+import React, { useEffect, useState, useContext } from 'react'
+import { LinearGradient } from 'expo-linear-gradient'
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Modal,
   LogBox,
-} from 'react-native';
+} from 'react-native'
 import {
   SnapShotUsers,
   SnapShotActiveQuestion,
@@ -18,28 +18,28 @@ import {
   UpdateUserScore,
   SaveUserAnswers,
   SaveUserAnswers1,
-} from '../firebase/Firebase';
+} from '../firebase/Firebase'
 
 // CONTEXTS
-import { AuthContext } from '../context/AuthContext';
-import { ThemeContext } from '../context/ThemeContext';
+import { AuthContext } from '../context/AuthContext'
+import { ThemeContext } from '../context/ThemeContext'
 
-import { useNavigation } from '@react-navigation/native';
-LogBox.ignoreLogs(['Setting a timer']);
+import { useNavigation } from '@react-navigation/native'
+LogBox.ignoreLogs(['Setting a timer'])
 
 export default function GameBoard({ route }) {
-  const { theme } = useContext(ThemeContext);
-  const [usersArray, setUsersArray] = useState(['']);
-  const [activeQuestion, SetActiveQuestion] = useState(0);
+  const { theme } = useContext(ThemeContext)
+  const [usersArray, setUsersArray] = useState([''])
+  const [activeQuestion, SetActiveQuestion] = useState(0)
   const [backgroundColor, setBackgroundColor] = useState(
-    `${theme.linearBackgroundColor}`
-  );
-  const [modalVisiable, setModalVisable] = useState(false);
+    `${theme.linearBackgroundColor}`,
+  )
+  const [modalVisiable, setModalVisable] = useState(false)
 
   //const { user } = useContext(AuthContext);
 
-  const { questionArray, gameKey } = route.params;
-  const navigation = useNavigation();
+  const { questionArray, gameKey } = route.params
+  const navigation = useNavigation()
 
   /*  const SnapShotObservers = () => {
     SnapShotUsers(setUsersArray, gameKey);
@@ -47,23 +47,23 @@ export default function GameBoard({ route }) {
   }; */
 
   useEffect(() => {
-    SnapShotUsers(setUsersArray, gameKey);
-    SnapShotActiveQuestion(SetActiveQuestion, gameKey);
+    SnapShotUsers(setUsersArray, gameKey)
+    SnapShotActiveQuestion(SetActiveQuestion, gameKey)
 
     //GetQuestionInfo(setQuestionArray);
-  }, []);
+  }, [])
 
   useEffect(() => {
     //console.log('här', questionArray.length - 1);
     if (questionArray.length - 1 === activeQuestion) {
-      navigation.navigate('WinnerScreen', { gameKey: gameKey });
+      navigation.navigate('WinnerScreen', { gameKey: gameKey })
 
       //console.log('sista frågan', questionArray.length, activeQuestion);
     } else {
       //console.log('här i slutet');
     }
     //////////////////////////////
-  }, [activeQuestion, gameKey, navigation, questionArray.length]);
+  }, [activeQuestion, gameKey, navigation, questionArray.length])
 
   return (
     <LinearGradient
@@ -129,7 +129,7 @@ export default function GameBoard({ route }) {
         setModalVisable={setModalVisable}
       />
     </LinearGradient>
-  );
+  )
 }
 
 const ModalTextComponent = ({ element }) => {
@@ -162,8 +162,8 @@ const ModalTextComponent = ({ element }) => {
         {element.userAnswer}
       </Text>
     </View>
-  );
-};
+  )
+}
 /* const ScoreFeild = ({ userName, userScore }) => {
   return (
     <View style={{ flexDirection: 'row', marginBottom: 15 }}>
@@ -182,8 +182,8 @@ const ScoreFeild = ({ userName, userScore }) => {
         <Text style={styles.userScoreText}>{userScore}</Text>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const AnswerFeilds = ({
   questionArray,
@@ -194,24 +194,25 @@ const AnswerFeilds = ({
   gameKey,
   setModalVisable,
 }) => {
-  const { theme } = useContext(ThemeContext);
-  const { user } = useContext(AuthContext);
-  const [AnswerdNum, setAnswerdNum] = useState(0);
-  let usersAnswer = questionArray[activeQuestion];
+  const { theme } = useContext(ThemeContext)
+  const { user } = useContext(AuthContext)
+  const [AnswerdNum, setAnswerdNum] = useState(0)
+  let usersAnswer = questionArray[activeQuestion]
 
   useEffect(() => {
-    SnapshotUserAnswerd(setAnswerdNum, gameKey);
-  }, [gameKey]);
+    SnapshotUserAnswerd(setAnswerdNum, gameKey)
+  }, [gameKey])
 
   useEffect(() => {
     if (AnswerdNum === usersArray.length) {
-      ResetAnswerdNum(gameKey);
-      setModalVisable(true);
+      ResetAnswerdNum(gameKey)
+      //Modal inactiv
+      //setModalVisable(true);
       setTimeout(function () {
-        setBackgroundColor('#146B66');
-        UpdateActiveQuestion(activeQuestion, gameKey);
-        setModalVisable(false);
-      }, 4000);
+        setBackgroundColor('#146B66')
+        UpdateActiveQuestion(activeQuestion, gameKey)
+        setModalVisable(false)
+      }, 1000)
     }
   }, [
     AnswerdNum,
@@ -221,24 +222,24 @@ const AnswerFeilds = ({
     setBackgroundColor,
     setModalVisable,
     usersArray.length,
-  ]);
+  ])
 
   const CheckAnswers = (value) => {
-    let usersAnswerd = questionArray[activeQuestion].Answers[value];
-    let questionsRightAnswer = questionArray[activeQuestion].rightAnswer;
+    let usersAnswerd = questionArray[activeQuestion].Answers[value]
+    let questionsRightAnswer = questionArray[activeQuestion].rightAnswer
     //SaveUserAnswers(usersAnswer, gameKey, user.email);
 
     //saveUsersAnswers(usersAnswer);
 
     if (usersAnswerd === questionsRightAnswer) {
-      setBackgroundColor('green');
-      UpdateUserScore(user.email, gameKey);
-      UpdateAnswerdNum(AnswerdNum, gameKey);
+      setBackgroundColor('green')
+      UpdateUserScore(user.email, gameKey)
+      UpdateAnswerdNum(AnswerdNum, gameKey)
     } else {
-      setBackgroundColor('red');
-      UpdateAnswerdNum(AnswerdNum, gameKey);
+      setBackgroundColor('red')
+      UpdateAnswerdNum(AnswerdNum, gameKey)
     }
-  };
+  }
 
   /*   const saveUsersAnswers = (userAnswer) => {
     SaveUserAnswers(userAnswer, gameKey, user.email);
@@ -271,9 +272,9 @@ const AnswerFeilds = ({
               borderColor: theme.borderColor,
             }}
             onPress={() => {
-              SaveUserAnswers(usersAnswer.Answers[0], gameKey, user.email);
+              //SaveUserAnswers(usersAnswer.Answers[0], gameKey, user.email)
               //SaveUserAnswers1(gameKey);
-              CheckAnswers(0);
+              CheckAnswers(0)
             }}
           >
             <View>
@@ -289,8 +290,8 @@ const AnswerFeilds = ({
               borderColor: theme.borderColor,
             }}
             onPress={() => {
-              SaveUserAnswers(usersAnswer.Answers[1], gameKey, user.email);
-              CheckAnswers(1);
+              //SaveUserAnswers(usersAnswer.Answers[1], gameKey, user.email)
+              CheckAnswers(1)
             }}
           >
             <View>
@@ -308,8 +309,8 @@ const AnswerFeilds = ({
               borderColor: theme.borderColor,
             }}
             onPress={() => {
-              SaveUserAnswers(usersAnswer.Answers[2], gameKey, user.email);
-              CheckAnswers(2);
+              //SaveUserAnswers(usersAnswer.Answers[2], gameKey, user.email)
+              CheckAnswers(2)
             }}
           >
             <View>
@@ -325,8 +326,8 @@ const AnswerFeilds = ({
               borderColor: theme.borderColor,
             }}
             onPress={() => {
-              SaveUserAnswers(usersAnswer.Answers[3], gameKey, user.email);
-              CheckAnswers(3);
+              //SaveUserAnswers(usersAnswer.Answers[3], gameKey, user.email)
+              CheckAnswers(3)
             }}
           >
             <View>
@@ -338,8 +339,8 @@ const AnswerFeilds = ({
         </View>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -444,7 +445,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 20,
   },
-});
+})
 
 /* const ScoreFeild = () => {
   const [UsersArray, setUsersArray] = useState(['']);
