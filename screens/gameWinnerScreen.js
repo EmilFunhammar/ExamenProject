@@ -1,35 +1,39 @@
-import React, { useContext } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import { useEffect, useState } from 'react/cjs/react.development';
-import { AuthContext } from '../context/AuthContext';
-import { GetUsers } from '../firebase/Firebase';
-import { useNavigation } from '@react-navigation/native';
-import { ThemeContext } from '../context/ThemeContext';
+import React, { useContext } from 'react'
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
+import { useEffect, useState } from 'react/cjs/react.development'
+import { AuthContext } from '../context/AuthContext'
+import { GetUsers, saveGameWinner } from '../firebase/Firebase'
+import { useNavigation } from '@react-navigation/native'
+import { ThemeContext } from '../context/ThemeContext'
+import HighScore from './highscoreScreen'
 
 export default function GameWinner({ route }) {
-  const navigation = useNavigation();
-  const { gameKey } = route.params;
-  const { user } = useContext(AuthContext);
-  const { theme } = useContext(ThemeContext);
-  const [userAry, setUserAry] = useState(['']);
-  const [winner, setWinner] = useState('');
+  const navigation = useNavigation()
+  const { gameKey } = route.params
+  const { user } = useContext(AuthContext)
+  const { theme } = useContext(ThemeContext)
+  const [userAry, setUserAry] = useState([''])
+  const [winnerName, setWinnerName] = useState('')
+  const [winnerScore, setWinnerScore] = useState(0)
+  let highScore = 0
+  let highScoreName = ''
 
   const SortOutWinner = () => {
-    let highScore = 0;
-    let highScoreName = '';
     for (let index = 0; index < userAry.length; index++) {
       if (userAry[index].userScore > highScore) {
-        highScore = userAry[index].userScore;
-        highScoreName = userAry[index].userDisplayName;
+        highScore = userAry[index].userScore
+        highScoreName = userAry[index].userDisplayName
       }
     }
-    return highScoreName;
-  };
-
+    //setWinnerName(highScoreName)
+    //setWinnerScore(highScore)
+    //saveGameWinner(winnerScore, winnerName)
+    return highScoreName
+  }
   useEffect(() => {
-    GetUsers(setUserAry, gameKey);
-  }, []);
+    GetUsers(setUserAry, gameKey)
+  }, [])
   return (
     <SafeAreaView
       style={{ ...styles.container, backgroundColor: theme.backgroundColor }}
@@ -82,14 +86,17 @@ export default function GameWinner({ route }) {
         >
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate('home')}
+            onPress={() => {
+              saveGameWinner(highScoreName, highScore)
+              navigation.navigate('home')
+            }}
           >
             <Text style={{ fontWeight: 'bold', fontSize: 32 }}>Quit Game</Text>
           </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
-  );
+  )
 }
 
 const ScoreComponent = ({ userScore, userName }) => {
@@ -102,8 +109,8 @@ const ScoreComponent = ({ userScore, userName }) => {
         {userScore}
       </Text>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -154,4 +161,4 @@ const styles = StyleSheet.create({
     height: '80%',
     marginTop: 10,
   },
-});
+})
