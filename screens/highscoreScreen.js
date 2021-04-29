@@ -1,8 +1,12 @@
-import React, { useState, useContext } from 'react'
-import { useEffect } from 'react'
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native'
-import { GetHighScoreList } from '../firebase/Firebase'
+//REACT
+import React, { useState, useContext, useEffect } from 'react'
+import { View, Text, StyleSheet } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
+
+//FIREBASE
+import { GetHighScoreList } from '../firebase/Firebase'
+
+//CONTEXT
 import { ThemeContext } from '../context/ThemeContext'
 
 export default function HighScore() {

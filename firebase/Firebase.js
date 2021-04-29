@@ -162,15 +162,33 @@ export function saveGameWinner(winnerName, winnerScore) {
       console.error('Error adding document: ', error)
     })
 }
+
 export function GetHighScoreList(setHighScorePlayers) {
   let ary = []
   let ref = firebase.firestore().collection('HighScore')
+  const bubbleSort = () => {
+    swapped = false
+    let end = ary.length - 1
+    for (let i = 0, j = 1; i < end; i++, j++) {
+      if (ary[i].score < ary[j].score) {
+        swapped = true
+        let temp = ary[i]
+        ary[i] = ary[j]
+        ary[j] = temp
+      }
+    }
+    end--
+  }
 
   ref.get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
       ary.push(doc.data())
     })
-    ary.sort((a, b) => b.score - a.score)
+    //ary.sort((a, b) => b.score - a.score)
+
+    do {
+      bubbleSort()
+    } while (swapped === true)
     ary.length = 10
     setHighScorePlayers(ary)
   })
@@ -202,8 +220,6 @@ export function CreateGameSetup(questionsArray, sessionName, user) {
 
 // bugg
 export function addUserAnswer(gameKey, userArray, user) {
-  console.log('hello', user)
-
   let ref = gameSessionRef.doc(gameKey).collection('user.email').doc('answers')
 
   ref.set({
