@@ -2,7 +2,7 @@ export let schemes = {}
 schemes = {
   Def: {
     backgroundColor: '#146B66',
-    lightBackgroundColor: 'green',
+    lightBackgroundColor: '#93F5EF',
     color: 'black',
     buttons: '#AFEFDF',
     buttonsText: 'black',
@@ -12,6 +12,9 @@ schemes = {
     linearButton: '#AFEFDF',
     linearButtonText: 'black',
     borderColor: 'black',
+    winnerScreenQuit: 'gray',
+    headerColor: '#121212',
+    shadowColor: '#FFFFF',
   },
 
   Dark: {
@@ -25,20 +28,24 @@ schemes = {
     linearBackgroundColor: ['#821EFC', '#BB86FC', 'black'],
     linearButton: 'black',
     linearButtonText: '#FEFEFE',
-    borderColor: 'white',
+    borderColor: '#FFFFFF',
+    headerColor: 'green',
+    shadowColor: '#FFFFFF',
   },
 
   EasyReadColor: {
-    backgroundColor: 'white',
-    lightBackgroundColor: 'White',
-    color: 'White',
+    backgroundColor: '#FFFFFF',
+    lightBackgroundColor: '#FFFFFF',
+    color: '#FFFFFF',
     buttons: '#515050',
-    buttonsText: 'white',
+    buttonsText: '#FFFFFF',
     viewBackgroundColor: '#515050',
-    placeholderTextColor: 'white',
+    placeholderTextColor: '#FFFFFF',
     linearBackgroundColor: ['#93F5EF', '#146B66', 'black'],
     linearButton: 'black',
     linearButtonText: '#FEFEFE',
     borderColor: 'black',
+    headerColor: '#121212',
+    shadowColor: '',
   },
 }
