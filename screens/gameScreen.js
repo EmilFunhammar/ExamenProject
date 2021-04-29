@@ -32,7 +32,7 @@ export default function GameBoard({ route }) {
   const [usersArray, setUsersArray] = useState([''])
   const [activeQuestion, SetActiveQuestion] = useState(0)
   const [backgroundColor, setBackgroundColor] = useState(
-    `${theme.linearBackgroundColor}`,
+    `${theme.lightBackgroundColor}`,
   )
   const [modalVisiable, setModalVisable] = useState(false)
 
@@ -66,10 +66,11 @@ export default function GameBoard({ route }) {
   }, [activeQuestion, gameKey, navigation, questionArray.length])
 
   return (
-    <LinearGradient
-      colors={theme.linearBackgroundColor}
+    <View
+      //colors={theme.linearBackgroundColor}
       style={{
         ...styles.container,
+        backgroundColor: backgroundColor,
       }}
     >
       <View style={styles.questionView}>
@@ -128,7 +129,7 @@ export default function GameBoard({ route }) {
         gameKey={gameKey}
         setModalVisable={setModalVisable}
       />
-    </LinearGradient>
+    </View>
   )
 }
 
@@ -209,7 +210,7 @@ const AnswerFeilds = ({
       //Modal inactiv
       //setModalVisable(true);
       setTimeout(function () {
-        setBackgroundColor('#146B66')
+        setBackgroundColor(theme.lightBackgroundColor)
         UpdateActiveQuestion(activeQuestion, gameKey)
         setModalVisable(false)
       }, 1000)
@@ -387,7 +388,7 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
   },
   answersText: {
-    fontSize: 0,
+    fontSize: 26,
     justifyContent: 'center',
     alignItems: 'center',
     fontWeight: '600',
@@ -398,7 +399,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderBottomColor: 'grey',
+    borderBottomColor: 'black',
     borderWidth: 3,
     borderRadius: 20,
   },
