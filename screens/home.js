@@ -11,7 +11,6 @@ import { ThemeContext } from '../context/ThemeContext'
 
 export default function HomePage() {
   const { theme } = useContext(ThemeContext)
-
   const navigation = useNavigation()
 
   return (
