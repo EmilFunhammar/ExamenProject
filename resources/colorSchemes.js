@@ -2,7 +2,7 @@ export let schemes = {}
 schemes = {
   Def: {
     backgroundColor: '#146B66',
-    lightBackgroundColor: 'green',
+    lightBackgroundColor: '#AFEFDF',
     color: 'black',
     buttons: '#AFEFDF',
     buttonsText: 'black',

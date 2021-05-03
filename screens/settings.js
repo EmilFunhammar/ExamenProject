@@ -1,28 +1,31 @@
-import React, { useContext } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+//REACT
+import React, { useContext } from 'react'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 
 // RESOURSES
-import { schemes } from '../resources/colorSchemes';
+import { schemes } from '../resources/colorSchemes'
 
 // CONTEXT:S
-import { ThemeContext } from '../context/ThemeContext';
-import { AuthContext } from '../context/AuthContext';
+import { ThemeContext } from '../context/ThemeContext'
+import { AuthContext } from '../context/AuthContext'
+
+//NAVIGATION
+import { useNavigation } from '@react-navigation/native'
 
 export default function Settings() {
-  const { signOutUser } = useContext(AuthContext);
-  const { theme, toggleTheme } = useContext(ThemeContext);
-  const navigation = useNavigation();
+  const { signOutUser } = useContext(AuthContext)
+  const { theme, toggleTheme } = useContext(ThemeContext)
+  const navigation = useNavigation()
 
   const changeTheme = (value) => {
     if (value === 'dark mode') {
-      toggleTheme(schemes.Dark);
+      toggleTheme(schemes.Dark)
     } else if (value === 'defualt mode') {
-      toggleTheme(schemes.Def);
+      toggleTheme(schemes.Def)
     } else if (value === 'Easy read mode') {
-      toggleTheme(schemes.EasyReadColor);
+      toggleTheme(schemes.EasyReadColor)
     }
-  };
+  }
 
   return (
     <View
@@ -45,8 +48,8 @@ export default function Settings() {
           <TouchableOpacity
             style={{ ...styles.thmesbuttons, backgroundColor: theme.buttons }}
             onPress={() => {
-              changeTheme('dark mode');
-              navigation.navigate('home');
+              changeTheme('dark mode')
+              navigation.navigate('home')
             }}
           >
             <View>
@@ -57,8 +60,8 @@ export default function Settings() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              changeTheme('defualt mode');
-              navigation.navigate('home');
+              changeTheme('defualt mode')
+              navigation.navigate('home')
             }}
             style={{ ...styles.thmesbuttons, backgroundColor: theme.buttons }}
           >
@@ -70,8 +73,8 @@ export default function Settings() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              changeTheme('Easy read mode');
-              navigation.navigate('home');
+              changeTheme('Easy read mode')
+              navigation.navigate('home')
             }}
             style={{ ...styles.thmesbuttons, backgroundColor: theme.buttons }}
           >
@@ -90,7 +93,7 @@ export default function Settings() {
         >
           <TouchableOpacity
             onPress={() => {
-              signOutUser();
+              signOutUser()
             }}
             style={{ ...styles.signOut, backgroundColor: theme.buttons }}
           >
@@ -103,7 +106,7 @@ export default function Settings() {
         </View>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -134,4 +137,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
   },
-});
+})

@@ -1,60 +1,58 @@
-import React, { useContext, useState, useEffect } from 'react';
+//REACT
+import React, { useContext, useState, useEffect } from 'react'
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
   TouchableOpacity,
-} from 'react-native';
-import { GetGameQuestions, CreateGameSetup } from '../firebase/Firebase';
-import { AuthContext } from '../context/AuthContext';
-import { useNavigation } from '@react-navigation/native';
-import { ThemeContext } from '../context/ThemeContext';
+} from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
+
+//FIREBASE
+import { GetGameQuestions, CreateGameSetup } from '../firebase/Firebase'
+
+//CONTEXT
+import { AuthContext } from '../context/AuthContext'
+import { ThemeContext } from '../context/ThemeContext'
+
+//NAVIGATION
+import { useNavigation } from '@react-navigation/native'
 
 export default function CreateGameComponent() {
-  const navigation = useNavigation();
-  const { user } = useContext(AuthContext);
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const navigation = useNavigation()
+  const { user } = useContext(AuthContext)
+  const { theme, toggleTheme } = useContext(ThemeContext)
 
-  const [key, setKey] = useState('');
-  const [gameQuestions, setGameQuestions] = useState();
-
-/*   const [key1, setKey1] = useState('');
- const [key2, setKey2] = useState(''); */
- 
- 
- 
-/*  const test = ()=>{
-   setKey2(key1)
- } */
-
+  const [key, setKey] = useState('')
+  const [gameQuestions, setGameQuestions] = useState()
 
   useEffect(() => {
-    GetGameQuestions(setGameQuestions);
-  }, []);
+    GetGameQuestions(setGameQuestions)
+  }, [])
   return (
-    <View
+    <LinearGradient
+      colors={theme.linearBackgroundColor}
       style={{ ...styles.container, backgroundColor: theme.backgroundColor }}
     >
       <View
         style={{
           ...styles.textView,
-          backgroundColor: theme.viewBackgroundColor,
         }}
       >
-        {/* <Text style={{ ...styles.text, color: theme.buttonsText }}>
-          Enter game key
-        </Text> */}
+        <Text style={{ ...styles.text, color: theme.buttonsText }}>
+          Ange spel nyckel
+        </Text>
 
         <TextInput
           style={{ ...styles.textInput, color: theme.color }}
           placeholderTextColor={theme.placeholderTextColor}
-          placeholder="Enter game key here:"
+          placeholder="Ange spel nyckel här:"
           onChangeText={(text) => setKey(text)}
         />
-         
-{/* <Button title="testbutton" onPress={()=> test()}></Button> */}
-   {/*     <Text>{key2}</Text>
+
+        {/* <Button title="testbutton" onPress={()=> test()}></Button> */}
+        {/*     <Text>{key2}</Text>
        <TextInput
          placeholder="emil"
          onChangeText={(text) => setKey1(text)}
@@ -62,24 +60,28 @@ export default function CreateGameComponent() {
         <View
           style={{
             ...styles.underLineView,
-            backgroundColor: theme.placeholderTextColor,
+            //backgroundColor: theme.placeholderTextColor,
           }}
         />
       </View>
 
       <TouchableOpacity
-        style={{ ...styles.button, backgroundColor: theme.buttons }}
+        style={{
+          ...styles.button,
+          backgroundColor: theme.buttons,
+          shadowColor: theme.shadowColor,
+        }}
         onPress={() => {
-          CreateGameSetup(gameQuestions, key, user);
-          navigation.navigate('ParticipantScreen', { gameKey: key });
+          CreateGameSetup(gameQuestions, key, user)
+          navigation.navigate('ParticipantScreen', { gameKey: key })
         }}
       >
         <Text style={{ ...styles.buttonText, color: theme.buttonsText }}>
-          Go to lobby
+          Gå till lobby
         </Text>
       </TouchableOpacity>
-    </View>
-  );
+    </LinearGradient>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -93,22 +95,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '80%',
-    height: '10%',
-    backgroundColor: '#AFEFDF',
-    marginBottom: 100,
-    borderRadius: 20,
+    height: '15%',
+    marginBottom: 80,
+    borderRadius: 15,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
   },
   buttonText: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: 'bold',
   },
   text: {
-    fontSize: 22,
+    fontSize: 26,
+    fontWeight: '600',
   },
   textInput: {
     marginTop: 40,
     fontSize: 20,
-    fontWeight: '400',
+    fontWeight: '700',
   },
   textView: {
     marginTop: 100,
@@ -121,7 +126,6 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: 'black',
     marginTop: 3,
-    marginBottom: 15,
-    width: '80%',
+    width: '100%',
   },
-});
+})

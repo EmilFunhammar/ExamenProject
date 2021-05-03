@@ -46,7 +46,7 @@ export default function HomePage() {
         >
           <View style={styles.buttons}>
             <Text style={{ ...styles.buttonsText, color: theme.buttonsText }}>
-              Highscore
+              Toppresultat
             </Text>
           </View>
         </TouchableOpacity>
@@ -59,7 +59,7 @@ export default function HomePage() {
         >
           <View>
             <Text style={{ ...styles.buttonsText, color: theme.buttonsText }}>
-              Create game
+              Skapa spel
             </Text>
           </View>
         </TouchableOpacity>
@@ -72,7 +72,7 @@ export default function HomePage() {
         >
           <View style={styles.buttons}>
             <Text style={{ ...styles.buttonsText, color: theme.buttonsText }}>
-              Join game
+              Gå med spel
             </Text>
           </View>
         </TouchableOpacity>
