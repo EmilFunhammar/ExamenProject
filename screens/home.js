@@ -1,16 +1,16 @@
-import React from 'react'
+//REACT
+import React, { useContext } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
-
-import { useState, useContext } from 'react'
-import { useNavigation } from '@react-navigation/native'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import { GetUsers, SnapShotUsers, saveGameWinner } from '../firebase/Firebase'
+
+//NAVIGATION
+import { useNavigation } from '@react-navigation/native'
+
+//CONTEXTS
 import { ThemeContext } from '../context/ThemeContext'
-import { schemes } from '../resources/colorSchemes'
 
 export default function HomePage() {
-  const { theme, toggleTheme } = useContext(ThemeContext)
-
+  const { theme } = useContext(ThemeContext)
   const navigation = useNavigation()
 
   return (
@@ -24,6 +24,7 @@ export default function HomePage() {
           backgroundColor: theme.linearBackgroundColor,
         }}
       > */}
+
       <View
         // eslint-disable-next-line react-native/no-inline-styles
         style={{
@@ -38,11 +39,13 @@ export default function HomePage() {
             ...styles.touchableOpacity,
             backgroundColor: theme.buttons,
           }}
-          onPress={() => navigation.navigate('HighScore')}
+          onPress={() => {
+            navigation.navigate('HighScore')
+          }}
         >
           <View style={styles.buttons}>
             <Text style={{ ...styles.buttonsText, color: theme.buttonsText }}>
-              Highscore
+              Toppresultat
             </Text>
           </View>
         </TouchableOpacity>
@@ -55,7 +58,7 @@ export default function HomePage() {
         >
           <View>
             <Text style={{ ...styles.buttonsText, color: theme.buttonsText }}>
-              Create game
+              Skapa spel
             </Text>
           </View>
         </TouchableOpacity>
@@ -68,7 +71,7 @@ export default function HomePage() {
         >
           <View style={styles.buttons}>
             <Text style={{ ...styles.buttonsText, color: theme.buttonsText }}>
-              Join game
+              Gå med spel
             </Text>
           </View>
         </TouchableOpacity>

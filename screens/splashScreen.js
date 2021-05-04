@@ -1,11 +1,11 @@
-import React from 'react';
+//REACT
+import React from 'react'
 import {
   ActivityIndicator,
   ImageBackground,
   StyleSheet,
   Text,
-  View,
-} from 'react-native';
+} from 'react-native'
 
 export default function SplashPage() {
   return (
@@ -17,7 +17,7 @@ export default function SplashPage() {
       <Text style={styles.text}>Vem kan minst!!!</Text>
       <ActivityIndicator animating={true} />
     </ImageBackground>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -32,4 +32,4 @@ const styles = StyleSheet.create({
     fontSize: 60,
     fontWeight: 'bold',
   },
-});
+})

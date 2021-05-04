@@ -1,12 +1,7 @@
-import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+//REACT
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
 
 export default function CustomHeader() {
   return (
@@ -18,7 +13,7 @@ export default function CustomHeader() {
 
       {/* <Ionicons name="md-checkmark-circle" size={32} color="green" /> */}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -36,4 +31,4 @@ const styles = StyleSheet.create({
     fontSize: 22,
     letterSpacing: 1,
   },
-});
+})

@@ -1,27 +1,30 @@
-import React from 'react';
-import { useState, useContext } from 'react';
+//REACT
+import React from 'react'
+import { useState, useContext } from 'react'
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
   TouchableOpacity,
-} from 'react-native';
-import { AuthContext } from '../context/AuthContext';
-import { LinearGradient } from 'expo-linear-gradient';
+} from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
+
+//CONTEXT
+import { AuthContext } from '../context/AuthContext'
 
 export default function Login() {
-  const { logInUser, createUser } = useContext(AuthContext);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [userName, setUserName] = useState('');
+  const { logInUser, createUser } = useContext(AuthContext)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [userName, setUserName] = useState('')
 
   const logIn = () => {
-    logInUser(email, password);
-  };
+    logInUser(email, password)
+  }
   const registrerUser = () => {
-    createUser(email, password, userName);
-  };
+    createUser(email, password, userName)
+  }
 
   return (
     <LinearGradient
@@ -71,7 +74,7 @@ export default function Login() {
         </View>
       </View>
     </LinearGradient>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -127,4 +130,4 @@ const styles = StyleSheet.create({
   width: {
     width: '100%',
   },
-});
+})

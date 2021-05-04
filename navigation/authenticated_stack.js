@@ -44,7 +44,8 @@ export default function AuthenticatedStack() {
         name="JoinGame"
         component={JoinGame}
         options={{
-          headerStyle: { backgroundColor: '#AFEFDF' },
+          headerStyle: { backgroundColor: theme.buttons },
+          headerTintColor: theme.buttonsText,
           title: '',
         }}
       />

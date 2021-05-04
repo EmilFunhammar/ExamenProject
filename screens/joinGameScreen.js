@@ -1,4 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
+//REACT
+import React, { useContext, useState, useEffect } from 'react'
 import {
   StyleSheet,
   Text,
@@ -6,38 +7,42 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-} from 'react-native';
-import { AddUserToGame } from '../firebase/Firebase';
-import { LinearGradient } from 'expo-linear-gradient';
-import { ThemeContext } from '../context/ThemeContext';
+} from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
+import { useRef } from 'react'
 
-import { AuthContext } from '../context/AuthContext';
-import { useNavigation } from '@react-navigation/native';
-//import { useEffect } from 'react/cjs/react.development';
-import { useRef } from 'react';
+//FIREBASE
+import { AddUserToGame } from '../firebase/Firebase'
+
+//CONTEXT
+import { ThemeContext } from '../context/ThemeContext'
+import { AuthContext } from '../context/AuthContext'
+
+//NAVIGATION
+import { useNavigation } from '@react-navigation/native'
 
 export default function JoinGame() {
-  const navigation = useNavigation();
-  const [key, setKey] = useState('');
-  const { theme } = useContext(ThemeContext);
-  const { user } = useContext(AuthContext);
-  const [ifDocExsists, setIfDocExsists] = useState();
-  let num = useRef(0);
+  const navigation = useNavigation()
+  const [key, setKey] = useState('')
+  const { theme } = useContext(ThemeContext)
+  const { user } = useContext(AuthContext)
+  const [ifDocExsists, setIfDocExsists] = useState()
+  let num = useRef(0)
 
   const navigate = () => {
-    navigation.navigate('ParticipantScreen', { gameKey: key });
-  };
+    navigation.navigate('ParticipantScreen', { gameKey: key })
+  }
 
   useEffect(() => {
     if (num.current !== 0) {
       if (ifDocExsists === true) {
-        navigate();
+        navigate()
       } else {
-        Alert.alert('wrong key');
+        Alert.alert('Fel nyckel')
       }
     }
-    num.current += 1;
-  }, [ifDocExsists]);
+    num.current += 1
+  }, [ifDocExsists])
 
   return (
     <LinearGradient
@@ -49,25 +54,30 @@ export default function JoinGame() {
           style={styles.text}
           onPress={() => console.log('emil', ifDocExsists)}
         >
-          Enter game key
+          Ange spel nyckel
         </Text>
         <TextInput
           style={styles.textInput}
-          placeholder="Enter key here:"
+          placeholderTextColor={theme.placeholderTextColor}
+          placeholder="Ange nyckel här:"
           onChangeText={(text) => setKey(text)}
         />
         <View style={styles.underLineView} />
       </View>
       <TouchableOpacity
-        style={styles.button}
+        style={{
+          ...styles.button,
+          backgroundColor: theme.linearButton,
+          shadowColor: theme.shadowColor,
+        }}
         onPress={() => {
-          AddUserToGame(user.displayName, user.email, key, setIfDocExsists);
+          AddUserToGame(user.displayName, user.email, key, setIfDocExsists)
         }}
       >
-        <Text style={styles.buttonText}>Join game</Text>
+        <Text style={styles.buttonText}>Gå med lobby</Text>
       </TouchableOpacity>
     </LinearGradient>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -78,13 +88,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#146B66',
   },
   button: {
-    backgroundColor: '#AFEFDF',
     width: '80%',
     height: '15%',
     marginBottom: 80,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 20,
+    borderRadius: 15,
+    shadowColor: 'white',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
   },
 
   buttonText: {
@@ -92,9 +105,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   text: {
-    fontSize: 22,
+    fontSize: 26,
+    fontWeight: '600',
   },
   textInput: {
+    fontWeight: '700',
     marginTop: 40,
     fontSize: 20,
   },
@@ -110,4 +125,4 @@ const styles = StyleSheet.create({
     marginTop: 3,
     width: '100%',
   },
-});
+})

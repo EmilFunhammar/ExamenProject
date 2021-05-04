@@ -1,5 +1,5 @@
+//REACT
 import React, { useEffect, useState, useContext } from 'react'
-import { LinearGradient } from 'expo-linear-gradient'
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,8 @@ import {
   Modal,
   LogBox,
 } from 'react-native'
+
+//FIREBASE
 import {
   SnapShotUsers,
   SnapShotActiveQuestion,
@@ -16,14 +18,13 @@ import {
   SnapshotUserAnswerd,
   UpdateAnswerdNum,
   UpdateUserScore,
-  SaveUserAnswers,
-  SaveUserAnswers1,
 } from '../firebase/Firebase'
 
 // CONTEXTS
 import { AuthContext } from '../context/AuthContext'
 import { ThemeContext } from '../context/ThemeContext'
 
+//NAVIGATION
 import { useNavigation } from '@react-navigation/native'
 LogBox.ignoreLogs(['Setting a timer'])
 
@@ -32,7 +33,7 @@ export default function GameBoard({ route }) {
   const [usersArray, setUsersArray] = useState([''])
   const [activeQuestion, SetActiveQuestion] = useState(0)
   const [backgroundColor, setBackgroundColor] = useState(
-    `${theme.linearBackgroundColor}`,
+    `${theme.lightBackgroundColor}`,
   )
   const [modalVisiable, setModalVisable] = useState(false)
 
@@ -54,22 +55,16 @@ export default function GameBoard({ route }) {
   }, [])
 
   useEffect(() => {
-    //console.log('här', questionArray.length - 1);
     if (questionArray.length - 1 === activeQuestion) {
       navigation.navigate('WinnerScreen', { gameKey: gameKey })
-
-      //console.log('sista frågan', questionArray.length, activeQuestion);
-    } else {
-      //console.log('här i slutet');
     }
-    //////////////////////////////
   }, [activeQuestion, gameKey, navigation, questionArray.length])
 
   return (
-    <LinearGradient
-      colors={theme.linearBackgroundColor}
+    <View
       style={{
         ...styles.container,
+        backgroundColor: backgroundColor,
       }}
     >
       <View style={styles.questionView}>
@@ -86,25 +81,27 @@ export default function GameBoard({ route }) {
       ))} */}
       <View>
         <Modal animationType="slide" transparent={true} visible={modalVisiable}>
-          <View style={styles.modal}>
+          <View
+            style={{
+              ...styles.modal,
+              backgroundColor: theme.lightBackgroundColor,
+            }}
+          >
             <View
               style={{
                 width: '100%',
-                position: 'absolute',
-                top: '8%',
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: 'rgba(20, 107, 102, 0.8)',
               }}
             >
-              <Text style={{ fontSize: 16, fontWeight: '600' }}>
-                Right answer:
+              <Text style={{ fontSize: 26, fontWeight: '600' }}>
+                Rätt svar:
               </Text>
-              <Text style={{ fontSize: 22, fontWeight: '600' }}>
+              <Text style={{ fontSize: 26, fontWeight: '600' }}>
                 {questionArray[activeQuestion].rightAnswer}
               </Text>
             </View>
-            <View
+            {/*   <View
               style={{
                 backgroundColor: 'rgba(20, 107, 102, 0.8)',
                 width: '100%',
@@ -115,7 +112,7 @@ export default function GameBoard({ route }) {
               {usersArray.map((element, index) => (
                 <ModalTextComponent element={element} key={index} />
               ))}
-            </View>
+            </View> */}
           </View>
         </Modal>
       </View>
@@ -128,7 +125,7 @@ export default function GameBoard({ route }) {
         gameKey={gameKey}
         setModalVisable={setModalVisable}
       />
-    </LinearGradient>
+    </View>
   )
 }
 
@@ -164,16 +161,7 @@ const ModalTextComponent = ({ element }) => {
     </View>
   )
 }
-/* const ScoreFeild = ({ userName, userScore }) => {
-  return (
-    <View style={{ flexDirection: 'row', marginBottom: 15 }}>
-      <View style={styles.userNameAndScoreView}>
-        <Text style={styles.userNameScoreText}>{userName}</Text>
-        <Text style={styles.userScoreText}>{userScore}</Text>
-      </View>
-    </View>
-  );
-}; */
+
 const ScoreFeild = ({ userName, userScore }) => {
   return (
     <View style={{ flexDirection: 'row', marginTop: 10 }}>
@@ -197,6 +185,7 @@ const AnswerFeilds = ({
   const { theme } = useContext(ThemeContext)
   const { user } = useContext(AuthContext)
   const [AnswerdNum, setAnswerdNum] = useState(0)
+  const [disableButton, setDisableButton] = useState(false)
   let usersAnswer = questionArray[activeQuestion]
 
   useEffect(() => {
@@ -207,12 +196,13 @@ const AnswerFeilds = ({
     if (AnswerdNum === usersArray.length) {
       ResetAnswerdNum(gameKey)
       //Modal inactiv
-      //setModalVisable(true);
+      setModalVisable(true)
       setTimeout(function () {
-        setBackgroundColor('#146B66')
+        setDisableButton(false)
+        setBackgroundColor(theme.lightBackgroundColor)
         UpdateActiveQuestion(activeQuestion, gameKey)
         setModalVisable(false)
-      }, 1000)
+      }, 4000)
     }
   }, [
     AnswerdNum,
@@ -225,6 +215,7 @@ const AnswerFeilds = ({
   ])
 
   const CheckAnswers = (value) => {
+    setDisableButton(true)
     let usersAnswerd = questionArray[activeQuestion].Answers[value]
     let questionsRightAnswer = questionArray[activeQuestion].rightAnswer
     //SaveUserAnswers(usersAnswer, gameKey, user.email);
@@ -266,6 +257,7 @@ const AnswerFeilds = ({
       <View style={styles.answersView}>
         <View style={styles.leftSide}>
           <TouchableOpacity
+            disabled={disableButton}
             style={{
               ...styles.answers,
               backgroundColor: theme.buttons,
@@ -274,6 +266,7 @@ const AnswerFeilds = ({
             onPress={() => {
               //SaveUserAnswers(usersAnswer.Answers[0], gameKey, user.email)
               //SaveUserAnswers1(gameKey);
+
               CheckAnswers(0)
             }}
           >
@@ -284,6 +277,7 @@ const AnswerFeilds = ({
             </View>
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={disableButton}
             style={{
               ...styles.answers,
               backgroundColor: theme.buttons,
@@ -303,6 +297,7 @@ const AnswerFeilds = ({
         </View>
         <View style={styles.rightSide}>
           <TouchableOpacity
+            disabled={disableButton}
             style={{
               ...styles.answers,
               backgroundColor: theme.buttons,
@@ -320,6 +315,7 @@ const AnswerFeilds = ({
             </View>
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={disableButton}
             style={{
               ...styles.answers,
               backgroundColor: theme.buttons,
@@ -362,12 +358,11 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   answersView: {
-    height: '90%',
+    height: '85%',
     width: '95%',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    marginBottom: 10,
   },
   answers: {
     width: '90%',
@@ -385,12 +380,14 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 20,
+    marginBottom: 22,
   },
   answersText: {
-    fontSize: 0,
+    fontSize: 26,
     justifyContent: 'center',
     alignItems: 'center',
     fontWeight: '600',
+    margin: 10,
   },
   questionView: {
     height: '30%',
@@ -398,8 +395,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderBottomColor: 'grey',
-    borderWidth: 3,
+    //borderWidth: 3,
     borderRadius: 20,
   },
   questionText: {

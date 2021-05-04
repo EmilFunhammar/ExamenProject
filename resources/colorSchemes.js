@@ -1,7 +1,8 @@
-export let schemes = {};
+export let schemes = {}
 schemes = {
   Def: {
     backgroundColor: '#146B66',
+    lightBackgroundColor: '#AFEFDF',
     color: 'black',
     buttons: '#AFEFDF',
     buttonsText: 'black',
@@ -15,6 +16,7 @@ schemes = {
 
   Dark: {
     backgroundColor: '#121212',
+    lightBackgroundColor: '#821EFC',
     color: '#BB86FC',
     buttons: '#BB86FC',
     buttonsText: 'black',
@@ -28,6 +30,7 @@ schemes = {
 
   EasyReadColor: {
     backgroundColor: 'white',
+    lightBackgroundColor: 'White',
     color: 'White',
     buttons: '#515050',
     buttonsText: 'white',
@@ -38,4 +41,4 @@ schemes = {
     linearButtonText: '#FEFEFE',
     borderColor: 'black',
   },
-};
+}

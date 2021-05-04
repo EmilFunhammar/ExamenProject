@@ -1,12 +1,18 @@
+//REACT
 import React, { useContext } from 'react'
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
 import { useEffect, useState } from 'react/cjs/react.development'
+
+//CONTEXT
 import { AuthContext } from '../context/AuthContext'
-import { GetUsers, saveGameWinner } from '../firebase/Firebase'
-import { useNavigation } from '@react-navigation/native'
 import { ThemeContext } from '../context/ThemeContext'
-import HighScore from './highscoreScreen'
+
+//FIREBASE
+import { GetUsers, saveGameWinner } from '../firebase/Firebase'
+
+//NAVIGATION
+import { useNavigation } from '@react-navigation/native'
 
 export default function GameWinner({ route }) {
   const navigation = useNavigation()
@@ -36,40 +42,69 @@ export default function GameWinner({ route }) {
   }, [])
   return (
     <SafeAreaView
-      style={{ ...styles.container, backgroundColor: theme.backgroundColor }}
+      style={{
+        ...styles.container,
+        backgroundColor: theme.lightBackgroundColor,
+      }}
     >
       <View
         style={{
           width: '100%',
-          height: '50%',
-          justifyContent: 'space-evenly',
+          height: '10%',
+          justifyContent: 'flex-start',
+          marginTop: '10%',
         }}
       >
-        <View style={styles.titleView}>
+        {/*  <View style={styles.titleView}>
           <Text style={styles.titleText}>Score</Text>
-        </View>
+        </View> */}
         <View style={styles.QuestionMaserView}>
-          <Text style={styles.QuestionMaserText}>Question Master!!!</Text>
+          <Text style={styles.QuestionMaserText}>Vinnare!</Text>
           <Text style={styles.QuestionMaserUserNameText}>
             {SortOutWinner()}
           </Text>
         </View>
       </View>
-      <View
-        style={{
-          backgroundColor: 'black',
-          height: 3,
-          width: '90%',
-        }}
-      ></View>
+
       <View
         style={{
           width: '100%',
-          height: '50%',
-          justifyContent: 'space-between',
+          height: '60%',
+          marginTop: 50,
+          justifyContent: 'flex-start',
         }}
       >
-        <ScrollView style={{ height: '70%' }}>
+        <View
+          style={{
+            backgroundColor: 'black',
+            height: 3,
+            width: '90%',
+            marginLeft: '5%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        ></View>
+        <ScrollView>
+          <View
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Text
+              style={{ fontSize: 32, marginLeft: '15%', fontWeight: 'bold' }}
+            >
+              Namn
+            </Text>
+            <Text
+              style={{ fontSize: 32, marginRight: '17%', fontWeight: 'bold' }}
+            >
+              Poäng
+            </Text>
+          </View>
+
           {userAry.map((element, index) => (
             <ScoreComponent
               userScore={element.userScore}
@@ -79,21 +114,36 @@ export default function GameWinner({ route }) {
           ))}
           <ScoreComponent />
         </ScrollView>
-        <View
+        {/* <View
           style={{
             height: '30%',
           }}
+        ></View> */}
+      </View>
+      <View
+        style={{
+          height: '15%',
+          width: '80%',
+          marginBottom: '5%',
+        }}
+      >
+        <TouchableOpacity
+          style={{
+            borderRadius: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+            width: '100%',
+            //...styles.button,
+            backgroundColor: theme.backgroundColor,
+          }}
+          onPress={() => {
+            saveGameWinner(highScoreName, highScore)
+            navigation.navigate('home')
+          }}
         >
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              saveGameWinner(highScoreName, highScore)
-              navigation.navigate('home')
-            }}
-          >
-            <Text style={{ fontWeight: 'bold', fontSize: 32 }}>Quit Game</Text>
-          </TouchableOpacity>
-        </View>
+          <Text style={{ fontWeight: 'bold', fontSize: 32 }}>Quit Game</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   )
@@ -102,10 +152,22 @@ export default function GameWinner({ route }) {
 const ScoreComponent = ({ userScore, userName }) => {
   return (
     <View style={styles.UserTableView}>
-      <Text style={{ ...styles.UserTableText, marginLeft: '30%' }}>
+      <Text
+        style={{
+          ...styles.UserTableText,
+          marginLeft: '15%',
+          fontWeight: '500',
+        }}
+      >
         {userName}
       </Text>
-      <Text style={{ ...styles.UserTableText, marginRight: '30%' }}>
+      <Text
+        style={{
+          ...styles.UserTableText,
+          marginRight: '25%',
+          fontWeight: '500',
+        }}
+      >
         {userScore}
       </Text>
     </View>
@@ -148,7 +210,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   UserTableText: {
-    fontSize: 40,
+    fontSize: 26,
     marginTop: 15,
   },
   button: {
