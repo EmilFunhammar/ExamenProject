@@ -41,32 +41,29 @@ export default function JoinGame({ route }) {
     //isHost();
   }, [])
 
+  // checks if user is host and shows start game
   useEffect(() => {
     //let juseEffectSub = true;
-    if (useEffectSub) {
-      userArray.forEach((element) => {
-        if (user.email === element.userEmail) {
-          if (element.host) {
-            console.log('true i isHost')
-            return setShouldShow(true)
-          } else {
-            console.log('false i isHost')
-            return setShouldShow(false)
-          }
+    //if (useEffectSub) {
+    userArray.forEach((element) => {
+      if (user.email === element.userEmail) {
+        if (element.host) {
+          return setShouldShow(true)
+        } else {
+          return setShouldShow(false)
         }
-      })
-    }
+      }
+    })
+    //}
   }, [userArray])
 
   useEffect(() => {
     if (startGame) {
-      setUseEffectSub(false)
+      //setUseEffectSub(false)
       navigation.navigate('GameScreen', {
         questionArray: questionArray,
         gameKey: gameKey,
       })
-    } else {
-      console.log(startGame)
     }
   }, [startGame])
 

@@ -387,6 +387,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     fontWeight: '600',
+    margin: 10,
   },
   questionView: {
     height: '30%',
