@@ -81,25 +81,27 @@ export default function GameBoard({ route }) {
       ))} */}
       <View>
         <Modal animationType="slide" transparent={true} visible={modalVisiable}>
-          <View style={styles.modal}>
+          <View
+            style={{
+              ...styles.modal,
+              backgroundColor: theme.lightBackgroundColor,
+            }}
+          >
             <View
               style={{
                 width: '100%',
-                position: 'absolute',
-                top: '8%',
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: 'rgba(20, 107, 102, 0.8)',
               }}
             >
-              <Text style={{ fontSize: 16, fontWeight: '600' }}>
-                Right answer:
+              <Text style={{ fontSize: 26, fontWeight: '600' }}>
+                Rätt svar:
               </Text>
-              <Text style={{ fontSize: 22, fontWeight: '600' }}>
+              <Text style={{ fontSize: 26, fontWeight: '600' }}>
                 {questionArray[activeQuestion].rightAnswer}
               </Text>
             </View>
-            <View
+            {/*   <View
               style={{
                 backgroundColor: 'rgba(20, 107, 102, 0.8)',
                 width: '100%',
@@ -110,7 +112,7 @@ export default function GameBoard({ route }) {
               {usersArray.map((element, index) => (
                 <ModalTextComponent element={element} key={index} />
               ))}
-            </View>
+            </View> */}
           </View>
         </Modal>
       </View>
@@ -194,13 +196,13 @@ const AnswerFeilds = ({
     if (AnswerdNum === usersArray.length) {
       ResetAnswerdNum(gameKey)
       //Modal inactiv
-      //setModalVisable(true);
+      setModalVisable(true)
       setTimeout(function () {
         setDisableButton(false)
         setBackgroundColor(theme.lightBackgroundColor)
         UpdateActiveQuestion(activeQuestion, gameKey)
         setModalVisable(false)
-      }, 3000)
+      }, 4000)
     }
   }, [
     AnswerdNum,

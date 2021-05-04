@@ -38,6 +38,7 @@ let questionRef = firebase.firestore().collection('Questions')
 export function SnapShotStartGame(setStartGame, gameKey) {
   gameSessionRef.doc(gameKey).onSnapshot((doc) => {
     setStartGame(doc.data().StartGame)
+    console.log('doc', doc.data().StartGame)
   })
 }
 
