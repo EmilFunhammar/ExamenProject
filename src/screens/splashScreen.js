@@ -11,7 +11,7 @@ export default function SplashPage() {
   return (
     <ImageBackground
       style={styles.container}
-      source={require('../assets/splashScreen.png')}
+      source={require('../../assets/splashScreen.png')}
     >
       <Text style={styles.text}>Välkomen till</Text>
       <Text style={styles.text}>Vem kan minst!!!</Text>

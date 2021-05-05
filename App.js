@@ -1,8 +1,9 @@
-import React from 'react';
-import AuthNavigation from './navigation/auth_navigation';
-import AuthContextProvider from './context/AuthContext';
+import React from 'react'
+import AuthNavigation from './src/navigation/auth_navigation'
+
+import AuthContextProvider from './src/context/AuthContext'
 //import { AuthContext } from './context/AuthContext';
-import ThemeContextProvider from './context/ThemeContext';
+import ThemeContextProvider from './src/context/ThemeContext'
 
 export default function App() {
   return (
@@ -11,5 +12,5 @@ export default function App() {
         <AuthNavigation />
       </ThemeContextProvider>
     </AuthContextProvider>
-  );
+  )
 }
