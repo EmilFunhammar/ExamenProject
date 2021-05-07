@@ -51,7 +51,7 @@ export default function JoinGame() {
     >
       <View style={styles.textView}>
         <Text
-          style={styles.text}
+          style={{ ...styles.text, color: theme.color }}
           onPress={() => console.log('emil', ifDocExsists)}
         >
           Ange spel nyckel
@@ -62,7 +62,9 @@ export default function JoinGame() {
           placeholder="Ange nyckel här:"
           onChangeText={(text) => setKey(text)}
         />
-        <View style={styles.underLineView} />
+        <View
+          style={{ ...styles.underLineView, backgroundColor: theme.color }}
+        />
       </View>
       <TouchableOpacity
         style={{

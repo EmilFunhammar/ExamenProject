@@ -1,6 +1,7 @@
 //REACT
 import React, { useContext } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
 
 // RESOURSES
 import { schemes } from '../resources/colorSchemes'
@@ -28,7 +29,8 @@ export default function Settings() {
   }
 
   return (
-    <View
+    <LinearGradient
+      colors={theme.linearBackgroundColor}
       style={{ ...styles.container, backgroundColor: theme.backgroundColor }}
     >
       <View
@@ -54,7 +56,7 @@ export default function Settings() {
           >
             <View>
               <Text style={{ ...styles.themeText, color: theme.buttonsText }}>
-                Dark mode
+                Mörkt läge
               </Text>
             </View>
           </TouchableOpacity>
@@ -67,7 +69,7 @@ export default function Settings() {
           >
             <View>
               <Text style={{ ...styles.themeText, color: theme.buttonsText }}>
-                Defualt mode
+                Standard läge
               </Text>
             </View>
           </TouchableOpacity>
@@ -80,7 +82,7 @@ export default function Settings() {
           >
             <View>
               <Text style={{ ...styles.themeText, color: theme.buttonsText }}>
-                Easy read mode
+                Lättläst läge
               </Text>
             </View>
           </TouchableOpacity>
@@ -105,7 +107,7 @@ export default function Settings() {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </LinearGradient>
   )
 }
 

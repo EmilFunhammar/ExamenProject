@@ -1,5 +1,5 @@
 import React from "react";
-import CreateGameComponent from "../screens/createGameScreen";
+import CreateGameComponent from "./createGameScreen";
 import { render, fireEvent } from "@testing-library/react-native"
  
  

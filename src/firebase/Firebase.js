@@ -77,7 +77,8 @@ export function GetQuestionInfo(setQuestionArray, gameKey) {
       for (let index = 0; index < ary.length; index++) {
         ary[index].Answers.sort(() => Math.random() - 0.5)
       }
-      const size = 10
+      // 10
+      const size = 4
       const items = ary.slice(0, size)
       setQuestionArray(items)
     })
@@ -147,20 +148,22 @@ export function GetGameQuestions(setGameQuestions) {
 //
 //
 // SETS
-export function saveGameWinner(winnerName, winnerScore) {
+export function saveGameWinner(winnerAry) {
+  console.log('emil runs')
   let ref = firebase.firestore().collection('HighScore')
-
-  ref
-    .add({
-      name: winnerName,
-      score: winnerScore,
-    })
-    .then((docRef) => {
-      console.log('Document written with ID: ', docRef.id)
-    })
-    .catch((error) => {
-      console.error('Error adding document: ', error)
-    })
+  winnerAry.forEach((element) => {
+    ref
+      .add({
+        name: element.userName,
+        score: element.userScore,
+      })
+      .then((docRef) => {
+        console.log('Document written with ID: ', docRef.id)
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error)
+      })
+  })
 }
 
 export function GetHighScoreList(setHighScorePlayers) {

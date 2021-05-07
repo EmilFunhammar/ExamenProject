@@ -74,7 +74,7 @@ export default function JoinGame({ route }) {
     >
       <View style={styles.participantView}>
         <Text
-          style={styles.participantTextHeader}
+          style={{ ...styles.participantTextHeader, color: theme.color }}
           onPress={() => {
             /*   for (let index = 0; index < questionAnswersArray.length; index++) {
               questionAnswersArray[index].Answers.sort(
@@ -87,8 +87,8 @@ export default function JoinGame({ route }) {
         >
           Deltagare
         </Text>
-        <Text>Spel nyckel:</Text>
-        <Text style={styles.gameKey}>{gameKey}</Text>
+        <Text style={{ color: theme.color }}>Spel nyckel:</Text>
+        <Text style={{ ...styles.gameKey, color: theme.color }}>{gameKey}</Text>
 
         {userArray.map((element, index) => (
           <ParticipantView key={index} element={element.userDisplayName} />
@@ -110,7 +110,7 @@ export default function JoinGame({ route }) {
             }); */
           }}
         >
-          <Text style={{ ...styles.buttonText, color: theme.linearButtonText }}>
+          <Text style={{ ...styles.buttonText, color: theme.buttonText }}>
             Starta Spel
           </Text>
         </TouchableOpacity>
@@ -132,10 +132,14 @@ export default function JoinGame({ route }) {
 }
 
 const ParticipantView = ({ element }) => {
+  const { theme } = useContext(ThemeContext)
+
   return (
     <>
-      <Text style={styles.participantText}>{element}</Text>
-      <View style={styles.underLineView} />
+      <Text style={{ ...styles.participantText, color: theme.color }}>
+        {element}
+      </Text>
+      <View style={{ ...styles.underLineView, backgroundColor: theme.color }} />
     </>
   )
 }

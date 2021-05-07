@@ -40,7 +40,7 @@ export default function CreateGameComponent() {
           ...styles.textView,
         }}
       >
-        <Text style={{ ...styles.text, color: theme.buttonsText }}>
+        <Text style={{ ...styles.text, color: theme.color }}>
           Ange spel nyckel
         </Text>
 
@@ -50,17 +50,10 @@ export default function CreateGameComponent() {
           placeholder="Ange spel nyckel här:"
           onChangeText={(text) => setKey(text)}
         />
-
-        {/* <Button title="testbutton" onPress={()=> test()}></Button> */}
-        {/*     <Text>{key2}</Text>
-       <TextInput
-         placeholder="emil"
-         onChangeText={(text) => setKey1(text)}
-       /> */}
         <View
           style={{
             ...styles.underLineView,
-            //backgroundColor: theme.placeholderTextColor,
+            backgroundColor: theme.color,
           }}
         />
       </View>
