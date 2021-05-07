@@ -78,7 +78,7 @@ export function GetQuestionInfo(setQuestionArray, gameKey) {
         ary[index].Answers.sort(() => Math.random() - 0.5)
       }
       // 10
-      const size = 4
+      const size = 11
       const items = ary.slice(0, size)
       setQuestionArray(items)
     })
