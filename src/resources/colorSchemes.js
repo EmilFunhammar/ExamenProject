@@ -23,6 +23,7 @@ schemes = {
     viewBackgroundColor: '#121212',
     placeholderTextColor: '#BB86FC',
     linearBackgroundColor: ['#821EFC', '#BB86FC', 'black'],
+    //linearBackgroundColor: ['#821EFC', '#BB86FC', 'black'],
     linearButton: 'black',
     linearButtonText: '#FEFEFE',
     borderColor: 'white',
