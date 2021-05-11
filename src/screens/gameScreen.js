@@ -33,7 +33,7 @@ export default function GameBoard({ route }) {
   const [usersArray, setUsersArray] = useState([''])
   const [activeQuestion, SetActiveQuestion] = useState(0)
   const [backgroundColor, setBackgroundColor] = useState(
-    `${theme.lightBackgroundColor}`,
+    `${theme.backgroundColor}`,
   )
   const [modalVisiable, setModalVisable] = useState(false)
 
@@ -67,8 +67,10 @@ export default function GameBoard({ route }) {
         backgroundColor: backgroundColor,
       }}
     >
-      <View style={styles.questionView}>
-        <Text style={{ ...styles.questionText, color: theme.color }}>
+      <View style={{ ...styles.questionView, backgroundColor: theme.buttons }}>
+        <Text
+          style={{ ...styles.questionText, color: theme.questionTextColor }}
+        >
           {questionArray[activeQuestion].question} {'?'}
         </Text>
       </View>
@@ -84,7 +86,7 @@ export default function GameBoard({ route }) {
           <View
             style={{
               ...styles.modal,
-              backgroundColor: theme.lightBackgroundColor,
+              backgroundColor: theme.buttons,
             }}
           >
             <View
@@ -163,11 +165,17 @@ const ModalTextComponent = ({ element }) => {
 }
 
 const ScoreFeild = ({ userName, userScore }) => {
+  const { theme } = useContext(ThemeContext)
+
   return (
     <View style={{ flexDirection: 'row', marginTop: 10 }}>
       <View style={styles.userNameAndScoreView}>
-        <Text style={styles.userNameScoreText}>{userName}</Text>
-        <Text style={styles.userScoreText}>{userScore}</Text>
+        <Text style={{ ...styles.userNameScoreText, color: theme.color }}>
+          {userName}
+        </Text>
+        <Text style={{ ...styles.userScoreText, color: theme.color }}>
+          {userScore}
+        </Text>
       </View>
     </View>
   )
@@ -199,7 +207,7 @@ const AnswerFeilds = ({
       setModalVisable(true)
       setTimeout(function () {
         setDisableButton(false)
-        setBackgroundColor(theme.lightBackgroundColor)
+        setBackgroundColor(theme.backgroundColor)
         UpdateActiveQuestion(activeQuestion, gameKey)
         setModalVisable(false)
       }, 4000)
@@ -242,7 +250,7 @@ const AnswerFeilds = ({
         height: '50%',
         width: '95%',
         alignItems: 'center',
-        backgroundColor: 'white',
+        //backgroundColor: theme.backgroundColor,
         borderRadius: 20,
       }}
     >
@@ -261,12 +269,12 @@ const AnswerFeilds = ({
             style={{
               ...styles.answers,
               backgroundColor: theme.buttons,
+              shadowColor: theme.shadowColor,
               borderColor: theme.borderColor,
             }}
             onPress={() => {
               //SaveUserAnswers(usersAnswer.Answers[0], gameKey, user.email)
               //SaveUserAnswers1(gameKey);
-
               CheckAnswers(0)
             }}
           >
@@ -281,6 +289,7 @@ const AnswerFeilds = ({
             style={{
               ...styles.answers,
               backgroundColor: theme.buttons,
+              shadowColor: theme.shadowColor,
               borderColor: theme.borderColor,
             }}
             onPress={() => {
@@ -301,6 +310,8 @@ const AnswerFeilds = ({
             style={{
               ...styles.answers,
               backgroundColor: theme.buttons,
+              //borderColor: theme.borderColor,
+              shadowColor: theme.shadowColor,
               borderColor: theme.borderColor,
             }}
             onPress={() => {
@@ -319,6 +330,8 @@ const AnswerFeilds = ({
             style={{
               ...styles.answers,
               backgroundColor: theme.buttons,
+              //borderColor: theme.borderColor,
+              shadowColor: theme.shadowColor,
               borderColor: theme.borderColor,
             }}
             onPress={() => {
@@ -367,18 +380,18 @@ const styles = StyleSheet.create({
   answers: {
     width: '90%',
     height: '40%',
-    backgroundColor: '#AFEFDF',
-    borderRadius: 10,
+
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: 'black',
+
     borderLeftWidth: 5,
     borderBottomWidth: 10,
     borderRightWidth: 3,
     borderTopWidth: 3,
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
+
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.4,
     shadowRadius: 20,
     marginBottom: 22,
   },
@@ -434,7 +447,6 @@ const styles = StyleSheet.create({
     top: '40%',
     width: '90%',
     height: '30%',
-    //backgroundColor: 'rgba(175, 239, 223, 0.8)',
     backgroundColor: 'rgba(20, 107, 102, 0.9)',
     alignSelf: 'center',
     alignItems: 'center',

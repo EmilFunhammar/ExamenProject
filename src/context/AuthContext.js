@@ -1,47 +1,47 @@
-import React, { useState, createContext, useEffect } from 'react';
-import { auth } from '../firebase/Firebase';
-import { UpdateUserName } from '../firebase/Firebase';
+import React, { useState, createContext, useEffect } from 'react'
+import { auth } from '../firebase/Firebase'
+import { UpdateUserName } from '../firebase/Firebase'
 
-export const AuthContext = createContext();
+export const AuthContext = createContext()
 
 export default function AuthContextProvider({ children }) {
-  const [user, setUser] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState()
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      setUser(user);
-      setIsLoading(false);
-    });
-  });
+      setUser(user)
+      setIsLoading(false)
+    })
+  })
 
   const logInUser = async (email, password) => {
     try {
-      await auth.signInWithEmailAndPassword(email, password);
-      console.log('sucssesful login');
+      await auth.signInWithEmailAndPassword(email, password)
+      console.log('sucssesful login')
     } catch (error) {
-      var errorMessage = error.message;
-      console.log('error', errorMessage);
+      var errorMessage = error.message
+      console.log('error', errorMessage)
     }
-  };
+  }
   const createUser = async (email, password, userName) => {
     try {
-      await auth.createUserWithEmailAndPassword(email, password);
-      UpdateUserName(userName);
-      console.log('sucssesful sign up');
+      await auth.createUserWithEmailAndPassword(email, password)
+      UpdateUserName(userName)
+      console.log('sucssesful sign up')
     } catch (error) {
-      var errorMessage = error.message;
-      console.log('error', errorMessage);
+      var errorMessage = error.message
+      console.log('error', errorMessage)
     }
-  };
+  }
 
   const signOutUser = async () => {
     try {
-      await auth.signOut();
+      await auth.signOut()
     } catch (error) {
-      var errorMessage = error.message;
+      var errorMessage = error.message
     }
-  };
+  }
 
   return (
     <AuthContext.Provider
@@ -49,5 +49,5 @@ export default function AuthContextProvider({ children }) {
     >
       {children}
     </AuthContext.Provider>
-  );
+  )
 }

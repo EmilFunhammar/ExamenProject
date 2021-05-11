@@ -23,7 +23,7 @@ export default function HighScore() {
       style={{ ...styles.container, backgroundColor: theme.backgroundColor }}
     >
       <View>
-        <Text style={styles.title}>HighScore</Text>
+        <Text style={{ ...styles.title, color: theme.color }}>HighScore</Text>
       </View>
       <View
         style={{
@@ -34,8 +34,12 @@ export default function HighScore() {
           justifyContent: 'space-between',
         }}
       >
-        <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Namn</Text>
-        <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Score</Text>
+        <Text style={{ fontSize: 30, fontWeight: 'bold', color: theme.color }}>
+          Namn
+        </Text>
+        <Text style={{ fontSize: 30, fontWeight: 'bold', color: theme.color }}>
+          Score
+        </Text>
       </View>
 
       {highScorePlayers.map((element, index) => (
@@ -46,6 +50,7 @@ export default function HighScore() {
 }
 
 const HighScoreView = ({ element }) => {
+  const { theme, toggleTheme } = useContext(ThemeContext)
   return (
     <View
       style={{
@@ -57,10 +62,14 @@ const HighScoreView = ({ element }) => {
       }}
     >
       <View style={{}}>
-        <Text style={styles.userName}>{element.name} </Text>
+        <Text style={{ ...styles.userName, color: theme.color }}>
+          {element.name}
+        </Text>
       </View>
       <View style={{ marginRight: 30 }}>
-        <Text style={styles.userScore}>{element.score}</Text>
+        <Text style={{ ...styles.userScore, color: theme.color }}>
+          {element.score}
+        </Text>
       </View>
     </View>
   )

@@ -3,6 +3,7 @@ import React, { useContext } from 'react'
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
 import { useEffect, useState } from 'react/cjs/react.development'
+import { LinearGradient } from 'expo-linear-gradient'
 
 //CONTEXT
 import { AuthContext } from '../context/AuthContext'
@@ -22,61 +23,94 @@ export default function GameWinner({ route }) {
   const [userAry, setUserAry] = useState([''])
   const [winnerName, setWinnerName] = useState('')
   const [winnerScore, setWinnerScore] = useState(0)
+  const [winners, setWinner] = useState([''])
   let highScore = 0
-  let highScoreName = ''
+  let winnerAry = []
 
   const SortOutWinner = () => {
-    for (let index = 0; index < userAry.length; index++) {
-      if (userAry[index].userScore > highScore) {
-        highScore = userAry[index].userScore
-        highScoreName = userAry[index].userDisplayName
+    let ary = []
+
+    let highScoreName = userAry[0].userDisplayName
+    userAry.sort((a, b) => b.userScore - a.userScore)
+    let obj = {
+      userName: highScoreName,
+      userScore: userAry[0].userScore,
+    }
+
+    ary.push(obj)
+    if (userAry.length != 1) {
+      console.log(userAry.length)
+      for (let i = 0; i < userAry.length - 1; i++) {
+        let y = i + 1
+        if (userAry[i].userScore === userAry[y].userScore) {
+          let obj = {
+            userName: userAry[y].userDisplayName,
+            userScore: userAry[y].userScore,
+          }
+          ary.push(obj)
+        }
       }
     }
-    //setWinnerName(highScoreName)
-    //setWinnerScore(highScore)
-    //saveGameWinner(winnerScore, winnerName)
-    return highScoreName
+    console.log('ary1', ary)
+    //setWinner(ary)
+    winnerAry = [...ary]
+    return ary.map((element, index) => (
+      <WinnerComponent userDisplayName={element.userName} key={index} />
+    ))
   }
+
   useEffect(() => {
     GetUsers(setUserAry, gameKey)
+    //SortOutWinner()
   }, [])
   return (
-    <SafeAreaView
+    <LinearGradient
+      colors={theme.linearBackgroundColor}
       style={{
         ...styles.container,
-        backgroundColor: theme.lightBackgroundColor,
+        backgroundColor: theme.backgroundColor,
       }}
     >
       <View
         style={{
           width: '100%',
-          height: '10%',
+          height: '30%',
           justifyContent: 'flex-start',
-          marginTop: '10%',
         }}
       >
         {/*  <View style={styles.titleView}>
           <Text style={styles.titleText}>Score</Text>
         </View> */}
         <View style={styles.QuestionMaserView}>
-          <Text style={styles.QuestionMaserText}>Vinnare!</Text>
-          <Text style={styles.QuestionMaserUserNameText}>
-            {SortOutWinner()}
+          <Text
+            style={{ ...styles.QuestionMaserText, color: theme.color }}
+            onPress={() => console.log('emil', winners)}
+          >
+            Vinnare!
           </Text>
+          {/* <Text
+            style={{ ...styles.QuestionMaserUserNameText, color: theme.color }}
+          >
+            {SortOutWinner()}
+          </Text> */}
+          {/*   {winners.map((element, index) => (
+            <WinnerComponent userDisplayName={element} key={index} />
+          ))} */}
+          {SortOutWinner()}
         </View>
       </View>
 
       <View
         style={{
           width: '100%',
-          height: '60%',
+          height: '40%',
           marginTop: 50,
           justifyContent: 'flex-start',
         }}
       >
         <View
           style={{
-            backgroundColor: 'black',
+            backgroundColor: theme.color,
             height: 3,
             width: '90%',
             marginLeft: '5%',
@@ -94,12 +128,22 @@ export default function GameWinner({ route }) {
             }}
           >
             <Text
-              style={{ fontSize: 32, marginLeft: '15%', fontWeight: 'bold' }}
+              style={{
+                fontSize: 32,
+                marginLeft: '15%',
+                fontWeight: 'bold',
+                color: theme.color,
+              }}
             >
               Namn
             </Text>
             <Text
-              style={{ fontSize: 32, marginRight: '17%', fontWeight: 'bold' }}
+              style={{
+                fontSize: 32,
+                marginRight: '17%',
+                fontWeight: 'bold',
+                color: theme.color,
+              }}
             >
               Poäng
             </Text>
@@ -114,17 +158,12 @@ export default function GameWinner({ route }) {
           ))}
           <ScoreComponent />
         </ScrollView>
-        {/* <View
-          style={{
-            height: '30%',
-          }}
-        ></View> */}
       </View>
       <View
         style={{
           height: '15%',
           width: '80%',
-          marginBottom: '5%',
+          marginBottom: '10%',
         }}
       >
         <TouchableOpacity
@@ -134,22 +173,64 @@ export default function GameWinner({ route }) {
             alignItems: 'center',
             height: '100%',
             width: '100%',
-            //...styles.button,
-            backgroundColor: theme.backgroundColor,
+            backgroundColor: theme.buttons,
           }}
           onPress={() => {
-            saveGameWinner(highScoreName, highScore)
+            console.log('emil')
+            for (let i = 0; i < userAry.length; i++) {
+              if (
+                userAry[i].host != null &&
+                userAry[i].userEmail === user.email
+              ) {
+                saveGameWinner(winnerAry)
+              }
+            }
             navigation.navigate('home')
           }}
         >
-          <Text style={{ fontWeight: 'bold', fontSize: 32 }}>Quit Game</Text>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              fontSize: 32,
+              color: theme.buttonsText,
+            }}
+          >
+            Quit Game
+          </Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </LinearGradient>
+  )
+}
+
+const WinnerComponent = ({ userDisplayName }) => {
+  const { theme } = useContext(ThemeContext)
+
+  return (
+    <View
+      style={{
+        flexDirection: 'column',
+        width: '100%',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+    >
+      <Text
+        style={{
+          fontSize: 32,
+          fontWeight: '500',
+          color: theme.color,
+        }}
+      >
+        {userDisplayName}
+      </Text>
+    </View>
   )
 }
 
 const ScoreComponent = ({ userScore, userName }) => {
+  const { theme } = useContext(ThemeContext)
+
   return (
     <View style={styles.UserTableView}>
       <Text
@@ -157,6 +238,7 @@ const ScoreComponent = ({ userScore, userName }) => {
           ...styles.UserTableText,
           marginLeft: '15%',
           fontWeight: '500',
+          color: theme.color,
         }}
       >
         {userName}
@@ -166,6 +248,7 @@ const ScoreComponent = ({ userScore, userName }) => {
           ...styles.UserTableText,
           marginRight: '25%',
           fontWeight: '500',
+          color: theme.color,
         }}
       >
         {userScore}
@@ -190,6 +273,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     alignItems: 'center',
+    height: '100%',
+    marginTop: 30,
   },
   UserTableView: {
     flexDirection: 'row',
@@ -221,6 +306,5 @@ const styles = StyleSheet.create({
     marginRight: 25,
     borderRadius: 10,
     height: '80%',
-    marginTop: 10,
   },
 })
