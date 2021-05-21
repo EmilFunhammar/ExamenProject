@@ -1,16 +1,19 @@
+//REACT
 import React, { useContext } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import HomePage from '../screens/home'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { ThemeContext } from '../context/ThemeContext'
+import { EvilIcons } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
+
+//SCREENS
+import HomePage from '../screens/home'
 import CreatGameComponent from '../screens/createGameScreen'
 import JoinGame from '../screens/joinGameScreen'
 import Participants from '../screens/participantScreen'
 import GameWinner from '../screens/gameWinnerScreen'
 import GameBoard from '../screens/gameScreen'
 import Settings from '../screens/settings'
-import { ThemeContext } from '../context/ThemeContext'
-import { EvilIcons } from '@expo/vector-icons'
-import { useNavigation } from '@react-navigation/native'
 import HighScore from '../screens/highscoreScreen'
 
 const Stack = createStackNavigator()
@@ -27,7 +30,6 @@ export default function AuthenticatedStack() {
           headerStyle: { backgroundColor: theme.buttons },
           headerTintColor: theme.buttonsText,
           headerTitle: () => <CustomHeader name={'Vem kan minst?'} />,
-          //headerRight: () => <SignOutComponent />,
           headerLeft: () => <ThemeComponent />,
         }}
       />
@@ -94,15 +96,6 @@ export default function AuthenticatedStack() {
     </Stack.Navigator>
   )
 }
-
-/* const SignOutComponent = () => {
-  const { signOutUser } = useContext(AuthContext);
-  return (
-    <Text style={styles.signOut} onPress={() => signOutUser()}>
-      Sign out
-    </Text>
-  );
-}; */
 
 const CustomHeader = ({ name }) => {
   const { theme } = useContext(ThemeContext)

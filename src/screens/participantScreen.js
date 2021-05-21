@@ -28,23 +28,15 @@ export default function JoinGame({ route }) {
   const [questionArray, setQuestionArray] = useState([''])
   const [shouldShow, setShouldShow] = useState(false)
   const [startGame, setStartGame] = useState(false)
-  const [useEffectSub, setUseEffectSub] = useState(true)
 
-  /*   const SnapShots = () => {
-    SnapShotUsers(setUserArray, gameKey);
-    SnapShotStartGame(setStartGame, gameKey);
-  }; */
   useEffect(() => {
     SnapShotUsers(setUserArray, gameKey)
     SnapShotStartGame(setStartGame, gameKey)
     GetQuestionInfo(setQuestionArray, gameKey)
-    //isHost();
   }, [])
 
   // checks if user is host and shows start game
   useEffect(() => {
-    //let juseEffectSub = true;
-    //if (useEffectSub) {
     userArray.forEach((element) => {
       if (user.email === element.userEmail) {
         if (element.host) {
@@ -54,12 +46,10 @@ export default function JoinGame({ route }) {
         }
       }
     })
-    //}
   }, [userArray])
 
   useEffect(() => {
     if (startGame) {
-      //setUseEffectSub(false)
       navigation.navigate('GameScreen', {
         questionArray: questionArray,
         gameKey: gameKey,
@@ -73,18 +63,7 @@ export default function JoinGame({ route }) {
       style={{ ...styles.container, backgroundColor: theme.backgroundColor }}
     >
       <View style={styles.participantView}>
-        <Text
-          style={{ ...styles.participantTextHeader, color: theme.color }}
-          onPress={() => {
-            /*   for (let index = 0; index < questionAnswersArray.length; index++) {
-              questionAnswersArray[index].Answers.sort(
-                () => Math.random() - 0.5
-              );
-            } */
-            //GetQuestionInfo(setQuestionArray, gameKey);
-            //isHost();
-          }}
-        >
+        <Text style={{ ...styles.participantTextHeader, color: theme.color }}>
           Deltagare
         </Text>
         <Text style={{ color: theme.color }}>Spel nyckel:</Text>
@@ -94,6 +73,7 @@ export default function JoinGame({ route }) {
           <ParticipantView key={index} element={element.userDisplayName} />
         ))}
       </View>
+      {/* hide the start button for the other players */}
       {shouldShow ? (
         <TouchableOpacity
           style={{
@@ -103,11 +83,6 @@ export default function JoinGame({ route }) {
           }}
           onPress={() => {
             StartGame(gameKey)
-            addUserAnswer(gameKey, userArray, user)
-            /* navigation.navigate('GameScreen', {
-              questionArray: questionArray,
-              gameKey: gameKey,
-            }); */
           }}
         >
           <Text style={{ ...styles.buttonText, color: theme.buttonText }}>
@@ -115,18 +90,6 @@ export default function JoinGame({ route }) {
           </Text>
         </TouchableOpacity>
       ) : null}
-
-      {/*  <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          navigation.navigate('GameScreen', {
-            questionArray: questionArray,
-            gameKey: gameKey,
-          });
-        }}
-      >
-        <Text style={styles.buttonText}>Start Game</Text>
-      </TouchableOpacity> */}
     </LinearGradient>
   )
 }

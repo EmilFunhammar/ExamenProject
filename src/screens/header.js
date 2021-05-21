@@ -10,8 +10,6 @@ export default function CustomHeader() {
       <View style={styles.header}>
         <Text style={styles.headerText}>GameZone</Text>
       </View>
-
-      {/* <Ionicons name="md-checkmark-circle" size={32} color="green" /> */}
     </View>
   )
 }

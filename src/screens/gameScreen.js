@@ -37,21 +37,12 @@ export default function GameBoard({ route }) {
   )
   const [modalVisiable, setModalVisable] = useState(false)
 
-  //const { user } = useContext(AuthContext);
-
   const { questionArray, gameKey } = route.params
   const navigation = useNavigation()
-
-  /*  const SnapShotObservers = () => {
-    SnapShotUsers(setUsersArray, gameKey);
-    SnapShotActiveQuestion(SetActiveQuestion, gameKey);
-  }; */
 
   useEffect(() => {
     SnapShotUsers(setUsersArray, gameKey)
     SnapShotActiveQuestion(SetActiveQuestion, gameKey)
-
-    //GetQuestionInfo(setQuestionArray);
   }, [])
 
   useEffect(() => {
@@ -74,13 +65,7 @@ export default function GameBoard({ route }) {
           {questionArray[activeQuestion].question} {'?'}
         </Text>
       </View>
-      {/* {usersArray.map((element, index) => (
-        <ScoreFeild
-          key={index}
-          userName={element.userDisplayName}
-          userScore={element.userScore}
-        />
-      ))} */}
+
       <View>
         <Modal animationType="slide" transparent={true} visible={modalVisiable}>
           <View
@@ -103,18 +88,6 @@ export default function GameBoard({ route }) {
                 {questionArray[activeQuestion].rightAnswer}
               </Text>
             </View>
-            {/*   <View
-              style={{
-                backgroundColor: 'rgba(20, 107, 102, 0.8)',
-                width: '100%',
-                position: 'absolute',
-                bottom: '10%',
-              }}
-            >
-              {usersArray.map((element, index) => (
-                <ModalTextComponent element={element} key={index} />
-              ))}
-            </View> */}
           </View>
         </Modal>
       </View>
@@ -131,7 +104,7 @@ export default function GameBoard({ route }) {
   )
 }
 
-const ModalTextComponent = ({ element }) => {
+/* const ModalTextComponent = ({ element }) => {
   return (
     <View
       style={{
@@ -156,13 +129,13 @@ const ModalTextComponent = ({ element }) => {
           marginLeft: '20%',
           fontSize: 22,
           fontWeight: '600',
-        }} /* style={{ position: 'absolute', left: '50%' }} */
+        }}
       >
         {element.userAnswer}
       </Text>
     </View>
   )
-}
+} */
 
 const ScoreFeild = ({ userName, userScore }) => {
   const { theme } = useContext(ThemeContext)
@@ -201,9 +174,9 @@ const AnswerFeilds = ({
   }, [gameKey])
 
   useEffect(() => {
+    // checks if it´s time for new question
     if (AnswerdNum === usersArray.length) {
       ResetAnswerdNum(gameKey)
-      //Modal inactiv
       setModalVisable(true)
       setTimeout(function () {
         setDisableButton(false)
@@ -226,9 +199,6 @@ const AnswerFeilds = ({
     setDisableButton(true)
     let usersAnswerd = questionArray[activeQuestion].Answers[value]
     let questionsRightAnswer = questionArray[activeQuestion].rightAnswer
-    //SaveUserAnswers(usersAnswer, gameKey, user.email);
-
-    //saveUsersAnswers(usersAnswer);
 
     if (usersAnswerd === questionsRightAnswer) {
       setBackgroundColor('green')
@@ -240,17 +210,12 @@ const AnswerFeilds = ({
     }
   }
 
-  /*   const saveUsersAnswers = (userAnswer) => {
-    SaveUserAnswers(userAnswer, gameKey, user.email);
-  }; */
-
   return (
     <View
       style={{
         height: '50%',
         width: '95%',
         alignItems: 'center',
-        //backgroundColor: theme.backgroundColor,
         borderRadius: 20,
       }}
     >
@@ -265,6 +230,7 @@ const AnswerFeilds = ({
       <View style={styles.answersView}>
         <View style={styles.leftSide}>
           <TouchableOpacity
+            // disable answer fields
             disabled={disableButton}
             style={{
               ...styles.answers,
@@ -273,8 +239,6 @@ const AnswerFeilds = ({
               borderColor: theme.borderColor,
             }}
             onPress={() => {
-              //SaveUserAnswers(usersAnswer.Answers[0], gameKey, user.email)
-              //SaveUserAnswers1(gameKey);
               CheckAnswers(0)
             }}
           >
@@ -293,7 +257,6 @@ const AnswerFeilds = ({
               borderColor: theme.borderColor,
             }}
             onPress={() => {
-              //SaveUserAnswers(usersAnswer.Answers[1], gameKey, user.email)
               CheckAnswers(1)
             }}
           >
@@ -310,12 +273,10 @@ const AnswerFeilds = ({
             style={{
               ...styles.answers,
               backgroundColor: theme.buttons,
-              //borderColor: theme.borderColor,
               shadowColor: theme.shadowColor,
               borderColor: theme.borderColor,
             }}
             onPress={() => {
-              //SaveUserAnswers(usersAnswer.Answers[2], gameKey, user.email)
               CheckAnswers(2)
             }}
           >
@@ -330,12 +291,10 @@ const AnswerFeilds = ({
             style={{
               ...styles.answers,
               backgroundColor: theme.buttons,
-              //borderColor: theme.borderColor,
               shadowColor: theme.shadowColor,
               borderColor: theme.borderColor,
             }}
             onPress={() => {
-              //SaveUserAnswers(usersAnswer.Answers[3], gameKey, user.email)
               CheckAnswers(3)
             }}
           >
@@ -408,7 +367,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    //borderWidth: 3,
     borderRadius: 20,
   },
   questionText: {
@@ -454,43 +412,3 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
 })
-
-/* const ScoreFeild = () => {
-  const [UsersArray, setUsersArray] = useState(['']);
-  useEffect(() => {
-    SnapShotUsers(setUsersArray);
-  }, [UsersArray]);
-  return (
-    <View style={{ flexDirection: 'row', marginBottom: 15 }}>
-      <View style={{ width: '50%' }}>
-        <View style={styles.userNameAndScoreView}>
-          <Text style={styles.userNameScoreText}>{UsersArray[0].userName}</Text>
-          <Text style={styles.userScoreText}>{UsersArray[0].userScore}</Text>
-        </View>
-        <View style={{ ...styles.underLineView, marginLeft: 20 }} />
-        <View style={styles.userNameAndScoreView}>
-          <Text style={styles.userNameScoreText}>esdsmil:</Text>
-          <Text style={styles.userScoreText}>6</Text>
-        </View>
-        <View style={{ ...styles.underLineView, marginLeft: 20 }} />
-      </View>
-      <View style={{ width: '50%' }}>
-        <View style={styles.userNameAndScoreView}>
-          <Text style={{ ...styles.userNameScoreText, marginLeft: 0 }}>
-            esdsmil:
-          </Text>
-          <Text style={styles.userScoreText}>6</Text>
-        </View>
-        <View style={styles.underLineView} />
-
-        <View style={styles.userNameAndScoreView}>
-          <Text style={{ ...styles.userNameScoreText, marginLeft: 0 }}>
-            emil:
-          </Text>
-          <Text style={{ ...styles.userScoreText }}>6</Text>
-        </View>
-        <View style={styles.underLineView} />
-      </View>
-    </View>
-  );
-}; */

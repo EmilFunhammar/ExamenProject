@@ -37,7 +37,6 @@ schemes = {
     lightBackgroundColor: 'White',
     color: '#FEFEFE',
     questionTextColor: 'black',
-    //buttons: '#515050',
     buttons: '#FEFEFE',
     buttonsText: 'black',
     viewBackgroundColor: '#515050',
