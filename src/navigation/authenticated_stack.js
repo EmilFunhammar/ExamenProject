@@ -1,7 +1,7 @@
 //REACT
 import React, { useContext } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native'
 import { ThemeContext } from '../context/ThemeContext'
 import { EvilIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
@@ -87,6 +87,7 @@ export default function AuthenticatedStack() {
         name="HighScore"
         component={HighScore}
         options={{
+          headerLeft: () => '',
           title: '',
           headerShown: true,
           headerStyle: { backgroundColor: theme.buttons },

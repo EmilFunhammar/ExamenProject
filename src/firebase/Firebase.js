@@ -186,7 +186,8 @@ export function GetHighScoreList(setHighScorePlayers) {
     do {
       bubbleSort()
     } while (swapped === true)
-    ary.length = 10
+    ary.length = 6
+    //console.log('ary', ary)
     setHighScorePlayers(ary)
   })
 }

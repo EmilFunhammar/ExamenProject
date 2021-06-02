@@ -1,22 +1,51 @@
 //REACT
 import React, { useState, useContext, useEffect } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Button, Touchable } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
+import { Cache } from 'react-native-cache'
+import { AsyncStorage } from 'react-native'
+import NetInfo from '@react-native-community/netinfo'
+import { useNavigation } from '@react-navigation/native'
 
 //FIREBASE
 import { GetHighScoreList } from '../firebase/Firebase'
 
 //CONTEXT
 import { ThemeContext } from '../context/ThemeContext'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 export default function HighScore() {
+  const navigation = useNavigation()
   const { theme } = useContext(ThemeContext)
   const [highScorePlayers, setHighScorePlayers] = useState([])
 
   useEffect(() => {
-    GetHighScoreList(setHighScorePlayers)
+    NetInfo.fetch().then((networkState) => {
+      // CHECKS FOR NETWORK AND USE CACHE IF NO NETWORK
+      if (networkState.isConnected == true) {
+        GetHighScoreList(setHighScorePlayers)
+      } else if (networkState.isConnected == false) {
+        ReadCaching()
+      }
+    })
   }, [])
 
+  const cache = new Cache({
+    namespace: 'FrågeSpelet',
+    policy: {
+      maxEntries: 50000,
+    },
+    backend: AsyncStorage,
+  })
+  //CACHING THE HIGHSCORE LIST
+  const Caching = async () => {
+    await cache.set('HighScoreList', highScorePlayers)
+  }
+  //GET THE CACH BY ID AND SETS THE STATEE TO RETURND CACH VALUE
+  const ReadCaching = async () => {
+    const value = await cache.get('HighScoreList')
+    setHighScorePlayers(value)
+  }
   return (
     <LinearGradient
       colors={theme.linearBackgroundColor}
@@ -24,6 +53,24 @@ export default function HighScore() {
     >
       <View>
         <Text style={{ ...styles.title, color: theme.color }}>HighScore</Text>
+        {/*    <Button
+          title="cach"
+          onPress={() => {
+            Caching()
+          }}
+        ></Button>
+        <Button
+          title="read cach"
+          onPress={() => {
+            ReadCaching()
+          }}
+        ></Button> */}
+        {/*   <Button
+          title="delete"
+          onPress={async () => {
+            await cache.clearAll()
+          }}
+        ></Button> */}
       </View>
       <View
         style={{
@@ -45,6 +92,31 @@ export default function HighScore() {
       {highScorePlayers.map((element, index) => (
         <HighScoreView key={index} element={element} />
       ))}
+      <View
+        style={{
+          position: 'relative',
+          top: 400,
+          width: '80%',
+          height: '8%',
+          borderRadius: 20,
+          shadowColor: 'black',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: theme.linearButton,
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            //UPDATES CACHE
+            Caching()
+            navigation.navigate('home')
+          }}
+        >
+          <Text style={{ color: theme.linearButtonText, fontSize: 22 }}>
+            Home Page
+          </Text>
+        </TouchableOpacity>
+      </View>
     </LinearGradient>
   )
 }
@@ -80,6 +152,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#146B66',
     alignItems: 'center',
+    width: '100%',
   },
   title: {
     fontSize: 40,
