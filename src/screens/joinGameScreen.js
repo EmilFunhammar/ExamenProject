@@ -50,10 +50,7 @@ export default function JoinGame() {
       style={styles.container}
     >
       <View style={styles.textView}>
-        <Text
-          style={{ ...styles.text, color: theme.color }}
-          onPress={() => console.log('emil', ifDocExsists)}
-        >
+        <Text style={{ ...styles.text, color: theme.color }}>
           Ange spel nyckel
         </Text>
         <TextInput

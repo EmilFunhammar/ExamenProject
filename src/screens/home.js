@@ -18,13 +18,6 @@ export default function HomePage() {
       colors={theme.linearBackgroundColor}
       style={{ ...styles.container, backgroundColor: theme.backgroundColor }}
     >
-      {/*  <View
-        style={{
-          ...styles.container,
-          backgroundColor: theme.linearBackgroundColor,
-        }}
-      > */}
-
       <View
         // eslint-disable-next-line react-native/no-inline-styles
         style={{

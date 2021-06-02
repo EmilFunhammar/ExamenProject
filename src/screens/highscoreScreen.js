@@ -10,7 +10,7 @@ import { GetHighScoreList } from '../firebase/Firebase'
 import { ThemeContext } from '../context/ThemeContext'
 
 export default function HighScore() {
-  const { theme, toggleTheme } = useContext(ThemeContext)
+  const { theme } = useContext(ThemeContext)
   const [highScorePlayers, setHighScorePlayers] = useState([])
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function HighScore() {
 }
 
 const HighScoreView = ({ element }) => {
-  const { theme, toggleTheme } = useContext(ThemeContext)
+  const { theme } = useContext(ThemeContext)
   return (
     <View
       style={{

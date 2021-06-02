@@ -34,7 +34,6 @@ export default function Login() {
       <View style={styles.contentView}>
         <Text style={styles.logIntoText}>Log into to youre account!</Text>
         <View style={styles.textFeildView}>
-          {/* <Text style={{ fontWeight: 'bold' }}>Email</Text> */}
           <TextInput
             style={styles.textinputs}
             placeholder="Enter Username:"

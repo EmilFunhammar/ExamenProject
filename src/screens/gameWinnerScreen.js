@@ -21,10 +21,6 @@ export default function GameWinner({ route }) {
   const { user } = useContext(AuthContext)
   const { theme } = useContext(ThemeContext)
   const [userAry, setUserAry] = useState([''])
-  const [winnerName, setWinnerName] = useState('')
-  const [winnerScore, setWinnerScore] = useState(0)
-  const [winners, setWinner] = useState([''])
-  let highScore = 0
   let winnerAry = []
 
   const SortOutWinner = () => {
@@ -51,8 +47,7 @@ export default function GameWinner({ route }) {
         }
       }
     }
-    console.log('ary1', ary)
-    //setWinner(ary)
+
     winnerAry = [...ary]
     return ary.map((element, index) => (
       <WinnerComponent userDisplayName={element.userName} key={index} />
@@ -61,7 +56,6 @@ export default function GameWinner({ route }) {
 
   useEffect(() => {
     GetUsers(setUserAry, gameKey)
-    //SortOutWinner()
   }, [])
   return (
     <LinearGradient
@@ -78,24 +72,10 @@ export default function GameWinner({ route }) {
           justifyContent: 'flex-start',
         }}
       >
-        {/*  <View style={styles.titleView}>
-          <Text style={styles.titleText}>Score</Text>
-        </View> */}
         <View style={styles.QuestionMaserView}>
-          <Text
-            style={{ ...styles.QuestionMaserText, color: theme.color }}
-            onPress={() => console.log('emil', winners)}
-          >
+          <Text style={{ ...styles.QuestionMaserText, color: theme.color }}>
             Vinnare!
           </Text>
-          {/* <Text
-            style={{ ...styles.QuestionMaserUserNameText, color: theme.color }}
-          >
-            {SortOutWinner()}
-          </Text> */}
-          {/*   {winners.map((element, index) => (
-            <WinnerComponent userDisplayName={element} key={index} />
-          ))} */}
           {SortOutWinner()}
         </View>
       </View>
@@ -176,7 +156,7 @@ export default function GameWinner({ route }) {
             backgroundColor: theme.buttons,
           }}
           onPress={() => {
-            console.log('emil')
+            // Checks if user are host and upload the winner to highscore
             for (let i = 0; i < userAry.length; i++) {
               if (
                 userAry[i].host != null &&

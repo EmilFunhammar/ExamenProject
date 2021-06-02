@@ -1,13 +1,10 @@
 import firebase, { firestore } from 'firebase'
-//import React, { useContext } from 'react';
 
 import 'firebase/auth'
 import 'firebase/database'
 import 'firebase/firestore'
 import 'firebase/functions'
 import 'firebase/storage'
-
-//import { AuthContext } from './AuthContext';
 
 var firebaseConfig = {
   apiKey: 'AIzaSyDfjQkD4UeSNfs1yup3oprY9sQx0ZcH4Uk',
@@ -18,9 +15,7 @@ var firebaseConfig = {
   appId: '1:321759435624:web:847f5ac5e161152646d4dd',
 }
 
-//const app = firebase.initializeApp(firebaseConfig);
 if (!firebase.apps.length) {
-  // const firebaseApp =
   firebase.initializeApp(firebaseConfig)
 }
 
@@ -187,7 +182,6 @@ export function GetHighScoreList(setHighScorePlayers) {
     querySnapshot.forEach((doc) => {
       ary.push(doc.data())
     })
-    //ary.sort((a, b) => b.score - a.score)
 
     do {
       bubbleSort()
@@ -207,9 +201,7 @@ export function CreateGameSetup(questionsArray, sessionName, user) {
   let userAry = { userEmail, userDisplayName, userScore, userAnswer, host }
 
   let ref = gameSessionRef.doc(sessionName)
-  /* ref.set({
-    google: 'emil',
-  }); */
+
   ref
     .set({
       StartGame: false,
@@ -219,26 +211,6 @@ export function CreateGameSetup(questionsArray, sessionName, user) {
       users: firebase.firestore.FieldValue.arrayUnion(userAry),
     })
     .catch((error) => console.log('error', error))
-}
-
-// bugg
-export function addUserAnswer(gameKey, userArray, user) {
-  let ref = gameSessionRef.doc(gameKey).collection('user.email').doc('answers')
-
-  ref.set({
-    userAnswers: 'emil',
-  })
-  //ref.get().then((doc) => {
-  /*   userArray.forEach((element) => {
-      if (doc.exists) {
-        let userName = element.userDisplayName;
-        ref.update({
-          usersAnswer: 'Emil',
-          //: firebase.firestore.FieldValue.arrayUnion('ary'),
-        });
-      }
-    }); */
-  //});
 }
 
 //
@@ -336,14 +308,3 @@ export function UpdateUserName(currentUserName) {
       console.log(error)
     })
 }
-
-/* export function doesDocExist(gameKey, setIfDocExsists) {
-  gameSessionRef
-    .doc(gameKey)
-    .get()
-    .then((doc) => {
-      if (doc.exists) {
-        setIfDocExsists(true);
-      }
-    });
-} */
